@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module type="CPP_MODULE" version="4">
+  <component name="NewModuleRootManager">
+    <content url="file://$MODULE_DIR$">
+      <sourceFolder url="file://$MODULE_DIR$/boards" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/boards/circuit-playground-bluefruit/examples" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/boards/circuit-playground-bluefruit/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/boards/circuit-playground-express/examples" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/boards/circuit-playground-express/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/boards/longan-nano/examples" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/boards/longan-nano/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/boards/circuit_playground_express/examples" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/boards/circuit_playground_express/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/boards/longan_nano/examples" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/boards/longan_nano/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/boards/raspberry-pi-pico/examples" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/boards/raspberry-pi-pico/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/smart-leds-fx/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/boards/ft232h/examples" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/boards/ft232h/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/boards/feather_m4_express/examples" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/boards/feather_m4_express/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" />
+      <excludeFolder url="file://$MODULE_DIR$/target" />
+      <excludeFolder url="file://$MODULE_DIR$/boards/circuit-playground-express/target" />
+      <excludeFolder url="file://$MODULE_DIR$/boards/circuit-playground-bluefruit/target" />
+      <excludeFolder url="file://$MODULE_DIR$/boards/longan-nano/target" />
+      <excludeFolder url="file://$MODULE_DIR$/boards/raspberry-pi-pico/target" />
+      <excludeFolder url="file://$MODULE_DIR$/boards/circuit_playground_express/target" />
+      <excludeFolder url="file://$MODULE_DIR$/smart-leds-fx/target" />
+      <excludeFolder url="file://$MODULE_DIR$/boards/longan_nano/target" />
+      <excludeFolder url="file://$MODULE_DIR$/boards/ft232h/target" />
+      <excludeFolder url="file://$MODULE_DIR$/boards/feather_m4_express/target" />
+    </content>
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
+  </component>
+</module>

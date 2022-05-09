@@ -1,0 +1,21 @@
+[package]
+name = "pwm-fan-controller"
+version = "0.0.1"
+authors = ["Jordan Williams <jordan@jwillikers.com>"]
+edition = "2018"
+homepage = "https://github.com/jwillikers/pwm-fan-controller"
+description = "A simple PWM fan controller for microcontrollers"
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/jwillikers/pwm-fan-controller.git"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+cortex-m = "0.7.2"
+adafruit-qt-py-rp2040 = "0.2.0"
+cortex-m-rt = "0.7"
+embedded-hal ="0.2.5"
+embedded-time = "0.12.0"
+nb = "1.0.0"
+panic-halt= "0.2.0"
+rp2040-boot2 = "0.2.0"
