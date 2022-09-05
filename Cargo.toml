@@ -12,7 +12,7 @@ repository = "https://github.com/jwillikers/pwm-fan-controller.git"
 
 [dependencies]
 cortex-m = "0.7.2"
-adafruit-qt-py-rp2040 = "0.2.0"
+adafruit-qt-py-rp2040 = "0.3.0"
 cortex-m-rt = "0.7"
 embedded-hal ="0.2.5"
 embedded-time = "0.12.0"

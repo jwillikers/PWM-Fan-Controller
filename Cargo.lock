@@ -4,9 +4,9 @@ version = 3
 
 [[package]]
 name = "adafruit-qt-py-rp2040"
-version = "0.2.0"
+version = "0.3.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d0ac854dea7f129ae87d08415f8acead33109d823af4190a1ccfba56f085b1e0"
+checksum = "8e23c5dcdf9ce13fc6aaa0cbae383577710a6cbd7d8cf53cf6a3626b8bd09bf8"
 dependencies = [
  "cortex-m",
  "cortex-m-rt",
@@ -382,11 +382,12 @@ dependencies = [
 
 [[package]]
 name = "rp2040-hal"
-version = "0.4.0"
+version = "0.5.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e4bca865e0a5a0aba04992ede50d7585f3dba13863943445b5ad1c81270e112e"
+checksum = "0de1bc8bf092f5da649a417ad9f18c9705b6226afe3521a469f15d1d2bcb7f66"
 dependencies = [
  "cortex-m",
+ "cortex-m-rt",
  "critical-section",
  "embedded-hal",
  "embedded-time",
@@ -395,10 +396,23 @@ dependencies = [
  "paste",
  "pio",
  "rand_core",
+ "rp2040-hal-macros",
  "rp2040-pac",
  "usb-device",
  "vcell",
  "void",
+]
+
+[[package]]
+name = "rp2040-hal-macros"
+version = "0.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "86479063e497efe1ae81995ef9071f54fd1c7427e04d6c5b84cde545ff672a5e"
+dependencies = [
+ "cortex-m-rt",
+ "proc-macro2",
+ "quote",
+ "syn",
 ]
 
 [[package]]
