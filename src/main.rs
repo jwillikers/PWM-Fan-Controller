@@ -49,10 +49,5 @@ fn main() -> ! {
     channel.output_to(pins.a0);
     channel.set_duty(channel.get_max_duty() * 2 / 5);
 
-    // Sleep forever.
-    unsafe {
-        clock.dormant().free();
-    }
-
     loop {}
 }
