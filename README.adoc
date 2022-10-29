@@ -9,23 +9,26 @@ ifdef::env-github[]
 :caution-caption: :fire:
 :warning-caption: :warning:
 endif::[]
-:Adafruit-QT-Py-RP2040: https://www.adafruit.com/product/4900[Adafruit QT Py RP2040]
+:Adafruit-USB-C-Breakout: https://www.adafruit.com/product/4090[Adafruit USB Type C Breakout Board]
 :Asciidoctor-link: https://asciidoctor.org[Asciidoctor]
-:elf2uf2-rs: https://github.com/JoNil/elf2uf2-rs[elf2uf2-rs]
+:ATtiny85: https://www.microchip.com/en-us/product/ATtiny85[ATtiny85]
+:ATtiny85-20pu: https://www.digikey.com/en/products/detail/microchip-technology/ATTINY85-20PU/735469[ATtiny85 20pu]
+:avr-hal: https://github.com/Rahix/avr-hal[avr-hal]
+:AVR-Libc: https://www.nongnu.org/avr-libc/[AVR Libc]
+:avrdude: https://github.com/avrdudes/avrdude[avrdude]
+:cargo-binutils: https://github.com/rust-embedded/cargo-binutils[cargo-binutils]
 :fish: https://fishshell.com/[fish]
-:flip-link: https://github.com/knurling-rs/flip-link[flip-link]
 :Git: https://git-scm.com/[Git]
 :Linux: https://www.linuxfoundation.org/[Linux]
 :Noctua-NF-P12-redux-1700-PWM-Fan: https://noctua.at/en/nf-p12-redux-1700-pwm[Noctua NF-P12 redux-1700 PWM Fan]
 :Python: https://www.python.org/[Python]
-:rp-hal: https://github.com/rp-rs/rp-hal[rp-hal]
 :Rouge: https://rouge.jneen.net/[Rouge]
 :Ruby: https://www.ruby-lang.org/en/[Ruby]
 :Rust: https://www.rust-lang.org/[Rust]
 :rustup: https://rustup.rs/[rustup]
-:UF2: https://github.com/microsoft/uf2[UF2]
+:USB-uISP: https://www.tindie.com/products/nsayer/usb-isp/[USB µISP]
 
-PWM fan controller for the {Adafruit-QT-Py-RP2040} written in {Rust}.
+PWM fan controller for the {ATtiny85} written in {Rust}.
 This fan controller just sets the fan speed to 40% speed to reduce noise from the {Noctua-NF-P12-redux-1700-PWM-Fan}.
 
 == Hardware
@@ -34,29 +37,77 @@ All the hardware components in my particular build are enumerated here.
 
 .Fan Controller Components
 * https://www.adafruit.com/product/798[12V DC 1000mA (1A) regulated switching power adapter - UL listed]
-* {Adafruit-QT-Py-RP2040}
+* https://www.adafruit.com/product/1465[Adafruit 6-pin AVR ISP Breadboard Adapter Mini Kit]
+* {ATtiny85-20pu}
 * https://www.adafruit.com/product/368[Female DC Power adapter - 2.1mm jack to screw terminal block]
 * https://www.adafruit.com/product/64[Half-size breadboard]
 * {Noctua-NF-P12-redux-1700-PWM-Fan}
 * https://www.adafruit.com/product/759[Premium Male/Male Jumper Wires - 40 x 3" (75mm)]
 * USB-C power supply for the microcontroller
+* {Adafruit-USB-C-Breakout}
+* {USB-uISP}
 
-Programming will require a USB-C cable and a computer.
+Programming will also require a USB-C cable and a computer.
 
 == How it Works
 
 This is a dead-simple PWM fan controller that simply lowers the speed of the {Noctua-NF-P12-redux-1700-PWM-Fan} to a quiescent 40% speed.
 The microcontroller simply sets the fan speed and then does nothing.
-The microcontroller draws just under 2 mA of current on average.
+Since the ATtiny85 is a 5V microcontroller and the Noctua fan uses 5V logic, no logic-level shifter is necessary.
 The fan setup might evolve in the future to take into account temperature sensing and dynamic speed adjustment.
 
-== Getting Started
+== Circuit
+
+. Gently place the ATtiny85 in the breadboard.
+. Connect pin #4 to ground.
+. Attach pin #8 to 5V.
+. Wire pin #5 on the ATtiny85 to the 4th pin on the Noctua fan header.
+This should be the pin opposite the one attached to ground on the fan header.
+. Connect the following pins on the ATtiny85 to the associated pins on the 6-pin ISP breakout.
++
+[cols="1,1"]
+|===
+| ATtiny85 pin | ISP Breakout pin
+
+| 1 | RST
+| 4 | GND
+| 5 | MOSI
+| 6 | MISO
+| 7 | SCK
+| 8 | VCC
+|===
+. Set the USB µISP's slider to 5V to power the ATtiny85 microcontroller for testing.
+. Attach the USB µISP programmer to the 6-pin ISP breakout board.
+. Connect the 12V power supply to the 2nd pin in the fan header, the one immediately next to ground.
+
+== Program
 
 . Install {rustup}.
 +
 [,sh]
 ----
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+----
+
+. Install the AVR GCC toolchain, {AVR-Libc}, and {avrdude}.
++
+[,sh]
+----
+sudo dnf -y install avr-gcc avr-libc avrdude
+----
+
+. Install {cargo-binutils}.
++
+[,sh]
+----
+cargo install cargo-binutils
+----
+
+. Install the LLVM tools preview {Rust} component for cargo-binutils.
++
+[,sh]
+----
+rustup component add llvm-tools-preview
 ----
 
 . Clone the repository.
@@ -73,57 +124,45 @@ git clone https://github.com/jwillikers/pwm-fan-controller.git
 cd pwm-fan-controller
 ----
 
-. Install the {Rust} toolchain for the RP2040.
+. Build the executable.
 +
 [,sh]
 ----
-rustup target add thumbv6m-none-eabi
+cargo build
 ----
 
-. Install {elf2uf2-rs}.
+. Convert the executable to the file `pwm.hex` in the Intel hex format.
 +
 [,sh]
 ----
-cargo install elf2uf2-rs
+cargo objcopy -- -O ihex pwm.hex
 ----
-
-. Install {flip-link}
+. Flash the `pwm.hex` file on the ATtiny85 with avrdude.
 +
 [,sh]
 ----
-cargo install flip-link
-----
-
-. While holding the `BOOT` button, attach the Adafruit QT Py RP2040 to your computer using the USB-C port.
-
-. Flash the board using Cargo's `run` subcommand.
-+
-[,sh]
-----
-cargo run
+avrdude -c USBtiny -B 4 -p attiny85 -U flash:w:pwm.hex:i
 ----
 
 == Todo
 
 * Add GitHub CI actions.
-* Do I even need to pull the NeoPixel power pin low?
 * Add pre-commit hooks?
 * Include pictures in README.
-* Improve power consumption by using dormant mode?
+* Add a wiring diagram.
+* Describe using the USB-C breakout.
+* Measure power consumption.
+* Investigate lowering power consumption.
 
 == References
 
-* https://learn.adafruit.com/adafruit-qt-py-2040/pinouts[Adafruit QT Py RP2040 Pinouts]
+* https://nostarch.com/avr-workshop[AVR Workshop by John Boxall]
+* https://ww1.microchip.com/downloads/en/DeviceDoc/Atmel-2586-AVR-8-bit-Microcontroller-ATtiny25-ATtiny45-ATtiny85_Datasheet.pdf[ATtiny85 Datasheet]
 * https://en.wikipedia.org/wiki/Computer_fan_control#Pulse-width_modulation[Computer Fan Control: Pulse-width modulation]
-* https://github.com/rp-rs/rp2040-project-template[Project template for rp2040-hal]
 * https://github.com/jwillikers/pwm-fan-controller-micropython[PWM Fan Controller Micropython]
-* https://datasheets.raspberrypi.com/rp2040/rp2040-datasheet.pdf[RP2040 Datasheet]
 
 .Rust Docs
-* https://docs.rs/adafruit-qt-py-rp2040/latest/adafruit_qt_py_rp2040/[adafruit-qt-py-rp2040]
-* https://docs.rs/embedded-hal/latest/embedded_hal/[embedded-hal]
-* https://docs.rs/embedded-time/latest/embedded_time/[embedded-time]
-* https://docs.rs/rp2040-hal/latest/rp2040_hal/[rp2040-hal]
+* https://rahix.github.io/avr-hal/attiny_hal/index.html[attiny_hal]
 
 == Contributing
 
@@ -136,14 +175,15 @@ This project is built on the hard work of countless open source contributors.
 Several of these projects are enumerated below.
 
 * {Asciidoctor-link}
-* {elf2uf2-rs}
+* {avr-hal}
+* {avrdude}
+* {AVR-Libc}
+* {cargo-binutils}
 * {fish}
-* {flip-link}
 * {Git}
 * {Linux}
 * {Python}
 * {Rouge}
-* {rp-hal}
 * {Ruby}
 * {Rust}
 

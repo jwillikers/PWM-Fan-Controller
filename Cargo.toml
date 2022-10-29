@@ -2,20 +2,39 @@
 name = "pwm-fan-controller"
 version = "0.0.1"
 authors = ["Jordan Williams <jordan@jwillikers.com>"]
-edition = "2018"
+edition = "2021"
 homepage = "https://github.com/jwillikers/pwm-fan-controller"
 description = "A simple PWM fan controller for microcontrollers"
 license = "MIT OR Apache-2.0"
 repository = "https://github.com/jwillikers/pwm-fan-controller.git"
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
-
 [dependencies]
-cortex-m = "0.7.2"
-adafruit-qt-py-rp2040 = "0.3.0"
-cortex-m-rt = "0.7"
 embedded-hal ="0.2.5"
-embedded-time = "0.12.0"
 nb = "1.0.0"
-panic-halt= "0.2.0"
-rp2040-boot2 = "0.2.0"
+panic-halt = "0.2.0"
+ufmt = "0.1.0"
+
+#[dependencies.avr-device]
+#version = "0.4.0"
+#features = ["attiny85"]
+
+[dependencies.avr-hal-generic]
+git = "https://github.com/rahix/avr-hal"
+rev = "750600d5013c42a2ace635818d2b746300ad0985"
+
+[dependencies.attiny-hal]
+git = "https://github.com/rahix/avr-hal"
+rev = "750600d5013c42a2ace635818d2b746300ad0985"
+features = ["attiny85", "rt"]
+
+[profile.dev]
+panic = "abort"
+lto = true
+opt-level = "s"
+
+[profile.release]
+panic = "abort"
+codegen-units = 1
+debug = true
+lto = true
+opt-level = "s"
