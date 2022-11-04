@@ -20,7 +20,8 @@
       <sourceFolder url="file://$MODULE_DIR$/boards/ft232h/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/boards/feather_m4_express/examples" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/boards/feather_m4_express/src" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/boards/pico/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/boards/attiny85/src" isTestSource="false" />
       <excludeFolder url="file://$MODULE_DIR$/target" />
       <excludeFolder url="file://$MODULE_DIR$/boards/circuit-playground-express/target" />
       <excludeFolder url="file://$MODULE_DIR$/boards/circuit-playground-bluefruit/target" />
@@ -31,6 +32,7 @@
       <excludeFolder url="file://$MODULE_DIR$/boards/longan_nano/target" />
       <excludeFolder url="file://$MODULE_DIR$/boards/ft232h/target" />
       <excludeFolder url="file://$MODULE_DIR$/boards/feather_m4_express/target" />
+      <excludeFolder url="file://$MODULE_DIR$/boards/pico/target" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
