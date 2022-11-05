@@ -43,9 +43,9 @@ All the hardware components in my particular build are enumerated here.
 * {Noctua-NF-P12-redux-1700-PWM-Fan}
 * {Raspberry-Pi-Pico}
 * https://www.adafruit.com/product/759[Premium Male/Male Jumper Wires - 40 x 3" (75mm)]
-* USB-C power supply for the microcontroller
+* micro USB power supply for the microcontroller
 
-Programming will require a USB-C cable and a computer.
+Programming will require a micro USB cable and a computer.
 
 == How it Works
 
@@ -55,6 +55,8 @@ The fan setup might evolve in the future to take into account temperature sensin
 
 The 3.3V Raspberry Pi Pico requires a logic-level shifter to boost the PWM signal up to 5V for the fan.
 I use the 74AHCT125 to perform the logic-level conversion, using pin #40, `VBUS`, to provide the 5V reference voltage.
+
+The Raspberry Pi Pico draws 2.07 mA of current in this particular configuration.
 
 == Getting Started
 
@@ -186,7 +188,7 @@ cargo run
 
 == References
 
-* https://cdn-shop.adafruit.com/product-files/1787/1787AHC125.pdf[1787AHC125 Datasheet]
+* https://www.ti.com/lit/ds/symlink/sn74ahct125.pdf[1787AHC125 Datasheet]
 * https://en.wikipedia.org/wiki/Computer_fan_control#Pulse-width_modulation[Computer Fan Control: Pulse-width modulation]
 * https://github.com/rp-rs/rp2040-project-template[Project template for rp2040-hal]
 * {Picoprobe-Wiring}
