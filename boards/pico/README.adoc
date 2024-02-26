@@ -237,7 +237,7 @@ Licensed under either of
 
 at your option.
 
-© 2022 Jordan Williams
+© 2022-2024 Jordan Williams
 
 == Authors
 
