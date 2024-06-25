@@ -31,6 +31,26 @@ endif::[]
 PWM fan controller for the {ATtiny85} written in {Rust}.
 This fan controller just sets the fan speed to 40% speed to reduce noise from the {Noctua-NF-P12-redux-1700-PWM-Fan}.
 
+ifdef::env-github[]
+++++
+<p align="center">
+  <img  alt="ATTiny85 PWM Fan Controller Protoboard Top View" src="pics/attiny85-pwm-fan-controller-top.jpg?raw=true"/>
+</p>
+<p align="center">
+  <img  alt="ATTiny85 PWM Fan Controller Protoboard Side View" src="pics/attiny85-pwm-fan-controller-side.jpg?raw=true"/>
+</p>
+<p align="center">
+  <img  alt="ATTiny85 PWM Fan Controller Protoboard Top Angle View" src="pics/attiny85-pwm-fan-controller-top-angle.jpg?raw=true"/>
+</p>
+++++
+endif::[]
+
+ifndef::env-github[]
+image::pics/attiny85-pwm-fan-controller-top.jpg[ATTiny85 PWM Fan Controller Protoboard Top View, align=center]
+image::pics/attiny85-pwm-fan-controller-side.jpg[ATTiny85 PWM Fan Controller Protoboard Side View, align=center]
+image::pics/attiny85-pwm-fan-controller-top-angle.jpg[ATTiny85 PWM Fan Controller Protoboard Top Angle View, align=center]
+endif::[]
+
 == Hardware
 
 All the hardware components in my particular build are enumerated here.

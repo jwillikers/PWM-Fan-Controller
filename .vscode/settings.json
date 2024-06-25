@@ -13,6 +13,7 @@
         "devel",
         "eabi",
         "ifdef",
+        "ifndef",
         "Libc",
         "libusbx",
         "microcontroller",
@@ -25,6 +26,7 @@
         "Pinout",
         "Pinouts",
         "proto",
+        "Protoboard",
         "rustup",
         "SWCLK",
         "SWDIO",
@@ -34,5 +36,6 @@
         "UART",
         "udev",
         "VBUS"
-    ]
+    ],
+    "asciidoc.antora.enableAntoraSupport": false
 }

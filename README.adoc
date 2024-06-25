@@ -20,6 +20,18 @@ PWM fan controller projects written in {Rust} targeting different microcontrolle
 Currently, these are basic examples for setting the {Noctua-NF-P12-redux-1700-PWM-Fan} to a quiescent 40% speed.
 Implementations for specific boards can be found in the `boards` directory.
 
+ifdef::env-github[]
+++++
+<p align="center">
+  <img  alt="ATTiny85 PWM Fan Controller Protoboard Top View" src="attiny85/pics/attiny85-pwm-fan-controller-top.jpg?raw=true"/>
+</p>
+++++
+endif::[]
+
+ifndef::env-github[]
+image::attiny85/pics/attiny85-pwm-fan-controller-top.jpg[ATTiny85 PWM Fan Controller Protoboard Top View, align=center]
+endif::[]
+
 == Boards
 
 * link:boards/attiny85/README.adoc[ATtiny85]
