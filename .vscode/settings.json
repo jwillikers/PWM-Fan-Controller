@@ -36,6 +36,5 @@
         "UART",
         "udev",
         "VBUS"
-    ],
-    "asciidoc.antora.enableAntoraSupport": false
+    ]
 }

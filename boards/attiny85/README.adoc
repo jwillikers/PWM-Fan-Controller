@@ -34,21 +34,37 @@ This fan controller just sets the fan speed to 40% speed to reduce noise from th
 ifdef::env-github[]
 ++++
 <p align="center">
-  <img  alt="ATTiny85 PWM Fan Controller Protoboard Top View" src="pics/attiny85-pwm-fan-controller-top.jpg?raw=true"/>
+  <img  alt="ATTiny85 PWM Fan Controller Protoboard Top View" src="pics/attiny85-pwm-fan-controller-protoboard-top.jpg?raw=true"/>
 </p>
 <p align="center">
-  <img  alt="ATTiny85 PWM Fan Controller Protoboard Side View" src="pics/attiny85-pwm-fan-controller-side.jpg?raw=true"/>
+  <img  alt="ATTiny85 PWM Fan Controller Protoboard Side View" src="pics/attiny85-pwm-fan-controller-protoboard-side.jpg?raw=true"/>
 </p>
 <p align="center">
-  <img  alt="ATTiny85 PWM Fan Controller Protoboard Top Angle View" src="pics/attiny85-pwm-fan-controller-top-angle.jpg?raw=true"/>
+  <img  alt="ATTiny85 PWM Fan Controller Protoboard Top Angle View" src="pics/attiny85-pwm-fan-controller-protoboard-top-angle.jpg?raw=true"/>
+</p>
+<p align="center">
+  <img  alt="ATTiny85 PWM Fan Controller Breadboard Top View 1" src="pics/attiny85-pwm-fan-controller-breadboard-top-1.jpg?raw=true"/>
+</p>
+<p align="center">
+  <img  alt="ATTiny85 PWM Fan Controller Breadboard Top View 2" src="pics/attiny85-pwm-fan-controller-breadboard-top-2.jpg?raw=true"/>
+</p>
+<p align="center">
+  <img  alt="ATTiny85 PWM Fan Controller Breadboard Side View 1" src="pics/attiny85-pwm-fan-controller-breadboard-side-1.jpg?raw=true"/>
+</p>
+<p align="center">
+  <img  alt="ATTiny85 PWM Fan Controller Breadboard Side View 2" src="pics/attiny85-pwm-fan-controller-breadboard-side-2.jpg?raw=true"/>
 </p>
 ++++
 endif::[]
 
 ifndef::env-github[]
-image::pics/attiny85-pwm-fan-controller-top.jpg[ATTiny85 PWM Fan Controller Protoboard Top View, align=center]
-image::pics/attiny85-pwm-fan-controller-side.jpg[ATTiny85 PWM Fan Controller Protoboard Side View, align=center]
-image::pics/attiny85-pwm-fan-controller-top-angle.jpg[ATTiny85 PWM Fan Controller Protoboard Top Angle View, align=center]
+image::pics/attiny85-pwm-fan-controller-protoboard-top.jpg[ATTiny85 PWM Fan Controller Protoboard Top View, align=center]
+image::pics/attiny85-pwm-fan-controller-protoboard-side.jpg[ATTiny85 PWM Fan Controller Protoboard Side View, align=center]
+image::pics/attiny85-pwm-fan-controller-protoboard-top-angle.jpg[ATTiny85 PWM Fan Controller Protoboard Top Angle View, align=center]
+image::pics/attiny85-pwm-fan-controller-breadboard-top-1.jpg[ATTiny85 PWM Fan Controller Breadboard Top View 1, align=center]
+image::pics/attiny85-pwm-fan-controller-breadboard-top-2.jpg[ATTiny85 PWM Fan Controller Breadboard Top View 2, align=center]
+image::pics/attiny85-pwm-fan-controller-breadboard-side-1.jpg[ATTiny85 PWM Fan Controller Breadboard Side View 1, align=center]
+image::pics/attiny85-pwm-fan-controller-breadboard-side-2.jpg[ATTiny85 PWM Fan Controller Breadboard Side View 2, align=center]
 endif::[]
 
 == Hardware

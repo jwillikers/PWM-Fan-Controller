@@ -23,13 +23,21 @@ Implementations for specific boards can be found in the `boards` directory.
 ifdef::env-github[]
 ++++
 <p align="center">
-  <img  alt="ATTiny85 PWM Fan Controller Protoboard Top View" src="boards/attiny85/pics/attiny85-pwm-fan-controller-top.jpg?raw=true"/>
+  <img  alt="ATTiny85 PWM Fan Controller Protoboard Top View" src="boards/attiny85/pics/attiny85-pwm-fan-controller-protoboard-top.jpg?raw=true"/>
+</p>
+<p align="center">
+  <img  alt="ATTiny85 PWM Fan Controller Breadboard Top View 1" src="boards/attiny85/pics/attiny85-pwm-fan-controller-breadboard-top-1.jpg?raw=true"/>
+</p>
+<p align="center">
+  <img  alt="Raspberry PI Pico PWM Fan Controller Breadboard Top View 1" src="boards/pico/pics/pico-pwm-fan-controller-breadboard-top-1.jpg?raw=true"/>
 </p>
 ++++
 endif::[]
 
 ifndef::env-github[]
-image::boards/attiny85/pics/attiny85-pwm-fan-controller-top.jpg[ATTiny85 PWM Fan Controller Protoboard Top View, align=center]
+image::boards/attiny85/pics/attiny85-pwm-fan-controller-protoboard-top.jpg[ATTiny85 PWM Fan Controller Protoboard Top View, align=center]
+image::boards/attiny85/pics/attiny85-pwm-fan-controller-breadboard-top-1.jpg[ATTiny85 PWM Fan Controller Breadboard Top View 1, align=center]
+image::boards/pico/pics/pico-pwm-fan-controller-breadboard-top-1.jpg[Raspberry PI Pico PWM Fan Controller Breadboard Top View 1, align=center]
 endif::[]
 
 == Boards

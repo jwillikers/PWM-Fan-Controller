@@ -15,3 +15,6 @@ target/
 
 # Ignore any built binaries.
 *.bin
+
+*.jpg~
+*.jpg-autosave.kra

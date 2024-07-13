@@ -31,6 +31,34 @@ endif::[]
 PWM fan controller for the {Raspberry-Pi-Pico} written in {Rust}.
 This fan controller just sets the fan speed to 40% speed to reduce noise from the {Noctua-NF-P12-redux-1700-PWM-Fan}.
 
+ifdef::env-github[]
+++++
+<p align="center">
+  <img  alt="Raspberry PI Pico PWM Fan Controller Breadboard Top View 1" src="pics/pico-pwm-fan-controller-breadboard-top-1.jpg?raw=true"/>
+</p>
+<p align="center">
+  <img  alt="Raspberry PI Pico PWM Fan Controller Protoboard Top View 2" src="pics/pico-pwm-fan-controller-breadboard-top-2.jpg?raw=true"/>
+</p>
+<p align="center">
+  <img  alt="Raspberry PI Pico PWM Fan Controller Protoboard Side View 1" src="pics/pico-pwm-fan-controller-breadboard-side-1?raw=true"/>
+</p>
+<p align="center">
+  <img  alt="Raspberry PI Pico PWM Fan Controller Protoboard Side View 2" src="pics/pico-pwm-fan-controller-breadboard-side-2?raw=true"/>
+</p>
+<p align="center">
+  <img  alt="Raspberry PI Pico PWM Fan Controller Protoboard Side View 3" src="pics/pico-pwm-fan-controller-breadboard-side-3?raw=true"/>
+</p>
+++++
+endif::[]
+
+ifndef::env-github[]
+image::pics/pico-pwm-fan-controller-breadboard-top-1.jpg[Raspberry PI Pico PWM Fan Controller Protoboard Top View 1, align=center]
+image::pics/pico-pwm-fan-controller-breadboard-top-2.jpg[Raspberry PI Pico PWM Fan Controller Protoboard Tope View 2, align=center]
+image::pics/pico-pwm-fan-controller-breadboard-side-1.jpg[Raspberry PI Pico PWM Fan Controller Protoboard Side View 1, align=center]
+image::pics/pico-pwm-fan-controller-breadboard-side-2.jpg[Raspberry PI Pico PWM Fan Controller Protoboard Side View 2, align=center]
+image::pics/pico-pwm-fan-controller-breadboard-side-3.jpg[Raspberry PI Pico PWM Fan Controller Protoboard Side View 3, align=center]
+endif::[]
+
 == Hardware
 
 All the hardware components in my particular build are enumerated here.
