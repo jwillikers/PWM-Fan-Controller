@@ -13,8 +13,6 @@ use rp_pico::hal::{
     sio::Sio,
 };
 
-const MAX_DUTY_CYCLE: u16 = 25000;
-
 #[entry]
 fn main() -> ! {
     info!("Program start");
@@ -43,7 +41,7 @@ fn main() -> ! {
 
     let channel = &mut pwm.channel_b;
     channel.output_to(pins.gpio15);
-    channel.set_duty_cycle(MAX_DUTY_CYCLE / 5 * 2).unwrap();
+    channel.set_duty_cycle(channel.max_duty_cycle() / 5 * 2).unwrap();
 
     loop {}
 }
