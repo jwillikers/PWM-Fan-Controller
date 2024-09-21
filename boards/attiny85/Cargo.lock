@@ -5,30 +5,42 @@ version = 3
 [[package]]
 name = "attiny-hal"
 version = "0.1.0"
-source = "git+https://github.com/rahix/avr-hal?rev=750600d5013c42a2ace635818d2b746300ad0985#750600d5013c42a2ace635818d2b746300ad0985"
+source = "git+https://github.com/rahix/avr-hal?rev=544e50bdf2c1944281d9f63fa9ef3ccf68b5f684#544e50bdf2c1944281d9f63fa9ef3ccf68b5f684"
 dependencies = [
  "avr-device",
  "avr-hal-generic",
 ]
 
 [[package]]
+name = "attiny85-pwm-fan-controller"
+version = "0.0.1"
+dependencies = [
+ "attiny-hal",
+ "avr-hal-generic",
+ "embedded-hal 1.0.0",
+ "nb 1.1.0",
+ "panic-halt",
+ "proc-macro2",
+ "ufmt",
+]
+
+[[package]]
 name = "avr-device"
-version = "0.3.4"
+version = "0.5.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "edb5cf74147f0a7ef4b7b2b5cdd6bc04e749d050cf48ed2a40048db290165db4"
+checksum = "546b09da5e933d18b790ccb5aae351371c6c4f8094a7b011dcd7c7e7fb69cc94"
 dependencies = [
  "avr-device-macros",
  "bare-metal",
  "cfg-if",
- "rustversion",
  "vcell",
 ]
 
 [[package]]
 name = "avr-device-macros"
-version = "0.3.4"
+version = "0.5.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "474dda7ee758065593ae9fd53c9f95a38c1f7d44fac02a4d354838a6c40070d8"
+checksum = "6b108541dc1ea060dfa9b824acbded94f658f8daecca549144d05a4d01e65b6f"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -38,32 +50,38 @@ dependencies = [
 [[package]]
 name = "avr-hal-generic"
 version = "0.1.0"
-source = "git+https://github.com/rahix/avr-hal?rev=750600d5013c42a2ace635818d2b746300ad0985#750600d5013c42a2ace635818d2b746300ad0985"
+source = "git+https://github.com/rahix/avr-hal?rev=544e50bdf2c1944281d9f63fa9ef3ccf68b5f684#544e50bdf2c1944281d9f63fa9ef3ccf68b5f684"
 dependencies = [
  "avr-device",
  "cfg-if",
- "embedded-hal",
- "nb 0.1.3",
+ "embedded-hal 0.2.7",
+ "embedded-hal 1.0.0",
+ "embedded-hal-bus",
+ "embedded-storage",
+ "nb 1.1.0",
  "paste",
  "rustversion",
  "ufmt",
- "void",
+ "unwrap-infallible",
 ]
 
 [[package]]
 name = "bare-metal"
-version = "0.2.5"
+version = "1.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "5deb64efa5bd81e31fcd1938615a6d98c82eafcbcd787162b6f63b91d6bac5b3"
-dependencies = [
- "rustc_version",
-]
+checksum = "f8fe8f5a8a398345e52358e18ff07cc17a568fbca5c6f73873d3a62056309603"
 
 [[package]]
 name = "cfg-if"
-version = "0.1.10"
+version = "1.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "4785bdd1c96b2a846b2bd7cc02e86b6b3dbf14e7e53446c4f54c92a361040822"
+checksum = "baf1de4339761588bc0619e3cbc0120ee582ebb74b53b4efbf79117bd2da40fd"
+
+[[package]]
+name = "critical-section"
+version = "1.1.3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "f64009896348fc5af4222e9cf7d7d82a95a256c634ebcf61c53e4ea461422242"
 
 [[package]]
 name = "embedded-hal"
@@ -76,19 +94,41 @@ dependencies = [
 ]
 
 [[package]]
+name = "embedded-hal"
+version = "1.0.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "361a90feb7004eca4019fb28352a9465666b24f840f5c3cddf0ff13920590b89"
+
+[[package]]
+name = "embedded-hal-bus"
+version = "0.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "57b4e6ede84339ebdb418cd986e6320a34b017cdf99b5cc3efceec6450b06886"
+dependencies = [
+ "critical-section",
+ "embedded-hal 1.0.0",
+]
+
+[[package]]
+name = "embedded-storage"
+version = "0.2.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "723dce4e9f25b6e6c5f35628e144794e5b459216ed7da97b7c4b66cdb3fa82ca"
+
+[[package]]
 name = "nb"
 version = "0.1.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "801d31da0513b6ec5214e9bf433a77966320625a37860f910be265be6e18d06f"
 dependencies = [
- "nb 1.0.0",
+ "nb 1.1.0",
 ]
 
 [[package]]
 name = "nb"
-version = "1.0.0"
+version = "1.1.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "546c37ac5d9e56f55e73b677106873d9d9f5190605e41a856503623648488cae"
+checksum = "8d5439c4ad607c3c23abf66de8c8bf57ba8adcd1f129e699851a6e43935d339d"
 
 [[package]]
 name = "panic-halt"
@@ -98,105 +138,61 @@ checksum = "de96540e0ebde571dc55c73d60ef407c653844e6f9a1e2fdbd40c07b9252d812"
 
 [[package]]
 name = "paste"
-version = "1.0.7"
+version = "1.0.15"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "0c520e05135d6e763148b6426a837e239041653ba7becd2e538c076c738025fc"
-
-[[package]]
-name = "proc-macro-hack"
-version = "0.5.19"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "dbf0c48bc1d91375ae5c3cd81e3722dff1abcf81a30960240640d223f59fe0e5"
+checksum = "57c0d7b74b563b49d38dae00a0c37d4d6de9b432382b2892f0574ddcae73fd0a"
 
 [[package]]
 name = "proc-macro2"
-version = "1.0.38"
+version = "1.0.79"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "9027b48e9d4c9175fa2218adf3557f91c1137021739951d4932f5f8268ac48aa"
+checksum = "e835ff2298f5721608eb1a980ecaee1aef2c132bf95ecc026a11b7bf3c01c02e"
 dependencies = [
- "unicode-xid",
-]
-
-[[package]]
-name = "pwm-fan-controller"
-version = "0.0.1"
-dependencies = [
- "attiny-hal",
- "avr-hal-generic",
- "embedded-hal",
- "nb 1.0.0",
- "panic-halt",
- "ufmt",
+ "unicode-ident",
 ]
 
 [[package]]
 name = "quote"
-version = "1.0.18"
+version = "1.0.36"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a1feb54ed693b93a84e14094943b84b7c4eae204c512b7ccb95ab0c66d278ad1"
+checksum = "0fa76aaf39101c457836aec0ce2316dbdc3ab723cdda1c6bd4e6ad4208acaca7"
 dependencies = [
  "proc-macro2",
-]
-
-[[package]]
-name = "rustc_version"
-version = "0.2.3"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "138e3e0acb6c9fb258b19b67cb8abd63c00679d2851805ea151465464fe9030a"
-dependencies = [
- "semver",
 ]
 
 [[package]]
 name = "rustversion"
-version = "1.0.9"
+version = "1.0.17"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "97477e48b4cf8603ad5f7aaf897467cf42ab4218a38ef76fb14c2d6773a6d6a8"
-
-[[package]]
-name = "semver"
-version = "0.9.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "1d7eb9ef2c18661902cc47e535f9bc51b78acd254da71d375c2f6720d9a40403"
-dependencies = [
- "semver-parser",
-]
-
-[[package]]
-name = "semver-parser"
-version = "0.7.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "388a1df253eca08550bef6c72392cfe7c30914bf41df5269b68cbd6ff8f570a3"
+checksum = "955d28af4278de8121b7ebeb796b6a45735dc01436d898801014aced2773a3d6"
 
 [[package]]
 name = "syn"
-version = "1.0.92"
+version = "1.0.109"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "7ff7c592601f11445996a06f8ad0c27f094a58857c2f89e97974ab9235b92c52"
+checksum = "72b64191b275b66ffe2469e8af2c1cfe3bafa67b529ead792a6d0160888b4237"
 dependencies = [
  "proc-macro2",
  "quote",
- "unicode-xid",
+ "unicode-ident",
 ]
 
 [[package]]
 name = "ufmt"
-version = "0.1.2"
+version = "0.2.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "31d3c0c63312dfc9d8e5c71114d617018a19f6058674003c0da29ee8d8036cdd"
+checksum = "1a64846ec02b57e9108d6469d98d1648782ad6bb150a95a9baac26900bbeab9d"
 dependencies = [
- "proc-macro-hack",
  "ufmt-macros",
  "ufmt-write",
 ]
 
 [[package]]
 name = "ufmt-macros"
-version = "0.2.0"
+version = "0.3.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e4ab6c92f30c996394a8bd525aef9f03ce01d0d7ac82d81902968057e37dd7d9"
+checksum = "d337d3be617449165cb4633c8dece429afd83f84051024079f97ad32a9663716"
 dependencies = [
- "proc-macro-hack",
  "proc-macro2",
  "quote",
  "syn",
@@ -209,10 +205,16 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "e87a2ed6b42ec5e28cc3b94c09982969e9227600b2e3dcbc1db927a84c06bd69"
 
 [[package]]
-name = "unicode-xid"
-version = "0.2.3"
+name = "unicode-ident"
+version = "1.0.13"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "957e51f3646910546462e67d5f7599b9e4fb8acdd304b087a6494730f9eebf04"
+checksum = "e91b56cd4cadaeb79bbf1a5645f6b4f8dc5bde8834ad5894a8db35fda9efa1fe"
+
+[[package]]
+name = "unwrap-infallible"
+version = "0.1.5"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "151ac09978d3c2862c4e39b557f4eceee2cc72150bc4cb4f16abf061b6e381fb"
 
 [[package]]
 name = "vcell"

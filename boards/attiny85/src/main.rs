@@ -5,10 +5,6 @@ use panic_halt as _;
 
 use attiny_hal::simple_pwm::*;
 use attiny_hal::entry;
-use avr_hal_generic::simple_pwm::IntoPwmPin;
-use avr_hal_generic::simple_pwm::Prescaler;
-use embedded_hal::digital::v2::OutputPin;
-use embedded_hal::PwmPin;
 
 #[entry]
 fn main() -> ! {

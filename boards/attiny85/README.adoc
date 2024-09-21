@@ -130,7 +130,7 @@ curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 +
 [,sh]
 ----
-sudo dnf -y install avr-gcc avr-libc avrdude
+sudo dnf --assumeyes install avr-gcc avr-libc avrdude
 ----
 
 . Install {cargo-binutils}.
