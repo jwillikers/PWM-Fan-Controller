@@ -1,31 +1,28 @@
 #![no_std]
 #![no_main]
 
-use bsp::entry;
+use rp_pico::entry;
 use defmt::*;
 use defmt_rtt as _;
-use embedded_hal::PwmPin;
-use fugit::RateExtU32;
-use fugit::Rate;
+use embedded_hal::pwm::SetDutyCycle;
 use panic_probe as _;
-
-use rp_pico as bsp;
-
-use bsp::hal::{
+use rp_pico::hal::{
     pac,
     pwm,
     rosc,
     sio::Sio,
 };
 
+const MAX_DUTY_CYCLE: u16 = 25000;
+
 #[entry]
 fn main() -> ! {
     info!("Program start");
     let mut pac = pac::Peripherals::take().unwrap();
-    let clock = rosc::RingOscillator::new(pac.ROSC).initialize();
+    let _clock = rosc::RingOscillator::new(pac.ROSC).initialize();
     let sio = Sio::new(pac.SIO);
 
-    let pins = bsp::Pins::new(
+    let pins = rp_pico::Pins::new(
         pac.IO_BANK0,
         pac.PADS_BANK0,
         sio.gpio_bank0,
@@ -46,7 +43,7 @@ fn main() -> ! {
 
     let channel = &mut pwm.channel_b;
     channel.output_to(pins.gpio15);
-    channel.set_duty(channel.get_max_duty() / 5 * 2);
+    channel.set_duty_cycle(MAX_DUTY_CYCLE / 5 * 2).unwrap();
 
     loop {}
 }
