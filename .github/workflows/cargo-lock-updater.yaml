@@ -1,0 +1,30 @@
+name: Cargo Lock Updater
+
+"on":
+  schedule:
+    # Once a month on the 5th
+    - cron: "0 0 5 * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  cargo-lock-updater:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: DeterminateSystems/nix-installer-action@v14
+      - uses: DeterminateSystems/magic-nix-cache-action@v8
+      - name: Update ATtiny85 Cargo lock file
+        run: cd boards/attiny85; nix develop --command cargo update
+      - name: Update Pico Cargo lock file
+        run: cd boards/pico; nix develop --command cargo update
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v7
+        with:
+          assignees: ${{ github.repository_owner }}
+          branch: "update/cargo-lock"
+          commit-message: "chore(deps): Update Cargo lock files"
+          title: "chore(deps): Update Cargo lock files"

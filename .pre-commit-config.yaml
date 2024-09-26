@@ -1,0 +1,60 @@
+exclude: |
+  (?x)^(
+    .idea/.*|
+    .run/.*|
+    .vscode/.*
+  )$
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.6.0
+    hooks:
+      - id: check-byte-order-marker
+      - id: check-executables-have-shebangs
+      - id: check-json
+      - id: check-merge-conflict
+      - id: check-toml
+      - id: check-yaml
+        args: [--allow-multiple-documents]
+      - id: end-of-file-fixer
+      - id: mixed-line-ending
+      - id: pretty-format-json
+        args: ["--autofix"]
+        exclude: ^.vscode/.*\.json$
+      - id: trailing-whitespace
+  - repo: local
+    hooks:
+      - id: just
+        entry: just --fmt --unstable
+        files: |
+          (?x)^(
+            .justfile|
+            justfile
+          )$
+        language: system
+        name: just
+        pass_filenames: false
+      - id: rustfmt
+        name: rustfmt
+        description: Format Rust files with rustfmt.
+        entry: rustfmt
+        pass_filenames: true
+        types: [file, rust]
+        language: system
+      # - id: rust-clippy-attiny85
+      #   name: Rust clippy ATtiny85
+      #   description: Run cargo clippy on files included in the commit.
+      #   entry: cargo clippy --all-targets --all-features --manifest-path boards/attiny85/Cargo.toml -- -Dclippy::all
+      #   pass_filenames: false
+      #   types: [file, rust]
+      #   language: system
+      # - id: rust-clippy-pico
+      #   name: Rust clippy Pico
+      #   description: Run cargo clippy on files included in the commit.
+      #   entry: cargo clippy --all-targets --all-features --manifest-path boards/pico/Cargo.toml -- -Dclippy::all
+      #   pass_filenames: false
+      #   types: [file, rust]
+      #   language: system
+  - repo: https://github.com/adrienverge/yamllint.git
+    rev: v1.35.1
+    hooks:
+      - id: yamllint

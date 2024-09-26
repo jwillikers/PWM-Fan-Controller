@@ -1,0 +1,18 @@
+name: Lint Rust code with Clippy
+"on":
+  pull_request:
+    branches: ["main"]
+    paths:
+      - .github/workflows/clippy-attiny85.yaml
+      - boards/attiny85/flake.lock
+      - boards/attiny85/**.rs
+
+jobs:
+  clippy-attiny85:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: DeterminateSystems/nix-installer-action@v14
+      - uses: DeterminateSystems/magic-nix-cache-action@v8
+      # - name: Lint Rust code with Clippy
+      #   run: cd boards/attiny85; nix develop --command cargo clippy

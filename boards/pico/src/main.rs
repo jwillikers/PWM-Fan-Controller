@@ -1,17 +1,12 @@
 #![no_std]
 #![no_main]
 
-use rp_pico::entry;
 use defmt::*;
 use defmt_rtt as _;
 use embedded_hal::pwm::SetDutyCycle;
 use panic_probe as _;
-use rp_pico::hal::{
-    pac,
-    pwm,
-    rosc,
-    sio::Sio,
-};
+use rp_pico::entry;
+use rp_pico::hal::{pac, pwm, rosc, sio::Sio};
 
 #[entry]
 fn main() -> ! {
@@ -41,7 +36,9 @@ fn main() -> ! {
 
     let channel = &mut pwm.channel_b;
     channel.output_to(pins.gpio15);
-    channel.set_duty_cycle(channel.max_duty_cycle() / 5 * 2).unwrap();
+    channel
+        .set_duty_cycle(channel.max_duty_cycle() / 5 * 2)
+        .unwrap();
 
     loop {}
 }

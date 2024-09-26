@@ -15,6 +15,13 @@ target/
 
 # Ignore any built binaries.
 *.bin
+*.hex
 
 *.jpg~
 *.jpg-autosave.kra
+
+# direnv
+.direnv/
+
+# Nix
+result/

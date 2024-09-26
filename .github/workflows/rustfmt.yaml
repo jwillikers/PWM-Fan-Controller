@@ -1,0 +1,18 @@
+name: Format Rust code
+"on":
+  pull_request:
+    branches: ["main"]
+    paths:
+      - .github/workflows/rustfmt.yaml
+      - '**/flake.lock'
+      - '**.rs'
+
+jobs:
+  rustfmt:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: DeterminateSystems/nix-installer-action@v14
+      - uses: DeterminateSystems/magic-nix-cache-action@v8
+      - name: Check Rust formatting
+        run: cd boards/attiny85; nix develop --command nu --commands 'rustfmt --check ../../**/*.rs'
