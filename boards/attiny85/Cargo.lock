@@ -12,19 +12,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "attiny85-pwm-fan-controller"
-version = "0.0.1"
-dependencies = [
- "attiny-hal",
- "avr-hal-generic",
- "embedded-hal 1.0.0",
- "nb 1.1.0",
- "panic-halt",
- "proc-macro2",
- "ufmt",
-]
-
-[[package]]
 name = "avr-device"
 version = "0.5.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -149,6 +136,19 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "e835ff2298f5721608eb1a980ecaee1aef2c132bf95ecc026a11b7bf3c01c02e"
 dependencies = [
  "unicode-ident",
+]
+
+[[package]]
+name = "pwm-fan-controller-attiny85"
+version = "0.0.1"
+dependencies = [
+ "attiny-hal",
+ "avr-hal-generic",
+ "embedded-hal 1.0.0",
+ "nb 1.1.0",
+ "panic-halt",
+ "proc-macro2",
+ "ufmt",
 ]
 
 [[package]]
