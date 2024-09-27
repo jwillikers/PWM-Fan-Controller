@@ -41,11 +41,11 @@
               rustToolchain = nativePkgs.pkgsBuildHost.rust-bin.fromRustupToolchainFile ./boards/attiny85/rust-toolchain.toml;
               pkgs = import nixpkgs {
                 inherit overlays system;
-                crossSystem = {
-                  config = "avr";
+                # crossSystem = {
+                  # config = "avr";
                   # rust.platform = "${./boards/attiny85/avr-unknown-none-attiny85.json}";
-                  rust.isNoStdTarget = true;
-                };
+                  # rust.isNoStdTarget = true;
+                # };
                 # config.allowUnsupportedSystem = true;
               };
               commonNativeBuildInputs = with nativePkgs; [
