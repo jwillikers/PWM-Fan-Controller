@@ -80,7 +80,6 @@
             pico = {
               pkgs = import nixpkgs {
                 inherit overlays system;
-                useLLVM = true;
                 # This causes all packages that depend on Rust to be rebuilt.
                 # crossSystem = {
                 #   config = "arm-none-eabi";
