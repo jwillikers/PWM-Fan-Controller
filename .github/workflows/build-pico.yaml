@@ -1,0 +1,48 @@
+name: Build Rasbperry Pi Pico
+
+"on":
+  pull_request:
+    branches: ["main"]
+    paths:
+      - .github/workflows/build-pico.yaml
+      - .justfile
+      - flake.lock
+      - flake.nix
+      - boards/pico/.cargo/**
+      - boards/pico/build.rs
+      - boards/pico/memory.x
+      - boards/pico/Cargo.lock
+      - boards/pico/Cargo.toml
+      - boards/pico/default.nix
+      - boards/pico/src/**
+  push:
+    branches: ["main"]
+    paths:
+      - .github/workflows/build-pico.yaml
+      - .justfile
+      - flake.lock
+      - flake.nix
+      - boards/pico/.cargo/**
+      - boards/pico/build.rs
+      - boards/pico/memory.x
+      - boards/pico/Cargo.lock
+      - boards/pico/Cargo.toml
+      - boards/pico/default.nix
+      - boards/pico/src/**
+  workflow_dispatch:
+
+jobs:
+  build-pico:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: DeterminateSystems/nix-installer-action@v14
+      - uses: DeterminateSystems/magic-nix-cache-action@v8
+      - name: Build
+        run: nix build
+      - name: Upload firmware
+        uses: actions/upload-artifact@v4
+        with:
+          name: pwm-fan-controller-pico
+          path: |
+            result/bin/pwm-fan-controller-pico
