@@ -72,7 +72,7 @@
               };
               app = flake-utils.lib.mkApp {
                 runtimeInputs = [boards.attiny85.nativeBuildInputs.avrdude];
-                drv = nativePkgs.writeScriptBin "flash-pwm-fan-controller" ''
+                drv = nativePkgs.writeScriptBin "flash-pwm-fan-controller-attiny85" ''
                   ${boards.attiny85.nativeBuildInputs.avrdude} -c USBtiny -B 4 -p attiny85 -U flash:w:${self.packages.${system}.pwm-fan-controller.attiny85}/bin/attiny85-pwm-fan-controller.hex:i
                 '';
               };
@@ -111,6 +111,14 @@
               devShell = boards.pico.craneLib.devShell {
                 checks = self.checks.${system};
                 nativeBuildInputs = boards.pico.nativeBuildInputs;
+              };
+              app = flake-utils.lib.mkApp {
+                runtimeInputs = [boards.pico.nativeBuildInputs.probe-run];
+                drv = nativePkgs.writeScriptBin "flash-pwm-fan-controller-pico" ''
+                  cd ./boards/pico
+                  ${boards.pico.nativeBuildInputs.cargo}/bin/cargo run --bin ${self.packages.${system}.pwm-fan-controller.pico}/bin/pwm-fan-controller-pico
+                  # ${boards.pico.nativeBuildInputs.probe-run}/bin/probe-run --chip RP2040
+                '';
               };
             };
           };
