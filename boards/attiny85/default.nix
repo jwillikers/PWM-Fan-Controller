@@ -41,15 +41,15 @@ rustPlatform.buildRustPackage {
   buildPhase = ''
     runHook preBuild
     cargo build -j $NIX_BUILD_CORES --release --frozen --target ${./avr-unknown-none-attiny85.json} -Z build-std=core
-    cargo objcopy -- -O ihex attiny85-pwm-fan-controller.hex
+    cargo objcopy -- -O ihex pwm-fan-controller-attiny85.hex
     runHook postBuild
   '';
   postBuild = ''
-    cargo objcopy -- -O ihex attiny85-pwm-fan-controller.hex
+    cargo objcopy -- -O ihex pwm-fan-controller-attiny85.hex
   '';
   installPhase = ''
     mkdir --parents $out/bin
-    mv attiny85-pwm-fan-controller.hex $out/bin/
+    mv pwm-fan-controller-attiny85.hex $out/bin/
   '';
   buildInputs = [
   ];

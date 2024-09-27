@@ -112,7 +112,15 @@
                 checks = self.checks.${system};
                 nativeBuildInputs = boards.pico.nativeBuildInputs;
               };
-              app = flake-utils.lib.mkApp {
+              app-elf2uf2-rs = flake-utils.lib.mkApp {
+                runtimeInputs = [boards.pico.nativeBuildInputs.probe-run];
+                drv = nativePkgs.writeScriptBin "flash-pwm-fan-controller-pico" ''
+                  cd ./boards/pico
+                  # ${boards.pico.nativeBuildInputs.cargo}/bin/cargo run --bin ${self.packages.${system}.pwm-fan-controller.pico}/bin/pwm-fan-controller-pico
+                  # ${boards.pico.nativeBuildInputs.elf2uf2-rs}/bin/elf2uf2-rs
+                '';
+              };
+              probe-run-rs = flake-utils.lib.mkApp {
                 runtimeInputs = [boards.pico.nativeBuildInputs.probe-run];
                 drv = nativePkgs.writeScriptBin "flash-pwm-fan-controller-pico" ''
                   cd ./boards/pico
@@ -141,8 +149,9 @@
           apps = {
             # attiny85 = boards.attiny85.app;
             # default = boards.attiny85.app;
-            default = boards.pico.app;
-            pico = boards.pico.app;
+            default = boards.pico.app-probe-run;
+            pico.elf2uf2-rs = boards.pico.app-elf2uf2-rs;
+            pico.probe-run = boards.pico.app-probe-run;
           };
         }
       );
