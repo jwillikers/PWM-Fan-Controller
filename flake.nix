@@ -98,6 +98,7 @@
               nativeBuildInputs = with boards.pico.pkgs; [
                 elf2uf2-rs
                 flip-link
+                probe-run
               ] ++ boards.pico.commonNativeBuildInputs;
               buildInputs = with boards.pico.pkgs; [];
               craneLib = (crane.mkLib boards.pico.pkgs).overrideToolchain (p: p.rust-bin.stable.latest.default.override {
