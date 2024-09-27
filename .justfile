@@ -15,9 +15,12 @@ just-fmt:
 alias b := build
 
 build board="attiny85" profile="dev":
+    #!/usr/bin/env nu
     cd "boards/{{ board }}"
     ^cargo build --profile "{{ profile }}"
-    ^cargo objcopy -- -O ihex "pwm-fan-controller-{{ board }}.hex"
+    if {{ board }} == "attiny85" {
+        ^cargo objcopy -- -O ihex "pwm-fan-controller-{{ board }}.hex"
+    }
 
 alias f := run
 alias flash := run
