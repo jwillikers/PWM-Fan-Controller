@@ -16,7 +16,7 @@ endif::[]
 :fish: https://fishshell.com/[fish]
 :flip-link: https://github.com/knurling-rs/flip-link[flip-link]
 :Git: https://git-scm.com/[Git]
-:Linux: https://www.linuxfoundation.org/[Linux]
+:Nix: https://nixos.org/[Nix]
 :Noctua-NF-P12-redux-1700-PWM-Fan: https://noctua.at/en/nf-p12-redux-1700-pwm[Noctua NF-P12 redux-1700 PWM Fan]
 :Picoprobe-Wiring: https://datasheets.raspberrypi.com/pico/getting-started-with-pico.pdf[Picoprobe Wiring]
 :PicoProbe-PCB-kit: https://shop.pimoroni.com/products/picoprobe-pcb-kit?variant=39954095472723[PicoProbe PCB kit]
@@ -88,11 +88,11 @@ The Raspberry Pi Pico draws 2.07 mA of current in this particular configuration.
 
 == Getting Started
 
-. Install {rustup}.
+. Install an implementation of {Nix}, such as https://lix.systems[Lix] used here.
 +
 [,sh]
 ----
-curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+curl -sSf -L https://install.lix.systems/lix | sh -s -- install
 ----
 
 . Clone the repository.
@@ -109,27 +109,6 @@ git clone https://github.com/jwillikers/pwm-fan-controller.git
 cd pwm-fan-controller/boards/pico
 ----
 
-. Install the {Rust} toolchain for the RP2040.
-+
-[,sh]
-----
-rustup target add thumbv6m-none-eabi
-----
-
-. Install {flip-link}.
-+
-[,sh]
-----
-cargo install flip-link
-----
-
-. Install {elf2uf2-rs}.
-+
-[,sh]
-----
-cargo install elf2uf2-rs
-----
-
 . Double check that link:.cargo/config.toml[.cargo/config.toml] has the runner set to `elf2uf2-rs -d`.
 
 . While holding the `BOOT` button, attach the Pico to your computer using the micro-USB port.
@@ -138,7 +117,7 @@ cargo install elf2uf2-rs
 +
 [,sh]
 ----
-cargo run
+nix develop '.#pico' --command cargo run
 ----
 
 == Probe
@@ -210,9 +189,6 @@ cargo run
 * Document how to use a debug probe with cargo-embed.
 * Document how to use the probe-rs-debugger VSCode extension.
 * Measure power efficiency.
-* Add GitHub CI actions.
-* Add pre-commit hooks?
-* Include pictures in README.
 
 == References
 
@@ -247,7 +223,6 @@ Several of these projects are enumerated below.
 * {fish}
 * {flip-link}
 * {Git}
-* {Linux}
 * {probe-run}
 * {rp-hal}
 * {Rust}

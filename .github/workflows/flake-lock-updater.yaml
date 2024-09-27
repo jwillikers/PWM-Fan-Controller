@@ -7,7 +7,7 @@ name: Flake ❄️ Lock 🔒️ Updater ✨
   workflow_dispatch:
 
 jobs:
-  lock-updater:
+  flake-lock-updater:
     name: Flake Lock Updater
     runs-on: ubuntu-latest
     steps:

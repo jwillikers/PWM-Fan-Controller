@@ -18,9 +18,9 @@ jobs:
       - uses: DeterminateSystems/nix-installer-action@v14
       - uses: DeterminateSystems/magic-nix-cache-action@v8
       - name: Update ATtiny85 Cargo lock file
-        run: cd boards/attiny85; nix develop --command cargo update
+        run: nix develop --command 'cd boards/attiny85; cargo update'
       - name: Update Pico Cargo lock file
-        run: cd boards/pico; nix develop --command cargo update
+        run: nix develop --command 'cd boards/pico; cargo update'
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v7
         with:

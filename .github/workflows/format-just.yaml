@@ -4,9 +4,10 @@ name: Format justfiles
     branches: ["main"]
     paths:
       - .github/workflows/format-just.yaml
-      - '**/flake.lock'
+      - flake.lock
       - '**/.justfile'
       - '**/justfile'
+      - '**/*.just'
 
 jobs:
   format-just:
@@ -16,4 +17,4 @@ jobs:
       - uses: DeterminateSystems/nix-installer-action@v14
       - uses: DeterminateSystems/magic-nix-cache-action@v8
       - name: Format justfile
-        run: cd boards/attiny85; nix develop --command just --check --fmt --unstable --working-directory ../..
+        run: nix develop --command just --check --fmt --unstable

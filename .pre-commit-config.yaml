@@ -24,11 +24,12 @@ repos:
   - repo: local
     hooks:
       - id: just
-        entry: just --fmt --unstable
+        entry: nix develop --command just --fmt --unstable
         files: |
           (?x)^(
-            .justfile|
-            justfile
+            \.justfile|
+            justfile|
+            .*\.just
           )$
         language: system
         name: just
@@ -36,25 +37,27 @@ repos:
       - id: rustfmt
         name: rustfmt
         description: Format Rust files with rustfmt.
-        entry: rustfmt
-        pass_filenames: true
-        types: [file, rust]
+        entry: nix develop --command rustfmt
         language: system
-      # - id: rust-clippy-attiny85
-      #   name: Rust clippy ATtiny85
-      #   description: Run cargo clippy on files included in the commit.
-      #   entry: cargo clippy --all-targets --all-features --manifest-path boards/attiny85/Cargo.toml -- -Dclippy::all
-      #   pass_filenames: false
-      #   types: [file, rust]
-      #   language: system
+        types: [file, rust]
+        pass_filenames: true
+      - id: rust-clippy-attiny85
+        name: Rust clippy ATtiny85
+        description: Run cargo clippy on files included in the commit.
+        language: system
+        entry: nix develop --command cargo clippy --all-targets --all-features --manifest-path boards/attiny85/Cargo.toml -- -Dclippy::all
+        pass_filenames: false
+        types: [file, rust]
       # - id: rust-clippy-pico
       #   name: Rust clippy Pico
       #   description: Run cargo clippy on files included in the commit.
-      #   entry: cargo clippy --all-targets --all-features --manifest-path boards/pico/Cargo.toml -- -Dclippy::all
+      #   entry: nix develop --command cargo clippy --all-targets --all-features --manifest-path boards/pico/Cargo.toml -- -Dclippy::all
       #   pass_filenames: false
       #   types: [file, rust]
       #   language: system
-  - repo: https://github.com/adrienverge/yamllint.git
-    rev: v1.35.1
-    hooks:
       - id: yamllint
+        entry: nix develop --command yamllint
+        language: system
+        name: yamllint
+        pass_filenames: true
+        types: [file, yaml]

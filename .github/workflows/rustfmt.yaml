@@ -4,7 +4,7 @@ name: Format Rust code
     branches: ["main"]
     paths:
       - .github/workflows/rustfmt.yaml
-      - '**/flake.lock'
+      - flake.lock
       - '**.rs'
 
 jobs:
@@ -15,4 +15,4 @@ jobs:
       - uses: DeterminateSystems/nix-installer-action@v14
       - uses: DeterminateSystems/magic-nix-cache-action@v8
       - name: Check Rust formatting
-        run: cd boards/attiny85; nix develop --command nu --commands 'rustfmt --check ../../**/*.rs'
+        run: nix develop --command nu --commands 'rustfmt --check **/*.rs'

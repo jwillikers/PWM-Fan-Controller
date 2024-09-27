@@ -19,12 +19,8 @@ endif::[]
 :cargo-binutils: https://github.com/rust-embedded/cargo-binutils[cargo-binutils]
 :fish: https://fishshell.com/[fish]
 :Git: https://git-scm.com/[Git]
-:Linux: https://www.linuxfoundation.org/[Linux]
 :Nix: https://nixos.org/[Nix]
 :Noctua-NF-P12-redux-1700-PWM-Fan: https://noctua.at/en/nf-p12-redux-1700-pwm[Noctua NF-P12 redux-1700 PWM Fan]
-:Python: https://www.python.org/[Python]
-:Rouge: https://rouge.jneen.net/[Rouge]
-:Ruby: https://www.ruby-lang.org/en/[Ruby]
 :Rust: https://www.rust-lang.org/[Rust]
 :rustup: https://rustup.rs/[rustup]
 :USB-uISP: https://www.tindie.com/products/nsayer/usb-isp/[USB µISP]
@@ -216,7 +212,6 @@ Several of these projects are enumerated below.
 * {cargo-binutils}
 * {fish}
 * {Git}
-* {Linux}
 * {Rust}
 
 == Code of Conduct

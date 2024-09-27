@@ -24,4 +24,4 @@ target/
 .direnv/
 
 # Nix
-result/
+result

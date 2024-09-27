@@ -16,7 +16,7 @@ let
   };
 in
 rustPlatform.buildRustPackage {
-  pname = "attiny85-pwm-fan-controller";
+  pname = "pwm-fan-controller-attiny85";
   version = "0.0.1";
   src = ./.;
   cargoLock = {
