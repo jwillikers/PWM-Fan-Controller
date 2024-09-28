@@ -111,7 +111,7 @@
                       name = "run-probe-rs";
                       runtimeInputs = with pkgs; [probe-rs];
                       text = ''
-                        ${pkgs.probe-rs}/bin/probe-rs run --chip RP2040 ${self.packages.${system}.pwm-fan-controller-pico}/bin/pwm-fan-controller-pico
+                        ${pkgs.probe-rs}/bin/probe-rs run --chip RP2040 --protocol swd ${self.packages.${system}.pwm-fan-controller-pico}/bin/pwm-fan-controller-pico
                       '';
                     };
                   in {
