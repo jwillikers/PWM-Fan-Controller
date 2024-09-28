@@ -39,11 +39,11 @@ jobs:
       - uses: DeterminateSystems/nix-installer-action@v14
       - uses: DeterminateSystems/magic-nix-cache-action@v8
       - name: Build
-        run: nix develop --command just build attiny85 release
+        run: nix develop '.#attiny85' --command just build attiny85 release
       - name: Upload firmware
         uses: actions/upload-artifact@v4
         with:
           name: pwm-fan-controller-attiny85
           path: |
-            target/avr-unknown-none-attiny85/release/pwm-fan-controller-attiny85.elf
-            pwm-fan-controller-attiny85.hex
+            boards/attiny85/target/avr-unknown-none-attiny85/release/pwm-fan-controller-attiny85.elf
+            boards/attiny85/pwm-fan-controller-attiny85.hex
