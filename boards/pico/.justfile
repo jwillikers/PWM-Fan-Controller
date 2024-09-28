@@ -11,7 +11,7 @@ alias f := run
 alias flash := run
 alias r := run
 
-run profile="dev" method="": (build board profile)
+run profile="dev" method="": (build profile)
     #!/usr/bin/env nu
     let build_type = {
         if "{{ profile }}" == "dev" {
@@ -23,9 +23,9 @@ run profile="dev" method="": (build board profile)
     if ("{{ method }}" | is-empty) {
         ^cargo run --profile="{{ profile }}"
     } else if "{{ method }}" == "elf2uf2-rs" {
-        ^elf2uf2-rs --deploy $"boards/{{ board }}/target/thumbv6m-none-eabi/($build_type)/pwm-fan-controller-pico"
+        ^elf2uf2-rs --deploy $"target/thumbv6m-none-eabi/($build_type)/pwm-fan-controller-pico"
     } else if "{{ method }}" == "probe-rs" {
-        ^probe-rs --chip RP2040 --protocol swd $"boards/{{ board }}/target/thumbv6m-none-eabi/($build_type)/pwm-fan-controller-pico"
+        ^probe-rs --chip RP2040 --protocol swd $"target/thumbv6m-none-eabi/($build_type)/pwm-fan-controller-pico"
     }
 
 alias p := package

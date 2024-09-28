@@ -43,7 +43,7 @@ run board="attiny85" profile="dev" method="": (build board profile)
         } else if "{{ method }}" == "elf2uf2-rs" {
             ^elf2uf2-rs --deploy $"boards/{{ board }}/target/thumbv6m-none-eabi/($build_type)/pwm-fan-controller-pico"
         } else if "{{ method }}" == "probe-rs" {
-            ^probe-rs --chip RP2040 --protocol swd $"boards/{{ board }}/target/thumbv6m-none-eabi/($build_type)/pwm-fan-controller-pico"
+            ^probe-rs run --chip RP2040 --protocol swd $"boards/{{ board }}/target/thumbv6m-none-eabi/($build_type)/pwm-fan-controller-pico"
         }
     }
 
