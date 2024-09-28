@@ -3,8 +3,8 @@
 
 use panic_halt as _;
 
-use attiny_hal::simple_pwm::*;
 use attiny_hal::entry;
+use attiny_hal::simple_pwm::*;
 
 #[entry]
 fn main() -> ! {

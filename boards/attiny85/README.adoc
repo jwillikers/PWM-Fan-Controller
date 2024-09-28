@@ -19,11 +19,7 @@ endif::[]
 :cargo-binutils: https://github.com/rust-embedded/cargo-binutils[cargo-binutils]
 :fish: https://fishshell.com/[fish]
 :Git: https://git-scm.com/[Git]
-:Linux: https://www.linuxfoundation.org/[Linux]
 :Noctua-NF-P12-redux-1700-PWM-Fan: https://noctua.at/en/nf-p12-redux-1700-pwm[Noctua NF-P12 redux-1700 PWM Fan]
-:Python: https://www.python.org/[Python]
-:Rouge: https://rouge.jneen.net/[Rouge]
-:Ruby: https://www.ruby-lang.org/en/[Ruby]
 :Rust: https://www.rust-lang.org/[Rust]
 :rustup: https://rustup.rs/[rustup]
 :USB-uISP: https://www.tindie.com/products/nsayer/usb-isp/[USB µISP]
@@ -117,75 +113,38 @@ This should be the pin opposite the one attached to ground on the fan header.
 . Attach the USB µISP programmer to the 6-pin ISP breakout board.
 . Connect the 12V power supply to the 2nd pin in the fan header, the one immediately next to ground.
 
-== Program
+== Permissions
 
-. Install {rustup}.
+. Create a udev rule to allow access to the USB µISP programmer without requiring root access.
 +
-[,sh]
+./etc/udev/rules.d/60-USBmicroISP.rules
+[,udev]
 ----
-curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
-----
-
-. Install the AVR GCC toolchain, {AVR-Libc}, and {avrdude}.
-+
-[,sh]
-----
-sudo dnf --assumeyes install avr-gcc avr-libc avrdude
+SUBSYSTEM=="usb", ATTR{product}=="USBmicroISP", ATTR{idProduct}=="0c9f", ATTRS{idVendor}=="1781", TAG+="uaccess"
 ----
 
-. Install {cargo-binutils}.
-+
-[,sh]
-----
-cargo install cargo-binutils
-----
+. Unplug the probe, and plug it back in for the new udev rule to take effect.
 
-. Install the LLVM tools preview {Rust} component for cargo-binutils.
-+
-[,sh]
-----
-rustup component add llvm-tools-preview
-----
+== Develop
 
-. Clone the repository.
-+
-[,sh]
-----
-git clone https://github.com/jwillikers/pwm-fan-controller.git
-----
-
-. Change to the project's directory.
+. Change to the board's directory.
 +
 [,sh]
 ----
 cd pwm-fan-controller/boards/attiny85
 ----
 
-. Build the executable.
-+
-[,sh]
-----
-cargo build
-----
+. Connect the USB µISP to your computer.
 
-. Convert the executable to the file `pwm.hex` in the Intel hex format.
+. Build and flash the executable.
 +
 [,sh]
 ----
-cargo objcopy -- -O ihex pwm.hex
-----
-. Flash the `pwm.hex` file on the ATtiny85 with avrdude.
-+
-[,sh]
-----
-avrdude -c USBtiny -B 4 -p attiny85 -U flash:w:pwm.hex:i
+nix develop '.#attiny85' --command just flash
 ----
 
 == Todo
 
-* Add GitHub CI actions.
-* Add pre-commit hooks?
-* Include pictures in README.
 * Add a wiring diagram.
 * Describe using the USB-C breakout.
 * Measure power consumption.
@@ -218,7 +177,6 @@ Several of these projects are enumerated below.
 * {cargo-binutils}
 * {fish}
 * {Git}
-* {Linux}
 * {Rust}
 
 == Code of Conduct

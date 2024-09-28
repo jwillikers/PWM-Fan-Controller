@@ -1,0 +1,10 @@
+[attiny85-usbtiny]
+name = "ATtiny85 through USBTiny"
+
+[attiny85-usbtiny.reset]
+automatic = true
+
+[attiny85-usbtiny.avrdude]
+programmer = "USBtiny"
+partno = "attiny85"
+bitclock = 4

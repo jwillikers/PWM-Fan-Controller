@@ -1,5 +1,5 @@
 [package]
-name = "attiny85-pwm-fan-controller"
+name = "pwm-fan-controller-attiny85"
 version = "0.0.1"
 authors = ["Jordan Williams <jordan@jwillikers.com>"]
 edition = "2021"

@@ -11,17 +11,16 @@ ifdef::env-github[]
 endif::[]
 :Asciidoctor-link: https://asciidoctor.org[Asciidoctor]
 :cargo-embed: https://github.com/probe-rs/cargo-embed[cargo-embed]
-:Dapper-Mime: https://github.com/majbthrd/DapperMime[Dapper Mime]
 :elf2uf2-rs: https://github.com/JoNil/elf2uf2-rs[elf2uf2-rs]
 :fish: https://fishshell.com/[fish]
 :flip-link: https://github.com/knurling-rs/flip-link[flip-link]
 :Git: https://git-scm.com/[Git]
-:Linux: https://www.linuxfoundation.org/[Linux]
 :Noctua-NF-P12-redux-1700-PWM-Fan: https://noctua.at/en/nf-p12-redux-1700-pwm[Noctua NF-P12 redux-1700 PWM Fan]
 :Picoprobe-Wiring: https://datasheets.raspberrypi.com/pico/getting-started-with-pico.pdf[Picoprobe Wiring]
 :PicoProbe-PCB-kit: https://shop.pimoroni.com/products/picoprobe-pcb-kit?variant=39954095472723[PicoProbe PCB kit]
-:probe-run: https://github.com/knurling-rs/probe-run[probe-run]
+:probe-rs: https://probe.rs/[probe-rs]
 :Raspberry-Pi-Pico: https://www.raspberrypi.com/products/raspberry-pi-pico/[Raspberry Pi Pico]
+:Raspberry-Pi-Debug-Probe: https://www.raspberrypi.com/documentation/microcontrollers/debug-probe.html[Raspberry Pi Debug Probe]
 :rp-hal: https://github.com/rp-rs/rp-hal[rp-hal]
 :Rust: https://www.rust-lang.org/[Rust]
 :rustup: https://rustup.rs/[rustup]
@@ -88,99 +87,91 @@ The Raspberry Pi Pico draws 2.07 mA of current in this particular configuration.
 
 == Getting Started
 
-. Install {rustup}.
-+
-[,sh]
-----
-curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
-----
-
-. Clone the repository.
-+
-[,sh]
-----
-git clone https://github.com/jwillikers/pwm-fan-controller.git
-----
-
-. Change to the project's directory.
+. Change to the board's directory.
 +
 [,sh]
 ----
 cd pwm-fan-controller/boards/pico
 ----
 
-. Install the {Rust} toolchain for the RP2040.
-+
-[,sh]
-----
-rustup target add thumbv6m-none-eabi
-----
-
-. Install {flip-link}.
-+
-[,sh]
-----
-cargo install flip-link
-----
-
-. Install {elf2uf2-rs}.
-+
-[,sh]
-----
-cargo install elf2uf2-rs
-----
-
-. Double check that link:.cargo/config.toml[.cargo/config.toml] has the runner set to `elf2uf2-rs -d`.
-
 . While holding the `BOOT` button, attach the Pico to your computer using the micro-USB port.
 
-. Flash the board using Cargo's `run` subcommand.
+. Mount the drive provided by the Pico.
+This can be determined by perusing the block devices available from the `lsblk` command.
+To mount `/dev/sda1`, as in my case, use the `udisksctl` command like so.
 +
 [,sh]
 ----
-cargo run
+udisksctl mount --block-device /dev/sda1
 ----
 
+. Flash the board using the `nix run` command with the `pico.flash.elf2uf2-rs` target.
++
+[,sh]
+----
+nix run '.#pico.flash.elf2uf2-rs'
+----
+
+// == Develop
+
+// . Double check that link:.cargo/config.toml[.cargo/config.toml] has the runner set to `elf2uf2-rs -d`.
+
 == Probe
+
+Any CMSIS-DAP compatible debug probe should work with probe-rs.
+The {Raspberry-Pi-Debug-Probe} is the most straightforward probe to use for this, and quite affordable.
+If you happen to have another Raspberry Pi Pico on-hand, this can be used as a debug probe by following the directions in the <<Pico Probe>> section.
+
+If you want to use a probe with the `cargo run` command, be sure that link:.cargo/config.toml[.cargo/config.toml] has the runner set to `probe-run --chip RP2040 --protocol swd`.
+
+=== Raspberry Pi Debug Probe
+
+. Add a udev rule to be able to access the Raspberry Pi Debug Probe as a non-root user.
++
+./etc/udev/rules.d/60-pico-debug-probe.rules
+[source]
+----
+SUBSYSTEM=="usb", ATTRS{idVendor}=="2e8a", ATTRS{idProduct}=="000c", TAG+="uaccess"
+----
+
+. Unplug the probe, and plug it back in for the udev rule to take effect.
+
+// todo Wiring.
+. Connect the probe to the Raspberry Pi Pico.
+
+. Flash and run the firmware using the `nix run` command with the `pico.run.probe-rs` target.
+Alternatively, use the just command `just run dev probe-rs`.
++
+[,sh]
+----
+nix run '.#pico.run.probe-rs'
+----
+
+=== Pico Probe
 
 The `UF2` method is handy for programming microcontrollers without requiring any additional hardware.
 However, debug probes are quite convenient for flashing and debugging code running on the microcontroller.
 There are many debuggers available on the market, but there's something quaint about using a spare Pico as a debugger.
 The {PicoProbe-PCB-kit} is a nifty add-on that makes it a bit more convenient to use the Pico as a probe.
-The steps here describe how to use a Pico as a debug probe with the {Dapper-Mime} firmware for this project.
-
-. Install the necessary dependencies for {probe-run}.
-+
-[,sh]
-----
-sudo dnf install --assumeyes libusbx-devel systemd-devel
-----
-
-. Install {probe-run}.
-+
-[,sh]
-----
-cargo install probe-run
-----
-
-. Ensure that link:.cargo/config.toml[.cargo/config.toml] has the runner set to `probe-run --chip RP2040`.
-
-. Install the {TinyUSB} udev rules to be able to access the Dapper Mime Debug probe as a non-root user.
-+
-[,sh]
-----
-wget -qLO - https://raw.githubusercontent.com/hathach/tinyusb/master/examples/device/99-tinyusb.rules \
-    | sudo tee /etc/udev/rules.d/99-tinyusb.rules
-----
+The steps here describe how to use a Pico as a debug probe with the Raspberry Pi Debug Probe firmware and wire everything up.
 
 . While holding the `BOOTSEL` button on the Raspberry Pi Pico, connect it to the computer.
 
-. Download and install the Dapper Mime firmware to the Raspberry Pi Pico.
+. Mount the drive provided by the Pico.
+This can be determined by perusing the block devices available from the `lsblk` command.
+To mount `/dev/sda1`, as in my case, use the `udisksctl` command like so.
 +
 [,sh]
 ----
-wget -qL --directory-prefix=/run/media/$USER/RPI-RP2 \
-  https://github.com/majbthrd/DapperMime/releases/download/20210225/raspberry_pi_pico-DapperMime.uf2
+udisksctl mount --block-device /dev/sda1
+----
+
+. Download and install the Raspberry Pi Debug Probe firmware to the Raspberry Pi Pico.
++
+[,sh]
+----
+curl --location --output-dir=/run/media/$USER/RPI-RP2 --remote-name \
+  https://github.com/raspberrypi/debugprobe/releases/download/debugprobe-v2.0.1/debugprobe_on_pico.uf2
 ----
 
 . Connect the debug probe Pico to the Pico to flash according to the {Picoprobe-Wiring} documentation.
@@ -197,12 +188,7 @@ wget -qL --directory-prefix=/run/media/$USER/RPI-RP2 \
 | GP5/UART1 RX | GP0/UART0 TX
 |===
 
-. Now flash the Pico.
-+
-[,sh]
-----
-cargo run
-----
+. Now just follow the directions in the <<Raspberry Pi Debug Probe>> section to flash the target Pico.
 
 == Todo
 
@@ -210,9 +196,6 @@ cargo run
 * Document how to use a debug probe with cargo-embed.
 * Document how to use the probe-rs-debugger VSCode extension.
 * Measure power efficiency.
-* Add GitHub CI actions.
-* Add pre-commit hooks?
-* Include pictures in README.
 
 == References
 
@@ -242,12 +225,10 @@ This project is built on the hard work of countless open source contributors.
 Several of these projects are enumerated below.
 
 * {Asciidoctor-link}
-* {Dapper-Mime}
 * {elf2uf2-rs}
 * {fish}
 * {flip-link}
 * {Git}
-* {Linux}
 * {probe-run}
 * {rp-hal}
 * {Rust}

@@ -1,0 +1,49 @@
+name: Build ATtiny85
+
+"on":
+  pull_request:
+    branches: ["main"]
+    paths:
+      - .github/workflows/build-attiny85.yaml
+      - .justfile
+      - flake.lock
+      - flake.nix
+      - boards/attiny85/.cargo/**
+      - boards/attiny85/avr-unknown-none-attiny85.json
+      - boards/attiny85/Cargo.lock
+      - boards/attiny85/Cargo.toml
+      - boards/attiny85/default.nix
+      - boards/attiny85/rust-toolchain.toml
+      - boards/attiny85/src/**
+  push:
+    branches: ["main"]
+    paths:
+      - .github/workflows/build-attiny85.yaml
+      - .justfile
+      - flake.lock
+      - flake.nix
+      - boards/attiny85/.cargo/**
+      - boards/attiny85/avr-unknown-none-attiny85.json
+      - boards/attiny85/Cargo.lock
+      - boards/attiny85/Cargo.toml
+      - boards/attiny85/default.nix
+      - boards/attiny85/rust-toolchain.toml
+      - boards/attiny85/src/**
+  workflow_dispatch:
+
+jobs:
+  build-attiny85:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: DeterminateSystems/nix-installer-action@v14
+      - uses: DeterminateSystems/magic-nix-cache-action@v8
+      - name: Build
+        run: nix develop --command just build attiny85 release
+      - name: Upload firmware
+        uses: actions/upload-artifact@v4
+        with:
+          name: pwm-fan-controller-attiny85
+          path: |
+            target/avr-unknown-none-attiny85/release/pwm-fan-controller-attiny85.elf
+            pwm-fan-controller-attiny85.hex

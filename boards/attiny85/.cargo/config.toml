@@ -1,9 +1,9 @@
 [build]
-target = "avr-specs/avr-attiny85.json"
+target = "avr-unknown-none-attiny85.json"
 
 #[target.'cfg(target_arch = "avr")']
 # ravedude doesn't support running from an AVR USB programmer like the USB uISP without code modifications.
-#runner = "ravedude trinket"
+# runner = "ravedude attiny85-usbtiny"
 
 [unstable]
 build-std = ["core"]

@@ -11,8 +11,12 @@ ifdef::env-github[]
 endif::[]
 :Asciidoctor-link: https://asciidoctor.org[Asciidoctor]
 :fish: https://fishshell.com/[fish]
+:direnv: https://direnv.net/[direnv]
 :Git: https://git-scm.com/[Git]
+:just: https://just.systems/[just]
 :Linux: https://www.linuxfoundation.org/[Linux]
+:nix: https://nixos.org/[Nix]
+:nix-direnv: https://github.com/nix-community/nix-direnv[nix-direnv]
 :Noctua-NF-P12-redux-1700-PWM-Fan: https://noctua.at/en/nf-p12-redux-1700-pwm[Noctua NF-P12 redux-1700 PWM Fan]
 :Rust: https://www.rust-lang.org/[Rust]
 
@@ -40,6 +44,86 @@ image::boards/attiny85/pics/attiny85-pwm-fan-controller-breadboard-top-1.jpg[ATT
 image::boards/pico/pics/pico-pwm-fan-controller-breadboard-top-1.jpg[Raspberry PI Pico PWM Fan Controller Breadboard Top View 1, align=center]
 endif::[]
 
+== Develop
+
+{Nix} is used to manage dependencies, toolchains, and development environments for each board.
+This makes it possible to develop locally in an environment that is consistent with CI.
+The `nix develop` command can be used to enter or run commands in an environment with all of the necessary dependencies.
+For convenience, direnv can be used to automatically load this environment when entering the project's directory.
+The https://marketplace.visualstudio.com/items?itemName=mkhl.direnv[mkhl.direnv VSCode extension] integrates this environment in VSCode for development.
+The repository contains configuration for https://pre-commit.com/[pre-commit], which can be used to automate formatting and various checks when committing changes.
+Follow the instructions here to set up your development environment.
+
+. Install an implementation of {Nix}, such as https://lix.systems[Lix] used here.
++
+[,sh]
+----
+curl -sSf -L https://install.lix.systems/lix | sh -s -- install
+----
+
+. Install direnv for your system according to the https://direnv.net/docs/installation.html[direnv installation instructions].
++
+[,sh]
+----
+sudo rpm-ostree install direnv
+sudo systemctl reboot
+----
+
+. Integrate direnv with your shell by following the instructions on the https://direnv.net/docs/hook.html[direnv Setup page].
+
+. Clone the repository.
++
+[,sh]
+----
+git clone https://github.com/jwillikers/pwm-fan-controller.git
+----
+
+. Permit the direnv configuration for the desired board or boards in the repository.
+The following command allows loading the environments for all boards.
++
+[,sh]
+----
+direnv allow boards/*
+----
+
+. Run `pre-commit install` to configure pre-commit hooks in the repository.
++
+[,sh]
+----
+pre-commit install
+----
+
+. The {just} command runner can be used to perform common tasks, such as building the and flashing the firmware for a particular board.
+The commands do not automatically use or assume a Nix environment.
+When in the directory for a particular board, this shouldn't be a problem as direnv automatically loads the Nix environment.
+However, the top-level directory does not load any environment, so use `nix develop` as required to execute the `just commands`.
++
+[,sh]
+----
+nix develop '.#attiny85' --command just flash attiny85
+----
+
+=== Serial Port Permissions
+
+On Linux, most distributions require the user to be in a particular group to access serial ports.
+Here, I document the particular steps required to permit access to serial ports on Fedora Atomic variants.
+
+. On Fedora Atomic, the _dialout_ group does not exist in the `/etc/group`, so it must be added there.
++
+[,sh]
+----
+echo (getent group dialout) | sudo tee -a /etc/group
+----
+
+. Add the user to the _dialout_ group to access USB without requiring superuser privileges.
++
+[,sh]
+----
+sudo usermod --append --groups dialout $USER
+----
+
+. Log out and back in for the group change to take effect.
+
 == Boards
 
 * link:boards/attiny85/README.adoc[ATtiny85]
@@ -57,8 +141,11 @@ Several of these projects are enumerated below.
 
 * {Asciidoctor-link}
 * {fish}
+* {direnv}
 * {Git}
 * {Linux}
+* {Nix}
+* {nix-direnv}
 * {Rust}
 
 == Code of Conduct
