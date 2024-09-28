@@ -47,7 +47,17 @@
               ] ++ commonNativeBuildInputs;
               # todo This does not work yet.
               # pwm-fan-controller = pkgs.callPackage "./boards/attiny85/default.nix" { };
-              devShell = with boards.attiny85; pkgs.mkShell {
+
+              # The development shell requires the GCC AVR toolchain to be available.
+              # Thus, this cross-compilation configuration here does the trick.
+              avrCrossPkgs = import nixpkgs {
+                inherit overlays system;
+                crossSystem = {
+                  inherit overlays;
+                  config = "avr";
+                };
+              };
+              devShell = with boards.attiny85; avrCrossPkgs.mkShell {
                 # checks = self.checks.${system};
                 inherit nativeBuildInputs;
               };
