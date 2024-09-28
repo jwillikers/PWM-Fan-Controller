@@ -109,16 +109,20 @@ git clone https://github.com/jwillikers/pwm-fan-controller.git
 cd pwm-fan-controller/boards/pico
 ----
 
-. Double check that link:.cargo/config.toml[.cargo/config.toml] has the runner set to `elf2uf2-rs -d`.
-
 . While holding the `BOOT` button, attach the Pico to your computer using the micro-USB port.
 
-. Flash the board using Cargo's `run` subcommand.
+. Mount the drive provided by the Pico.
+
+. Flash the board using `nix run` command with the `pico.flash.elf2uf2-rs` target.
 +
 [,sh]
 ----
-nix develop '.#pico' --command cargo run
+nix run '.#pico.flash.elf2uf2-rs'
 ----
+
+// == Develop
+
+// . Double check that link:.cargo/config.toml[.cargo/config.toml] has the runner set to `elf2uf2-rs -d`.
 
 == Probe
 

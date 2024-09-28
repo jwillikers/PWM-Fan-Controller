@@ -24,109 +24,101 @@
       (system:
          let
           overlays = [ (import rust-overlay) ];
-          nativePkgs = import nixpkgs {
+          pkgs = import nixpkgs {
             inherit overlays system;
           };
-          # commonNativeBuildInputs = [
-          #   clippy
-          #   fish
-          #   just
-          #   nushell
-          #   pre-commit
-          #   rustfmt
-          #   yamllint
-          # ];
+          commonNativeBuildInputs = with pkgs; [
+            clippy
+            fish
+            just
+            nushell
+            pre-commit
+            rustfmt
+            yamllint
+          ];
           boards = {
             attiny85 = {
-              rustToolchain = nativePkgs.pkgsBuildHost.rust-bin.fromRustupToolchainFile ./boards/attiny85/rust-toolchain.toml;
-              pkgs = import nixpkgs {
-                inherit overlays system;
-                # crossSystem = {
-                  # config = "avr";
-                  # rust.platform = "${./boards/attiny85/avr-unknown-none-attiny85.json}";
-                  # rust.isNoStdTarget = true;
-                # };
-                # config.allowUnsupportedSystem = true;
-              };
-              commonNativeBuildInputs = with nativePkgs; [
-                clippy
-                fish
-                just
-                nushell
-                pre-commit
-                rustfmt
-                yamllint
-              ];
-              nativeBuildInputs = with nativePkgs; [
-                # unique
+              rustToolchain = pkgs.pkgsBuildHost.rust-bin.fromRustupToolchainFile ./boards/attiny85/rust-toolchain.toml;
+              nativeBuildInputs = with pkgs; [
                 avrdude
                 cargo-binutils
                 # ravedude
                 boards.attiny85.rustToolchain
-              ] ++ boards.attiny85.commonNativeBuildInputs;
+              ] ++ commonNativeBuildInputs;
               # todo This does not work yet.
               # pwm-fan-controller = pkgs.callPackage "./boards/attiny85/default.nix" { };
-              devShell = with boards.attiny85; boards.attiny85.pkgs.mkShell {
+              devShell = with boards.attiny85; pkgs.mkShell {
                 # checks = self.checks.${system};
                 inherit nativeBuildInputs;
               };
-              app = flake-utils.lib.mkApp {
-                runtimeInputs = [boards.attiny85.nativeBuildInputs.avrdude];
-                drv = nativePkgs.writeScriptBin "flash-pwm-fan-controller-attiny85" ''
-                  ${boards.attiny85.nativeBuildInputs.avrdude} -c USBtiny -B 4 -p attiny85 -U flash:w:${self.packages.${system}.pwm-fan-controller.attiny85}/bin/attiny85-pwm-fan-controller.hex:i
-                '';
+              apps = {
+                flash = {
+                  avrdude = let
+                    script = pkgs.writeShellApplication {
+                      name = "flash-avrdude";
+                      runtimeInputs = with pkgs; [avrdude];
+                      text = ''
+                        ${pkgs.avrdude}/bin/avrdude -c USBtiny -B 4 -p attiny85 -U flash:w:${self.packages.${system}.pwm-fan-controller-attiny85}/bin/pwm-fan-controller-attiny85.hex:i
+                      '';
+                    };
+                  in {
+                    type = "app";
+                    program = "${script}/bin/flash-avrdude";
+                  };
+                };
               };
             };
             pico = {
-              pkgs = import nixpkgs {
-                inherit overlays system;
-                # This causes all packages that depend on Rust to be rebuilt.
-                # crossSystem = {
-                #   config = "arm-none-eabi";
-                #   rust.rustcTarget = "thumbv6m-none-eabi";
-                # };
-              };
-              commonNativeBuildInputs = with boards.pico.pkgs; [
-                clippy
-                fish
-                just
-                nushell
-                pre-commit
-                rustfmt
-                yamllint
-              ];
-              nativeBuildInputs = with boards.pico.pkgs; [
+              nativeBuildInputs = with pkgs; [
                 elf2uf2-rs
                 flip-link
-                probe-run
-              ] ++ boards.pico.commonNativeBuildInputs;
-              buildInputs = with boards.pico.pkgs; [];
-              craneLib = (crane.mkLib boards.pico.pkgs).overrideToolchain (p: p.rust-bin.stable.latest.default.override {
+                probe-rs
+              ] ++ commonNativeBuildInputs;
+              buildInputs = with pkgs; [];
+              craneLib = (crane.mkLib pkgs).overrideToolchain (p: p.rust-bin.stable.latest.default.override {
                 extensions = [ "llvm-tools-preview" ];
                 targets = [ "thumbv6m-none-eabi" ];
               });
-              pwm-fan-controller = with boards.pico.pkgs; callPackage ./boards/pico/default.nix {
+              pwm-fan-controller = pkgs.callPackage ./boards/pico/default.nix {
                 craneLib = boards.pico.craneLib;
               };
-              devShell = boards.pico.craneLib.devShell {
-                checks = self.checks.${system};
+              devShell = pkgs.mkShell {
                 nativeBuildInputs = boards.pico.nativeBuildInputs;
               };
-              app-elf2uf2-rs = flake-utils.lib.mkApp {
-                runtimeInputs = [boards.pico.nativeBuildInputs.probe-run];
-                drv = nativePkgs.writeScriptBin "flash-pwm-fan-controller-pico" ''
-                  cd ./boards/pico
-                  # ${boards.pico.nativeBuildInputs.cargo}/bin/cargo run --bin ${self.packages.${system}.pwm-fan-controller.pico}/bin/pwm-fan-controller-pico
-                  # ${boards.pico.nativeBuildInputs.elf2uf2-rs}/bin/elf2uf2-rs
-                '';
-              };
-              probe-run-rs = flake-utils.lib.mkApp {
-                runtimeInputs = [boards.pico.nativeBuildInputs.probe-run];
-                drv = nativePkgs.writeScriptBin "flash-pwm-fan-controller-pico" ''
-                  cd ./boards/pico
-                  ${boards.pico.nativeBuildInputs.cargo}/bin/cargo run --bin ${self.packages.${system}.pwm-fan-controller.pico}/bin/pwm-fan-controller-pico
-                  # ${boards.pico.nativeBuildInputs.probe-run}/bin/probe-run --chip RP2040
-                '';
+              # todo Figure out why this somehow activates the ATtiny85 shell.
+              # devShell = boards.pico.craneLib.devShell {
+              #   checks = self.checks.${system};
+              #   nativeBuildInputs = boards.pico.nativeBuildInputs;
+              # };
+              apps = {
+                flash = {
+                  elf2uf2-rs = let
+                    script = pkgs.writeShellApplication {
+                      name = "flash-elf2uf2-rs";
+                      runtimeInputs = with pkgs; [elf2uf2-rs];
+                      text = ''
+                        ${pkgs.elf2uf2-rs}/bin/elf2uf2-rs --deploy ${self.packages.${system}.pwm-fan-controller-pico}/bin/pwm-fan-controller-pico
+                      '';
+                    };
+                  in {
+                    type = "app";
+                    program = "${script}/bin/flash-elf2uf2-rs";
+                  };
+                };
+                run = {
+                  probe-rs = let
+                    script = pkgs.writeShellApplication {
+                      name = "run-probe-rs";
+                      runtimeInputs = with pkgs; [probe-rs];
+                      text = ''
+                        ${pkgs.probe-rs}/bin/probe-rs run --chip RP2040 ${self.packages.${system}.pwm-fan-controller-pico}/bin/pwm-fan-controller-pico
+                      '';
+                    };
+                  in {
+                    type = "app";
+                    program = "${script}/bin/run-probe-rs";
+                  };
+                };
               };
             };
           };
@@ -138,8 +130,9 @@
           packages = {
             # default = boards.attiny85.pwm-fan-controller;
             default = boards.pico.pwm-fan-controller;
-            # pwm-fan-controller.attiny85 = boards.attiny85.pwm-fan-controller;
-            pwm-fan-controller.pico = boards.pico.pwm-fan-controller;
+            # pwm-fan-controller-attiny85 = boards.attiny85.pwm-fan-controller;
+            # todo Why can't it be pwm-fan-controller.pico?
+            pwm-fan-controller-pico = boards.pico.pwm-fan-controller;
           };
           devShells = {
             attiny85 = boards.attiny85.devShell;
@@ -147,11 +140,11 @@
             pico = boards.pico.devShell;
           };
           apps = {
-            # attiny85 = boards.attiny85.app;
-            # default = boards.attiny85.app;
-            default = boards.pico.app-probe-run;
-            pico.elf2uf2-rs = boards.pico.app-elf2uf2-rs;
-            pico.probe-run = boards.pico.app-probe-run;
+            attiny85.flash.avrdude = boards.attiny85.apps.flash.avrdude;
+            # default = boards.attiny85.apps.flash.avrdude;
+            default = boards.pico.apps.flash.elf2uf2-rs;
+            pico.flash.elf2uf2-rs = boards.pico.apps.flash.elf2uf2-rs;
+            pico.run.probe-rs = boards.pico.apps.run.probe-rs;
           };
         }
       );
