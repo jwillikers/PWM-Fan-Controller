@@ -45,8 +45,6 @@
                 # ravedude
                 boards.attiny85.rustToolchain
               ] ++ commonNativeBuildInputs;
-              # todo This does not work yet.
-              # pwm-fan-controller = pkgs.callPackage "./boards/attiny85/default.nix" { };
 
               # The development shell requires the GCC AVR toolchain to be available.
               # Thus, this cross-compilation configuration here does the trick.
@@ -57,6 +55,8 @@
                   config = "avr";
                 };
               };
+              # todo This does not work yet.
+              # pwm-fan-controller = avrCrossPkgs.callPackage "./boards/attiny85/default.nix" { };
               devShell = with boards.attiny85; avrCrossPkgs.mkShell {
                 # checks = self.checks.${system};
                 inherit nativeBuildInputs;
