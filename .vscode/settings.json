@@ -37,6 +37,7 @@
         "Pinouts",
         "proto",
         "Protoboard",
+        "rustc",
         "rustfmt",
         "rustup",
         "SWCLK",
