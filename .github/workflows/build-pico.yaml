@@ -40,9 +40,12 @@ jobs:
       - uses: DeterminateSystems/magic-nix-cache-action@v8
       - name: Build
         run: nix build '.#pwm-fan-controller-pico'
+      - name: Generate UF2
+        run: nix develop '.#pico' --command elf2uf2-rs result/bin/pwm-fan-controller-pico pwm-fan-controller-pico
       - name: Upload firmware
         uses: actions/upload-artifact@v4
         with:
           name: pwm-fan-controller-pico
           path: |
             result/bin/pwm-fan-controller-pico
+            pwm-fan-controller-pico.uf2

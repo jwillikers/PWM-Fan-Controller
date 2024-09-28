@@ -34,6 +34,17 @@ alias pack := package
 package:
     ^nix build ".#pwm-fan-controller-pico"
 
+uf2 profile="dev":
+    #!/usr/bin/env nu
+    let build_type = {
+        if "{{ profile }}" == "dev" {
+            "debug"
+        } else {
+            "{{ profile }}"
+        }
+    }
+    ^elf2uf2-rs $"target/thumbv6m-none-eabi/($build_type)/pwm-fan-controller-pico" pwm-fan-controller-pico
+
 alias u := update
 alias up := package
 

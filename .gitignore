@@ -16,6 +16,7 @@ target/
 # Ignore any built binaries.
 *.bin
 *.hex
+*.uf2
 
 *.jpg~
 *.jpg-autosave.kra
