@@ -16,6 +16,7 @@
         "Dclippy",
         "devel",
         "dialout",
+        "direnv",
         "eabi",
         "getent",
         "ifdef",
