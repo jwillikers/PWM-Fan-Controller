@@ -69,6 +69,7 @@ All the hardware components in my particular build are enumerated here.
 
 .Fan Controller Components
 * https://www.adafruit.com/product/798[12V DC 1000mA (1A) regulated switching power adapter - UL listed]
+* https://www.digikey.com/en/products/detail/molex/0470533000/3262217[4-Pin Male Fan Header]
 * https://www.adafruit.com/product/1465[Adafruit 6-pin AVR ISP Breadboard Adapter Mini Kit]
 * {ATtiny85-20pu}
 * https://www.adafruit.com/product/368[Female DC Power adapter - 2.1mm jack to screw terminal block]
