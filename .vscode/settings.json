@@ -54,5 +54,6 @@
         "udisksctl",
         "usermod",
         "VBUS"
-    ]
+    ],
+    "asciidoc.antora.enableAntoraSupport": false
 }
