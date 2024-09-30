@@ -65,7 +65,7 @@ All the hardware components in my particular build are enumerated here.
 .Fan Controller Components
 * https://www.adafruit.com/product/798[12V DC 1000mA (1A) regulated switching power adapter - UL listed]
 * https://www.digikey.com/en/products/detail/molex/0470533000/3262217[4-Pin Male Fan Header]
-* https://www.adafruit.com/product/1787[74AHCT125 - Quad Level-Shifter]
+* https://www.digikey.com/en/products/detail/texas-instruments/SN74AHCT125N/375798[74AHCT125 - Quad Level-Shifter]
 * https://www.adafruit.com/product/368[Female DC Power adapter - 2.1mm jack to screw terminal block]
 * https://www.adafruit.com/product/64[Half-size breadboard]
 * {Noctua-NF-P12-redux-1700-PWM-Fan}
