@@ -34,6 +34,7 @@
         "Noctua",
         "objcopy",
         "ostree",
+        "Perma",
         "Pico",
         "picoprobe",
         "Pinout",
@@ -54,5 +55,6 @@
         "udisksctl",
         "usermod",
         "VBUS"
-    ]
+    ],
+    "asciidoc.antora.enableAntoraSupport": false
 }

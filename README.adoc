@@ -20,6 +20,9 @@ endif::[]
 :Noctua-NF-P12-redux-1700-PWM-Fan: https://noctua.at/en/nf-p12-redux-1700-pwm[Noctua NF-P12 redux-1700 PWM Fan]
 :Rust: https://www.rust-lang.org/[Rust]
 
+image:https://github.com/jwillikers/resume/actions/workflows/build-attiny85.yaml/badge.svg[ATtiny85 Build, link=https://github.com/jwillikers/pwm-fan-controller/actions/workflows/build-attiny85.yaml]
+image:https://github.com/jwillikers/resume/actions/workflows/build-pico.yaml/badge.svg[Pico Build, link=https://github.com/jwillikers/pwm-fan-controller/actions/workflows/build-pico.yaml]
+
 PWM fan controller projects written in {Rust} targeting different microcontrollers.
 Currently, these are basic examples for setting the {Noctua-NF-P12-redux-1700-PWM-Fan} to a quiescent 40% speed.
 Implementations for specific boards can be found in the `boards` directory.

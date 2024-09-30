@@ -67,19 +67,52 @@ endif::[]
 
 All the hardware components in my particular build are enumerated here.
 
-.Fan Controller Components
+.Fan Controller Breadboard Components
 * https://www.adafruit.com/product/798[12V DC 1000mA (1A) regulated switching power adapter - UL listed]
-* https://www.adafruit.com/product/1465[Adafruit 6-pin AVR ISP Breadboard Adapter Mini Kit]
+* https://www.digikey.com/en/products/detail/onsemi/1N4001RLG/918017[1N4001 Power Blocking Diode]
+* https://www.digikey.com/en/products/detail/molex/0470533000/3262217[4-Pin Male Fan Header]
+* https://www.adafruit.com/product/1465[6-pin AVR ISP Breadboard Adapter Mini Kit]
 * {ATtiny85-20pu}
-* https://www.adafruit.com/product/368[Female DC Power adapter - 2.1mm jack to screw terminal block]
+* https://www.adafruit.com/product/373[Breadboard-friendly 2.1mm DC barrel jack]
 * https://www.adafruit.com/product/64[Half-size breadboard]
-* {Noctua-NF-P12-redux-1700-PWM-Fan}
+* https://www.adafruit.com/product/1311[Hook-up Wire - 22AWG Solid Core]
 * https://www.adafruit.com/product/759[Premium Male/Male Jumper Wires - 40 x 3" (75mm)]
-* USB-C power supply for the microcontroller
+* 5V USB-C power supply for the microcontroller
 * {Adafruit-USB-C-Breakout}
 * {USB-uISP}
 
-Programming will also require a USB-C cable and a computer.
+The compact protoboard omits the AVR breadboard adapter, incorporates a socket to ensconce the ATtiny85, and adds a DC/DC converter along with an electrolytic capacitor to convert 12V power down to 5V for the ATtiny85.
+
+.Fan Controller Protoboard Components
+* https://www.adafruit.com/product/798[12V DC 1000mA (1A) regulated switching power adapter - UL listed]
+* https://www.digikey.com/en/products/detail/onsemi/1N4001RLG/918017[1N4001 Power Blocking Diode]
+* https://www.digikey.com/en/products/detail/molex/0470533000/3262217[4-Pin Male Fan Header]
+* https://www.digikey.com/en/products/detail/w%C3%BCrth-elektronik/860020672010/5727093[10 uF 50V Electrolytic Capacitor]
+* {ATtiny85-20pu}
+* https://www.adafruit.com/product/1608[Adafruit Perma-Proto Quarter-sized Breadboard PCB - Single]
+* https://www.adafruit.com/product/373[Breadboard-friendly 2.1mm DC barrel jack]
+* https://www.adafruit.com/product/1311[Hook-up Wire - 22AWG Solid Core]
+* https://www.adafruit.com/product/2202[IC Socket - for 8-pin 0.3" Chips - Pack of 3]
+* https://www.digikey.com/en/products/detail/traco-power/TSR-1-2450E/12171283[Traco Power TSR 1-2450E Non-Isolated DC/DC Converter]
+
+Unfortunately, the small protoboard doesn't make it possible to program the ATtiny85 directly, unlike the breadboard circuit.
+So, you'll still need to put together something for that.
+That can be pretty easily accomplished by using the breadboard layout with only the necessary components to program the ATtiny85.
+These components are enumerated separately below.
+
+.AVR Programming Breadboard Components
+* 5V USB-C power supply for the microcontroller
+* https://www.adafruit.com/product/1465[6-pin AVR ISP Breadboard Adapter Mini Kit]
+* {ATtiny85-20pu}
+* https://www.adafruit.com/product/64[Half-size breadboard]
+* https://www.adafruit.com/product/1311[Hook-up Wire - 22AWG Solid Core]
+* {Adafruit-USB-C-Breakout}
+* {USB-uISP}
+
+Programming will also require a USB-C cable and a computer, of course.
+If you don't already have one, you'll probably want a fan, too.
+This circuit is meant for a 12V fan.
+I use this controller for the {Noctua-NF-P12-redux-1700-PWM-Fan}.
 
 == How it Works
 
