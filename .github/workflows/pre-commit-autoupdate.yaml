@@ -28,3 +28,4 @@ jobs:
           branch: "update/pre-commit-hooks"
           commit-message: "chore(deps): Update pre-commit hooks"
           title: "chore(deps): Update pre-commit hooks"
+          token: ${{ secrets.GH_TOKEN_FOR_UPDATES }}

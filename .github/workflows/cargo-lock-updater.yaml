@@ -28,3 +28,4 @@ jobs:
           branch: "update/cargo-lock"
           commit-message: "chore(deps): Update Cargo lock files"
           title: "chore(deps): Update Cargo lock files"
+          token: ${{ secrets.GH_TOKEN_FOR_UPDATES }}
