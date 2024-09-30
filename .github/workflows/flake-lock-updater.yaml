@@ -18,9 +18,9 @@ jobs:
       - uses: DeterminateSystems/magic-nix-cache-action@v8
       - uses: DeterminateSystems/update-flake-lock@v24
         with:
-          pr-title: "chore: update flake.lock"
-          # Labels to be set on the PR
+          pr-assignees: ${{ github.repository_owner }}
           pr-labels: |
-            dependencies
             automated
+            dependencies
+          pr-title: "chore: update flake.lock"
           token: ${{ secrets.GH_TOKEN_FOR_UPDATES }}
