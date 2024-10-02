@@ -118,8 +118,8 @@ I use this controller for the {Noctua-NF-P12-redux-1700-PWM-Fan}.
 
 This is a dead-simple PWM fan controller that simply lowers the speed of the {Noctua-NF-P12-redux-1700-PWM-Fan} to a quiescent 40% speed.
 The microcontroller simply sets the fan speed and then does nothing.
-Since the ATtiny85 is a 5V microcontroller and the Noctua fan uses 5V logic, no logic-level shifter is necessary.
-The ATtiny85 draws 2.17 mA of current in this particular configuration.
+Since the ATtiny85 is a 5V microcontroller and the Noctua fan uses 5V logic, no logic-level shifting is necessary.
+The ATtiny85 draws 1.61 mA of current in this particular configuration.
 The fan setup might evolve in the future to take into account temperature sensing and dynamic speed adjustment.
 
 == Circuit

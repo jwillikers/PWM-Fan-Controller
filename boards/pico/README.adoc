@@ -88,7 +88,7 @@ The fan setup might evolve in the future to take into account temperature sensin
 The 3.3V Raspberry Pi Pico requires a logic-level shifter to boost the PWM signal up to 5V for the fan.
 I use the 74AHCT125 to perform the logic-level conversion, using pin #40, `VBUS`, to provide the 5V reference voltage.
 
-The Raspberry Pi Pico draws 2.07 mA of current in this particular configuration.
+The Raspberry Pi Pico draws 1.99 mA of current in this particular configuration.
 
 == Getting Started
 
