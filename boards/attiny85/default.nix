@@ -2,12 +2,12 @@
 craneLib
 , cargoArtifacts
 , commonArgs
-, pkgs
-, lib
 , stdenv
 }:
-craneLib.buildPackage (commonArgs // {
+craneLib.buildPackage commonArgs // {
   inherit cargoArtifacts;
+
+  version = "0.0.1";
 
   postBuild = ''
     cargo objcopy -- -O ihex pwm-fan-controller-attiny85.hex
@@ -16,4 +16,4 @@ craneLib.buildPackage (commonArgs // {
   postInstall = ''
     mv pwm-fan-controller-attiny85.hex $out/bin/
   '';
-})
+}

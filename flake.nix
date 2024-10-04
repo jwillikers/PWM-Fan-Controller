@@ -69,7 +69,6 @@
               # Common arguments can be set here to avoid repeating them later
               commonArgs = {
                 pname = "pwm-fan-controller-attiny85";
-                version = "0.0.1";
                 strictDeps = true;
                 doCheck = false;
 
