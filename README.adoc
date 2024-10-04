@@ -22,9 +22,10 @@ endif::[]
 image:https://github.com/jwillikers/pwm-fan-controller/actions/workflows/build-attiny85.yaml/badge.svg[ATtiny85 Build, link=https://github.com/jwillikers/pwm-fan-controller/actions/workflows/build-attiny85.yaml]
 image:https://github.com/jwillikers/pwm-fan-controller/actions/workflows/build-pico.yaml/badge.svg[Pico Build, link=https://github.com/jwillikers/pwm-fan-controller/actions/workflows/build-pico.yaml]
 
-PWM fan controller projects written in {Rust} targeting different microcontrollers.
+PWM fan controller written in {Rust} targeting different microcontrollers.
 Currently, these are basic examples for setting the {Noctua-NF-P12-redux-1700-PWM-Fan} to a quiescent 40% speed.
 Implementations for specific boards can be found in the `boards` directory.
+The implementations include boards targeting the Arm, AVR, and RISC-V architectures.
 
 ifdef::env-github[]
 ++++
@@ -130,6 +131,7 @@ sudo usermod --append --groups dialout $USER
 
 * link:boards/attiny85/README.adoc[ATtiny85]
 * link:boards/pico/README.adoc[Raspberry Pi Pico]
+* link:boards/qt-py-ch32v203/README.adoc[Adafruit QT Py CH32V203]
 
 == Contributing
 
