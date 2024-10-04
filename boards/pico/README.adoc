@@ -113,7 +113,7 @@ udisksctl mount --block-device /dev/sda1
 +
 [,sh]
 ----
-nix run '.#pico.flash.elf2uf2-rs'
+nix run '../..#pico.flash.elf2uf2-rs'
 ----
 
 // == Develop

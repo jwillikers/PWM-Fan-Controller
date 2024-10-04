@@ -1,0 +1,50 @@
+name: Build QT Py CH32V203
+
+"on":
+  pull_request:
+    branches: ["main"]
+    paths:
+      - .github/workflows/build-qt-py-ch32v203.yaml
+      - .justfile
+      - flake.lock
+      - flake.nix
+      - boards/qt-py-ch32v203/.cargo/**
+      - boards/qt-py-ch32v203/build.rs
+      - boards/qt-py-ch32v203/memory.x
+      - boards/qt-py-ch32v203/Cargo.lock
+      - boards/qt-py-ch32v203/Cargo.toml
+      - boards/qt-py-ch32v203/default.nix
+      - boards/qt-py-ch32v203/rust-toolchain.toml
+      - boards/qt-py-ch32v203/src/**
+  push:
+    branches: ["main"]
+    paths:
+      - .github/workflows/build-qt-py-ch32v203.yaml
+      - .justfile
+      - flake.lock
+      - flake.nix
+      - boards/qt-py-ch32v203/.cargo/**
+      - boards/qt-py-ch32v203/build.rs
+      - boards/qt-py-ch32v203/memory.x
+      - boards/qt-py-ch32v203/Cargo.lock
+      - boards/qt-py-ch32v203/Cargo.toml
+      - boards/qt-py-ch32v203/default.nix
+      - boards/qt-py-ch32v203/rust-toolchain.toml
+      - boards/qt-py-ch32v203/src/**
+  workflow_dispatch:
+
+jobs:
+  build-qt-py-ch32v203:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: DeterminateSystems/nix-installer-action@v14
+      - uses: DeterminateSystems/magic-nix-cache-action@v8
+      - name: Build
+        run: nix build '.#pwm-fan-controller-qt-py-ch32v203'
+      - name: Upload firmware
+        uses: actions/upload-artifact@v4
+        with:
+          name: pwm-fan-controller-qt-py-ch32v203
+          path: |
+            result/bin/pwm-fan-controller-qt-py-ch32v203

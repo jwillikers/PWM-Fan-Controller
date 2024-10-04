@@ -105,7 +105,7 @@ SUBSYSTEM=="usb", ATTRS{idVendor}=="4348", ATTRS{idProduct}=="55e0", TAG+="uacce
 +
 [,sh]
 ----
-nix run '.#qt-py-ch32v203.flash.wchisp'
+nix run '../..#qt-py-ch32v203.flash.wchisp'
 ----
 
 == Todo
