@@ -86,7 +86,7 @@
               };
               devShell = boards.pico.craneLib.devShell {
                 checks = self.checks.${system};
-                nativeBuildInputs = boards.pico.nativeBuildInputs;
+                packages = boards.pico.nativeBuildInputs;
               };
               apps = {
                 flash = {
@@ -132,7 +132,7 @@
                 craneLib = boards.qt-py-ch32v203.craneLib;
               };
               devShell = boards.qt-py-ch32v203.craneLib.devShell {
-                checks = self.checks.${system};
+                packages = boards.qt-py-ch32v203.nativeBuildInputs;
                 nativeBuildInputs = boards.qt-py-ch32v203.nativeBuildInputs;
               };
               apps = {
