@@ -1,11 +1,3 @@
-# https://github.com/NixOS/nixpkgs/blob/master/doc/languages-frameworks/rust.section.md
-# https://github.com/oxalica/rust-overlay
-# https://github.com/oxalica/rust-overlay/blob/660018f3a78e1f83e4e4aa569d9c6e2a31b0222c/docs/cross_compilation.md
-# https://github.com/oxalica/rust-overlay/issues?q=is%3Aissue+callPackage+is%3Aclosed
-# https://github.com/ipetkov/crane/blob/master/examples/cross-rust-overlay/flake.nix
-# https://github.com/alekseysidorov/nixpkgs-rust-service-example/blob/main/flake.nix
-# https://github.com/nix-community/naersk/blob/ee7edec50b49ab6d69b06d62f1de554efccb1ccd/examples/static-musl/flake.nix
-# https://github.com/ipetkov/crane/blob/master/examples/cross-rust-overlay/flake.nix
 {
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
@@ -15,7 +7,6 @@
       url = "github:oxalica/rust-overlay";
       inputs = {
         nixpkgs.follows = "nixpkgs";
-        flake-utils.follows = "flake-utils";
       };
     };
   };
@@ -39,6 +30,7 @@
           boards = {
             attiny85 = {
               rustToolchain = pkgs.pkgsBuildHost.rust-bin.fromRustupToolchainFile ./boards/attiny85/rust-toolchain.toml;
+              # craneLib = (crane.mkLib pkgs).overrideToolchain (p: p.rust-bin.fromRustupToolchainFile ./boards/attiny85/rust-toolchain.toml);
               nativeBuildInputs = with pkgs; [
                 avrdude
                 cargo-binutils
@@ -92,14 +84,10 @@
               pwm-fan-controller = pkgs.callPackage ./boards/pico/default.nix {
                 craneLib = boards.pico.craneLib;
               };
-              devShell = pkgs.mkShell {
+              devShell = boards.pico.craneLib.devShell {
+                checks = self.checks.${system};
                 nativeBuildInputs = boards.pico.nativeBuildInputs;
               };
-              # todo Figure out why this somehow activates the ATtiny85 shell.
-              # devShell = boards.pico.craneLib.devShell {
-              #   checks = self.checks.${system};
-              #   nativeBuildInputs = boards.pico.nativeBuildInputs;
-              # };
               apps = {
                 flash = {
                   elf2uf2-rs = let
@@ -131,11 +119,44 @@
                 };
               };
             };
+            qt-py-ch32v203 = {
+              nativeBuildInputs = with pkgs; [
+                wchisp
+                # probe-rs
+              ] ++ commonNativeBuildInputs;
+              buildInputs = with pkgs; [];
+              craneLib = (crane.mkLib pkgs).overrideToolchain (p: p.rust-bin.nightly.latest.default.override {
+                targets = [ "riscv32imac-unknown-none-elf" ];
+              });
+              pwm-fan-controller = pkgs.callPackage ./boards/qt-py-ch32v203/default.nix {
+                craneLib = boards.qt-py-ch32v203.craneLib;
+              };
+              devShell = boards.qt-py-ch32v203.craneLib.devShell {
+                checks = self.checks.${system};
+                nativeBuildInputs = boards.qt-py-ch32v203.nativeBuildInputs;
+              };
+              apps = {
+                flash = {
+                  wchisp = let
+                    script = pkgs.writeShellApplication {
+                      name = "flash-wchisp";
+                      runtimeInputs = with pkgs; [wchisp];
+                      text = ''
+                        ${pkgs.wchisp}/bin/wchisp flash ${self.packages.${system}.pwm-fan-controller-qt-py-ch32v203}/bin/pwm-fan-controller-qt-py-ch32v203
+                      '';
+                    };
+                  in {
+                    type = "app";
+                    program = "${script}/bin/flash-wchisp";
+                  };
+                };
+              };
+            };
           };
         in
         {
           checks = {
-            inherit (boards.attiny85.pwm-fan-controller);
+            inherit (boards.qt-py-ch32v203.pwm-fan-controller);
           };
           packages = {
             # default = boards.attiny85.pwm-fan-controller;
@@ -143,11 +164,13 @@
             # pwm-fan-controller-attiny85 = boards.attiny85.pwm-fan-controller;
             # todo Why can't it be pwm-fan-controller.pico?
             pwm-fan-controller-pico = boards.pico.pwm-fan-controller;
+            pwm-fan-controller-qt-py-ch32v203 = boards.qt-py-ch32v203.pwm-fan-controller;
           };
           devShells = {
             attiny85 = boards.attiny85.devShell;
             default = boards.attiny85.devShell;
             pico = boards.pico.devShell;
+            qt-py-ch32v203 = boards.qt-py-ch32v203.devShell;
           };
           apps = {
             attiny85.flash.avrdude = boards.attiny85.apps.flash.avrdude;
@@ -155,6 +178,7 @@
             default = boards.pico.apps.flash.elf2uf2-rs;
             pico.flash.elf2uf2-rs = boards.pico.apps.flash.elf2uf2-rs;
             pico.run.probe-rs = boards.pico.apps.run.probe-rs;
+            qt-py-ch32v203.flash.wchisp = boards.qt-py-ch32v203.apps.flash.wchisp;
           };
         }
       );

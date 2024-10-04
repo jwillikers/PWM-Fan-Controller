@@ -1,0 +1,15 @@
+[build]
+target = "riscv32imac-unknown-none-elf"
+
+[target."riscv32imac-unknown-none-elf"]
+rustflags = [
+#  "-C", "link-arg=-Tlink.x",
+#   "-C", "no-vectorize-loops",
+]
+# runner = "riscv64-unknown-elf-gdb -q -x openocd.gdb"
+# runner = "riscv-none-embed-gdb -q -x openocd.gdb"
+# runner = "gdb -q -x openocd.gdb"
+
+runner = "wchisp flash"
+# runner = "wlink -v flash --enable-sdi-print --watch-serial --erase"
+# runner = "wlink -v flash"

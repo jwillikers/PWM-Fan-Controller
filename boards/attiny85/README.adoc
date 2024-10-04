@@ -17,7 +17,6 @@ endif::[]
 :AVR-Libc: https://www.nongnu.org/avr-libc/[AVR Libc]
 :avrdude: https://github.com/avrdudes/avrdude[avrdude]
 :cargo-binutils: https://github.com/rust-embedded/cargo-binutils[cargo-binutils]
-:fish: https://fishshell.com/[fish]
 :Git: https://git-scm.com/[Git]
 :Noctua-NF-P12-redux-1700-PWM-Fan: https://noctua.at/en/nf-p12-redux-1700-pwm[Noctua NF-P12 redux-1700 PWM Fan]
 :Rust: https://www.rust-lang.org/[Rust]
@@ -208,7 +207,6 @@ Several of these projects are enumerated below.
 * {avrdude}
 * {AVR-Libc}
 * {cargo-binutils}
-* {fish}
 * {Git}
 * {Rust}
 

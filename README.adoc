@@ -10,7 +10,6 @@ ifdef::env-github[]
 :warning-caption: :warning:
 endif::[]
 :Asciidoctor-link: https://asciidoctor.org[Asciidoctor]
-:fish: https://fishshell.com/[fish]
 :direnv: https://direnv.net/[direnv]
 :Git: https://git-scm.com/[Git]
 :just: https://just.systems/[just]
@@ -143,7 +142,6 @@ This project is built on the hard work of countless open source contributors.
 Several of these projects are enumerated below.
 
 * {Asciidoctor-link}
-* {fish}
 * {direnv}
 * {Git}
 * {Linux}

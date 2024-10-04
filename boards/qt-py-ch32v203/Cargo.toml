@@ -1,0 +1,39 @@
+[package]
+name = "pwm-fan-controller-qt-py-ch32v203"
+version = "0.0.1"
+authors = ["Jordan Williams <jordan@jwillikers.com>"]
+edition = "2021"
+homepage = "https://github.com/jwillikers/pwm-fan-controller"
+description = "A simple PWM fan controller for microcontrollers"
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/jwillikers/pwm-fan-controller.git"
+
+[dependencies.ch32-hal]
+default-features = false
+features = [
+    "ch32v203g8r6",
+    "embassy",
+    "rt",
+    # todo It doesn't seem to matter whether I choose timer 2 or 4 here.
+    # The PWM is attached to timer 4 though, in case it matters.
+    "time-driver-tim4",
+    # "time-driver-tim2",
+]
+git = "https://github.com/ch32-rs/ch32-hal.git"
+
+[dependencies]
+embedded-hal = "1.0"
+qingke-rt = "0.2"
+qingke = "0.2"
+panic-halt = "0.2"
+
+# Dev builds need to be optimized for code size or they won't fit in flash.
+[profile.dev]
+lto = true
+opt-level = "z"
+strip = false
+
+[profile.release]
+lto = true
+opt-level = "z" # Optimize for size.
+strip = false # symbols are not flashed to the microcontroller, so don't strip them.
