@@ -78,10 +78,7 @@
                 probe-rs
               ] ++ commonNativeBuildInputs;
               buildInputs = with pkgs; [];
-              craneLib = (crane.mkLib pkgs).overrideToolchain (p: p.rust-bin.stable.latest.default.override {
-                extensions = [ "llvm-tools-preview" ];
-                targets = [ "thumbv6m-none-eabi" ];
-              });
+              craneLib = (crane.mkLib pkgs).overrideToolchain (p: p.rust-bin.fromRustupToolchainFile ./boards/pico/rust-toolchain.toml);
               pwm-fan-controller = pkgs.callPackage ./boards/pico/default.nix {
                 craneLib = boards.pico.craneLib;
               };
@@ -126,15 +123,12 @@
                 # probe-rs
               ] ++ commonNativeBuildInputs;
               buildInputs = with pkgs; [];
-              craneLib = (crane.mkLib pkgs).overrideToolchain (p: p.rust-bin.nightly.latest.default.override {
-                targets = [ "riscv32imac-unknown-none-elf" ];
-              });
+              craneLib = (crane.mkLib pkgs).overrideToolchain (p: p.rust-bin.fromRustupToolchainFile ./boards/qt-py-ch32v203/rust-toolchain.toml);
               pwm-fan-controller = pkgs.callPackage ./boards/qt-py-ch32v203/default.nix {
                 craneLib = boards.qt-py-ch32v203.craneLib;
               };
               devShell = boards.qt-py-ch32v203.craneLib.devShell {
                 packages = boards.qt-py-ch32v203.nativeBuildInputs;
-                nativeBuildInputs = boards.qt-py-ch32v203.nativeBuildInputs;
               };
               apps = {
                 flash = {
