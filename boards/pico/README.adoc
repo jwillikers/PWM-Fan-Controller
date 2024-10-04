@@ -12,7 +12,6 @@ endif::[]
 :Asciidoctor-link: https://asciidoctor.org[Asciidoctor]
 :cargo-embed: https://github.com/probe-rs/cargo-embed[cargo-embed]
 :elf2uf2-rs: https://github.com/JoNil/elf2uf2-rs[elf2uf2-rs]
-:fish: https://fishshell.com/[fish]
 :flip-link: https://github.com/knurling-rs/flip-link[flip-link]
 :Git: https://git-scm.com/[Git]
 :Noctua-NF-P12-redux-1700-PWM-Fan: https://noctua.at/en/nf-p12-redux-1700-pwm[Noctua NF-P12 redux-1700 PWM Fan]
@@ -114,7 +113,7 @@ udisksctl mount --block-device /dev/sda1
 +
 [,sh]
 ----
-nix run '.#pico.flash.elf2uf2-rs'
+nix run '../..#pico.flash.elf2uf2-rs'
 ----
 
 // == Develop
@@ -197,14 +196,11 @@ curl --location --output-dir=/run/media/$USER/RPI-RP2 --remote-name \
 
 == Todo
 
-* Document connections with the 1787AHC125.
-* Document how to use a debug probe with cargo-embed.
-* Document how to use the probe-rs-debugger VSCode extension.
-* Measure power efficiency.
+* Document connections with the 74AHCT125.
 
 == References
 
-* https://www.ti.com/lit/ds/symlink/sn74ahct125.pdf[1787AHC125 Datasheet]
+* https://www.ti.com/lit/ds/symlink/sn74ahct125.pdf[SN74AHCT125 Datasheet]
 * https://en.wikipedia.org/wiki/Computer_fan_control#Pulse-width_modulation[Computer Fan Control: Pulse-width modulation]
 * https://github.com/rp-rs/rp2040-project-template[Project template for rp2040-hal]
 * {Picoprobe-Wiring}
@@ -216,7 +212,7 @@ curl --location --output-dir=/run/media/$USER/RPI-RP2 --remote-name \
 .Rust Docs
 * https://docs.rs/embedded-hal/latest/embedded_hal/[embedded-hal]
 * https://docs.rs/fugit/latest/fugit/[fugit]
-* https://docs.rs/rp-pico/0.5.0/rp_pico/[rp-pico]
+* https://docs.rs/rp-pico/latest/rp_pico/[rp-pico]
 * https://docs.rs/rp2040-hal/latest/rp2040_hal/[rp2040-hal]
 
 == Contributing
@@ -231,7 +227,6 @@ Several of these projects are enumerated below.
 
 * {Asciidoctor-link}
 * {elf2uf2-rs}
-* {fish}
 * {flip-link}
 * {Git}
 * {probe-run}

@@ -41,17 +41,17 @@ repos:
         language: system
         types: [file, rust]
         pass_filenames: true
-      - id: rust-clippy-attiny85
-        name: Rust clippy ATtiny85
-        description: Run cargo clippy on files included in the commit.
-        language: system
-        entry: nix develop --command cargo clippy --all-targets --all-features --manifest-path boards/attiny85/Cargo.toml -- -Dclippy::all
-        pass_filenames: false
-        types: [file, rust]
+      # - id: rust-clippy-attiny85
+      #   name: Rust clippy ATtiny85
+      #   description: Run cargo clippy on files included in the commit.
+      #   language: system
+      #   entry: nix develop '.#attiny85' --command cargo clippy --all-targets --all-features --manifest-path boards/attiny85/Cargo.toml -- -Dclippy::all
+      #   pass_filenames: false
+      #   types: [file, rust]
       # - id: rust-clippy-pico
       #   name: Rust clippy Pico
       #   description: Run cargo clippy on files included in the commit.
-      #   entry: nix develop --command cargo clippy --all-targets --all-features --manifest-path boards/pico/Cargo.toml -- -Dclippy::all
+      #   entry: nix develop '.#pico' --command cargo clippy --all-targets --all-features --manifest-path boards/pico/Cargo.toml -- -Dclippy::all
       #   pass_filenames: false
       #   types: [file, rust]
       #   language: system

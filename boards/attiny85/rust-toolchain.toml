@@ -2,3 +2,4 @@
 channel = "nightly-2024-03-22"
 components = ["llvm-tools-preview", "rust-src"]
 profile = "minimal"
+targets = ["avr-unknown-none-attiny85.json"]
