@@ -20,34 +20,29 @@ endif::[]
 PWM fan controller for the {QT-Py-CH32V203} RISC-V board written in {Rust}.
 This fan controller just sets the fan speed to 40% speed to reduce noise from the {Noctua-NF-P12-redux-1700-PWM-Fan}.
 
-// todo Add pictures.
-// ifdef::env-github[]
-// ++++
-// <p align="center">
-//   <img  alt="QT Py CH32V203 PWM Fan Controller Breadboard Top View 1" src="pics/qt-py-ch32v203-pwm-fan-controller-breadboard-top-1.jpg?raw=true"/>
-// </p>
-// <p align="center">
-//   <img  alt="QT Py CH32V203 PWM Fan Controller Breadboard Top View 2" src="pics/qt-py-ch32v203-pwm-fan-controller-breadboard-top-2.jpg?raw=true"/>
-// </p>
-// <p align="center">
-//   <img  alt="QT Py CH32V203 PWM Fan Controller Breadboard Side View 1" src="pics/qt-py-ch32v203-pwm-fan-controller-breadboard-side-1.jpg?raw=true"/>
-// </p>
-// <p align="center">
-//   <img  alt="QT Py CH32V203 PWM Fan Controller Breadboard Side View 2" src="pics/qt-py-ch32v203-pwm-fan-controller-breadboard-side-2.jpg?raw=true"/>
-// </p>
-// <p align="center">
-//   <img  alt="QT Py CH32V203 PWM Fan Controller Breadboard Side View 3" src="pics/qt-py-ch32v203-pwm-fan-controller-breadboard-side-3.jpg?raw=true"/>
-// </p>
-// ++++
-// endif::[]
+ifdef::env-github[]
+++++
+<p align="center">
+  <img  alt="QT Py CH32V203 PWM Fan Controller Breadboard Top View 1" src="pics/qt-py-ch32v203-pwm-fan-controller-breadboard-top-1.jpg?raw=true"/>
+</p>
+<p align="center">
+  <img  alt="QT Py CH32V203 PWM Fan Controller Breadboard Side View 1" src="pics/qt-py-ch32v203-pwm-fan-controller-breadboard-side-1.jpg?raw=true"/>
+</p>
+<p align="center">
+  <img  alt="QT Py CH32V203 PWM Fan Controller Breadboard Side View 2" src="pics/qt-py-ch32v203-pwm-fan-controller-breadboard-side-2.jpg?raw=true"/>
+</p>
+<p align="center">
+  <img  alt="QT Py CH32V203 PWM Fan Controller Breadboard Side View 3" src="pics/qt-py-ch32v203-pwm-fan-controller-breadboard-side-3.jpg?raw=true"/>
+</p>
+++++
+endif::[]
 
-// ifndef::env-github[]
-// image::pics/qt-py-ch32v203-pwm-fan-controller-breadboard-top-1.jpg[QT Py CH32V203 PWM Fan Controller Breadboard Top View 1, align=center]
-// image::pics/qt-py-ch32v203-pwm-fan-controller-breadboard-top-2.jpg[QT Py CH32V203 PWM Fan Controller Breadboard Tope View 2, align=center]
-// image::pics/qt-py-ch32v203-pwm-fan-controller-breadboard-side-1.jpg[QT Py CH32V203 PWM Fan Controller Breadboard Side View 1, align=center]
-// image::pics/qt-py-ch32v203-pwm-fan-controller-breadboard-side-2.jpg[QT Py CH32V203 PWM Fan Controller Breadboard Side View 2, align=center]
-// image::pics/qt-py-ch32v203-pwm-fan-controller-breadboard-side-3.jpg[QT Py CH32V203 PWM Fan Controller Breadboard Side View 3, align=center]
-// endif::[]
+ifndef::env-github[]
+image::pics/qt-py-ch32v203-pwm-fan-controller-breadboard-top-1.jpg[QT Py CH32V203 PWM Fan Controller Breadboard Top View 1, align=center]
+image::pics/qt-py-ch32v203-pwm-fan-controller-breadboard-side-1.jpg[QT Py CH32V203 PWM Fan Controller Breadboard Side View 1, align=center]
+image::pics/qt-py-ch32v203-pwm-fan-controller-breadboard-side-2.jpg[QT Py CH32V203 PWM Fan Controller Breadboard Side View 2, align=center]
+image::pics/qt-py-ch32v203-pwm-fan-controller-breadboard-side-3.jpg[QT Py CH32V203 PWM Fan Controller Breadboard Side View 3, align=center]
+endif::[]
 
 == Hardware
 

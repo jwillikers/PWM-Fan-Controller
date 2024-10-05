@@ -6,6 +6,12 @@ name: Format Rust code
       - .github/workflows/rustfmt.yaml
       - flake.lock
       - '**.rs'
+  push:
+    branches: ["main"]
+    paths:
+      - .github/workflows/rustfmt.yaml
+      - flake.lock
+      - '**.rs'
 
 jobs:
   rustfmt:

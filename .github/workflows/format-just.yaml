@@ -8,6 +8,14 @@ name: Format justfiles
       - '**/.justfile'
       - '**/justfile'
       - '**/*.just'
+  push:
+    branches: ["main"]
+    paths:
+      - .github/workflows/format-just.yaml
+      - flake.lock
+      - '**/.justfile'
+      - '**/justfile'
+      - '**/*.just'
 
 jobs:
   format-just:

@@ -22,6 +22,7 @@
           commonNativeBuildInputs = with pkgs; [
             clippy
             fish
+            imagemagick_light # To strip metadata from images.
             just
             nushell
             pre-commit

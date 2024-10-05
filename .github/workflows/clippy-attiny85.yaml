@@ -8,6 +8,14 @@ name: Lint Rust code with Clippy
       - boards/attiny85/**.rs
       - boards/attiny85/.cargo/**
       - boards/attiny85/rust-toolchain.toml
+  push:
+    branches: ["main"]
+    paths:
+      - .github/workflows/clippy-attiny85.yaml
+      - flake.lock
+      - boards/attiny85/**.rs
+      - boards/attiny85/.cargo/**
+      - boards/attiny85/rust-toolchain.toml
 
 jobs:
   clippy-attiny85:

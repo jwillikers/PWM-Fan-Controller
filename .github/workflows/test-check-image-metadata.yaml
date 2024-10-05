@@ -1,0 +1,27 @@
+name: Test check-image-metadata.nu
+"on":
+  pull_request:
+    branches: ["main"]
+    paths:
+      - .github/workflows/test-check-image-metadata.yaml
+      - flake.lock
+      - check-image-metadata.nu
+      - check-image-metadata-tests.nu
+  push:
+    branches: ["main"]
+    paths:
+      - .github/workflows/test-check-image-metadata.yaml
+      - flake.lock
+      - check-image-metadata.nu
+      - check-image-metadata-tests.nu
+  workflow_dispatch:
+
+jobs:
+  test-check-image-metadata:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: DeterminateSystems/nix-installer-action@v14
+      - uses: DeterminateSystems/magic-nix-cache-action@v8
+      - name: Run the Nushell tests
+        run: nix develop --command nu check-image-metadata-tests.nu
