@@ -1,0 +1,38 @@
+name: Check image metadata
+"on":
+  pull_request:
+    branches: ["main"]
+    paths:
+      - .github/workflows/check-image-metadata.yaml
+      - flake.lock
+      - check-image-metadata.nu
+      - '**.gif'
+      - '**.jpg'
+      - '**.jpeg'
+      - '**.png'
+      - '**.webp'
+  push:
+    branches: ["main"]
+    paths:
+      - .github/workflows/check-image-metadata.yaml
+      - flake.lock
+      - check-image-metadata.nu
+      - '**.gif'
+      - '**.jpg'
+      - '**.jpeg'
+      - '**.png'
+      - '**.webp'
+
+jobs:
+  check-image-metadata:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: DeterminateSystems/nix-installer-action@v14
+      - uses: DeterminateSystems/magic-nix-cache-action@v8
+      - name: Get changed files
+        id: changed-files
+        uses: tj-actions/changed-files@v45
+      - name: Check image metadata
+        run: |
+          nix develop --command nu check-image-metadata.nu ${{ steps.changed-files.outputs.all_changed_files }}

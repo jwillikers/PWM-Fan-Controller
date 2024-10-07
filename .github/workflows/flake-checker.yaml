@@ -5,6 +5,11 @@ name: Check Nix Flake
     paths:
       - .github/workflows/flake-checker.yaml
       - flake.lock
+  push:
+    branches: ["main"]
+    paths:
+      - .github/workflows/flake-checker.yaml
+      - flake.lock
 
 jobs:
   flake-checker:

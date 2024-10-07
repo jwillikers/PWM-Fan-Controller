@@ -21,6 +21,7 @@ endif::[]
 
 image:https://github.com/jwillikers/pwm-fan-controller/actions/workflows/build-attiny85.yaml/badge.svg[ATtiny85 Build, link=https://github.com/jwillikers/pwm-fan-controller/actions/workflows/build-attiny85.yaml]
 image:https://github.com/jwillikers/pwm-fan-controller/actions/workflows/build-pico.yaml/badge.svg[Pico Build, link=https://github.com/jwillikers/pwm-fan-controller/actions/workflows/build-pico.yaml]
+image:https://github.com/jwillikers/pwm-fan-controller/actions/workflows/build-qt-py-ch32v203.yaml/badge.svg[QT Py CH32V203 Build, link=https://github.com/jwillikers/pwm-fan-controller/actions/workflows/build-qt-py-ch32v203.yaml]
 
 PWM fan controller written in {Rust} targeting different microcontrollers.
 Currently, these are basic examples for setting the {Noctua-NF-P12-redux-1700-PWM-Fan} to a quiescent 40% speed.
@@ -38,6 +39,9 @@ ifdef::env-github[]
 <p align="center">
   <img  alt="Raspberry PI Pico PWM Fan Controller Breadboard Top View 1" src="boards/pico/pics/pico-pwm-fan-controller-breadboard-top-1.jpg?raw=true"/>
 </p>
+<p align="center">
+  <img  alt="QT Py CH32V203 PWM Fan Controller Breadboard Top View 1" src="boards/qt-py-ch32v203/pics/qt-py-ch32v203-pwm-fan-controller-breadboard-top-1.jpg?raw=true"/>
+</p>
 ++++
 endif::[]
 
@@ -45,6 +49,7 @@ ifndef::env-github[]
 image::boards/attiny85/pics/attiny85-pwm-fan-controller-protoboard-top.jpg[ATTiny85 PWM Fan Controller Protoboard Top View, align=center]
 image::boards/attiny85/pics/attiny85-pwm-fan-controller-breadboard-top-1.jpg[ATTiny85 PWM Fan Controller Breadboard Top View 1, align=center]
 image::boards/pico/pics/pico-pwm-fan-controller-breadboard-top-1.jpg[Raspberry PI Pico PWM Fan Controller Breadboard Top View 1, align=center]
+image::boards/qt-py-ch32v203/pics/qt-py-ch32v203-pwm-fan-controller-breadboard-top-1.jpg[QT Py CH32V203 PWM Fan Controller Breadboard Top View 1, align=center]
 endif::[]
 
 == Develop

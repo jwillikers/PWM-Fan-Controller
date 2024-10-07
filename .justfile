@@ -62,3 +62,7 @@ update:
     ^cargo update
     cd "{{ justfile_directory() }}/boards/pico"
     ^cargo update
+
+strip-image-metadata:
+    #!/usr/bin/env nu
+    check-image-metadata --strip

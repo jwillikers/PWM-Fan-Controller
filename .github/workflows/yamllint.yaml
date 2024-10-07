@@ -8,6 +8,14 @@ name: yamllint
       - flake.lock
       - '**.yaml'
       - '**.yml'
+  push:
+    branches: ["main"]
+    paths:
+      - .github/workflows/yamllint.yaml
+      - .yamllint.yaml
+      - flake.lock
+      - '**.yaml'
+      - '**.yml'
 
 jobs:
   yamllint:

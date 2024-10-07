@@ -34,13 +34,27 @@ repos:
         language: system
         name: just
         pass_filenames: false
+      - id: mogrify-strip
+        entry: nix develop --command nu check-image-metadata.nu --strip
+        language: system
+        name: Strip Image Metadata
+        types: [binary, file, image]
       - id: rustfmt
         name: rustfmt
         description: Format Rust files with rustfmt.
         entry: nix develop --command rustfmt
         language: system
         types: [file, rust]
-        pass_filenames: true
+      - id: test-check-image-metadata
+        entry: nix develop --command nu check-image-metadata-tests.nu
+        files: |
+          (?x)^(
+            check-image-metadata\.nu
+            check-image-metadata-tests\.nu
+          )$
+        language: system
+        name: test check-image-metadata.nu
+        pass_filenames: false
       # - id: rust-clippy-attiny85
       #   name: Rust clippy ATtiny85
       #   description: Run cargo clippy on files included in the commit.
@@ -59,5 +73,4 @@ repos:
         entry: nix develop --command yamllint
         language: system
         name: yamllint
-        pass_filenames: true
         types: [file, yaml]
