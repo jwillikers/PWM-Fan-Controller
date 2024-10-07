@@ -21,6 +21,7 @@ endif::[]
 
 image:https://github.com/jwillikers/pwm-fan-controller/actions/workflows/build-attiny85.yaml/badge.svg[ATtiny85 Build, link=https://github.com/jwillikers/pwm-fan-controller/actions/workflows/build-attiny85.yaml]
 image:https://github.com/jwillikers/pwm-fan-controller/actions/workflows/build-pico.yaml/badge.svg[Pico Build, link=https://github.com/jwillikers/pwm-fan-controller/actions/workflows/build-pico.yaml]
+image:https://github.com/jwillikers/pwm-fan-controller/actions/workflows/build-qt-py-ch32v203.yaml/badge.svg[QT Py CH32V203 Build, link=https://github.com/jwillikers/pwm-fan-controller/actions/workflows/build-qt-py-ch32v203.yaml]
 
 PWM fan controller written in {Rust} targeting different microcontrollers.
 Currently, these are basic examples for setting the {Noctua-NF-P12-redux-1700-PWM-Fan} to a quiescent 40% speed.
