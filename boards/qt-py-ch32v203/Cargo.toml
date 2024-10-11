@@ -11,13 +11,13 @@ repository = "https://github.com/jwillikers/pwm-fan-controller.git"
 [dependencies.ch32-hal]
 default-features = false
 features = [
-    "ch32v203g8r6",
-    "embassy",
-    "rt",
-    # todo It doesn't seem to matter whether I choose timer 2 or 4 here.
-    # The PWM is attached to timer 4 though, in case it matters.
-    "time-driver-tim4",
-    # "time-driver-tim2",
+  "ch32v203g8r6",
+  "embassy",
+  "rt",
+  # todo It doesn't seem to matter whether I choose timer 2 or 4 here.
+  # The PWM is attached to timer 4 though, in case it matters.
+  "time-driver-tim4",
+  # "time-driver-tim2",
 ]
 git = "https://github.com/ch32-rs/ch32-hal.git"
 
@@ -36,4 +36,4 @@ strip = false
 [profile.release]
 lto = true
 opt-level = "z" # Optimize for size.
-strip = false # symbols are not flashed to the microcontroller, so don't strip them.
+strip = false   # symbols are not flashed to the microcontroller, so don't strip them.

@@ -1,4 +1,4 @@
-name: Build Rasbperry Pi Pico
+name: Build Raspberry Pi Pico
 
 "on":
   pull_request:

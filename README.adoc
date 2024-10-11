@@ -59,7 +59,7 @@ This makes it possible to develop locally in an environment that is consistent w
 The `nix develop` command can be used to enter or run commands in an environment with all of the necessary dependencies.
 For convenience, direnv can be used to automatically load this environment when entering the project's directory.
 The https://marketplace.visualstudio.com/items?itemName=mkhl.direnv[mkhl.direnv VSCode extension] integrates this environment in VSCode for development.
-The repository contains configuration for https://pre-commit.com/[pre-commit], which can be used to automate formatting and various checks when committing changes.
+Nix also generates the configuration for https://pre-commit.com/[pre-commit], which automates formatting and various checks when committing changes.
 Follow the instructions here to set up your development environment.
 
 . Install an implementation of {Nix}, such as https://lix.systems[Lix] used here.
