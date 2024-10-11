@@ -2,15 +2,13 @@ set shell := ["nu", "-c"]
 
 default: build
 
-alias fmt := format
+alias c := check
 
-format: just-fmt rustfmt
-
-rustfmt:
-    ^rustfmt **/*.rs
-
-just-fmt:
-    ^just --fmt --unstable
+check: && format
+    #!/usr/bin/env nu
+    ^yamllint .
+    ^asciidoctor '**/*.adoc'
+    ^lychee --cache **/*.html
 
 alias b := build
 
@@ -21,6 +19,11 @@ build board="attiny85" profile="dev":
     if "{{ board }}" == "attiny85" {
         ^cargo objcopy -- -O ihex "pwm-fan-controller-{{ board }}.hex"
     }
+
+alias fmt := format
+
+format:
+    treefmt
 
 alias f := run
 alias flash := run
@@ -43,8 +46,21 @@ run board="attiny85" profile="dev" method="": (build board profile)
         } else if "{{ method }}" == "elf2uf2-rs" {
             ^elf2uf2-rs --deploy $"boards/{{ board }}/target/thumbv6m-none-eabi/($build_type)/pwm-fan-controller-pico"
         } else if "{{ method }}" == "probe-rs" {
-            ^probe-rs run --chip RP2040 --protocol swd $"boards/{{ board }}/target/thumbv6m-none-eabi/($build_type)/pwm-fan-controller-pico"
+            ^probe-rs run \
+                --chip RP2040 \
+                --protocol swd \
+                $"boards/{{ board }}/target/thumbv6m-none-eabi/($build_type)/pwm-fan-controller-pico"
         }
+    } else if "{{ board }}" == "qt-py-ch32v203" {
+        let build_type = {
+            if "{{ profile }}" == "dev" {
+                "debug"
+            } else {
+                "{{ profile }}"
+            }
+        }
+        ^wchisp flash \
+            $"boards/{{ board }}target/riscvimac-unknown-none-elf/($build_type)/pwm-fan-controller-qt-py-ch32v203"
     }
 
 alias p := package
@@ -53,8 +69,13 @@ alias pack := package
 package board="attiny85":
     ^nix build ".#pwm-fan-controller-{{ board }}"
 
+alias t := test
+
+test:
+    nu update-nix-direnv-tests.nu
+
 alias u := update
-alias up := package
+alias up := update
 
 update:
     ^nix flake update
@@ -62,7 +83,6 @@ update:
     ^cargo update
     cd "{{ justfile_directory() }}/boards/pico"
     ^cargo update
-
-strip-image-metadata:
-    #!/usr/bin/env nu
-    check-image-metadata --strip
+    cd "{{ justfile_directory() }}/boards/qt-py-ch32v203"
+    ^cargo update
+    nu update-nix-direnv.nu

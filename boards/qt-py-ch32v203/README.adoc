@@ -122,7 +122,7 @@ nix run '../..#qt-py-ch32v203.flash.wchisp'
 == Contributing
 
 Contributions in the form of issues, feedback, and even pull requests are welcome.
-Make sure to adhere to the project's link:../CODE_OF_CONDUCT.adoc[Code of Conduct].
+Make sure to adhere to the project's link:../../CODE_OF_CONDUCT.adoc[Code of Conduct].
 
 == Open Source Software
 
@@ -137,14 +137,14 @@ Several of these projects are enumerated below.
 
 == Code of Conduct
 
-Refer to the project's link:../CODE_OF_CONDUCT.adoc[Code of Conduct] for details.
+Refer to the project's link:../../CODE_OF_CONDUCT.adoc[Code of Conduct] for details.
 
 == License
 
 Licensed under either of
 
-* Apache License, Version 2.0 (link:../LICENSE-APACHE[LICENSE-APACHE] or http://www.apache.org/licenses/LICENSE-2.0)
-* MIT license (link:../LICENSE-MIT[LICENSE-MIT] or http://opensource.org/licenses/MIT)
+* Apache License, Version 2.0 (link:../../LICENSE-APACHE[LICENSE-APACHE] or http://www.apache.org/licenses/LICENSE-2.0)
+* MIT license (link:../../LICENSE-MIT[LICENSE-MIT] or http://opensource.org/licenses/MIT)
 
 at your option.
 

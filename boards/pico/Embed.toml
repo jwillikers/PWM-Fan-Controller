@@ -26,7 +26,7 @@ connect_under_reset = false
 enabled = true
 up_mode = "NoBlockSkip"
 channels = [
-    { up = 0, down = 0, name = "name", up_mode = "NoBlockSkip", format = "Defmt" },
+  { up = 0, down = 0, name = "name", up_mode = "NoBlockSkip", format = "Defmt" },
 ]
 timeout = 3000
 show_timestamps = true

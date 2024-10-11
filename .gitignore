@@ -26,3 +26,12 @@ target/
 
 # Nix
 result
+
+# git-hooks.nix
+/.pre-commit-config.yaml
+
+# Asciidoctor
+*.html
+
+# lychee
+.lycheecache

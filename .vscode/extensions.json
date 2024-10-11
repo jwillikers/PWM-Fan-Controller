@@ -1,5 +1,12 @@
 {
-    "recommendations": [
-        "probe-rs.probe-rs-debugger"
-    ]
+  "recommendations": [
+    "probe-rs.probe-rs-debugger",
+    "asciidoctor.asciidoctor-vscode",
+    "mkhl.direnv",
+    "tamasfe.even-better-toml",
+    "bbenoist.nix",
+    "rust-lang.rust-analyzer",
+    "ibecker.treefmt-vscode",
+    "nefrob.vscode-just-syntax"
+  ]
 }
