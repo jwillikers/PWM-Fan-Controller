@@ -18,9 +18,19 @@ jobs:
       - uses: DeterminateSystems/magic-nix-cache-action@v8
       - uses: DeterminateSystems/update-flake-lock@v24
         with:
+          pr-assignees: ${{ github.repository_owner }}
+          pr-body: |
+            Automated changes by the [update-flake-lock]
+            (https://github.com/DeterminateSystems/update-flake-lock) GitHub Action.
+
+            ```
+            {{ env.GIT_COMMIT_MESSAGE }}
+            ```
+
+            @${{ github.repository_owner }}
+
           pr-labels: |
             automated
             dependencies
-          pr-reviewers: ${{ github.repository_owner }}
           pr-title: "chore: update flake.lock"
           token: ${{ secrets.GH_TOKEN_FOR_UPDATES }}
