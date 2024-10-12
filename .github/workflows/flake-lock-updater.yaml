@@ -18,7 +18,6 @@ jobs:
       - uses: DeterminateSystems/magic-nix-cache-action@v8
       - uses: DeterminateSystems/update-flake-lock@v24
         with:
-          pr-assignees: ${{ github.repository_owner }}
           pr-labels: |
             automated
             dependencies
