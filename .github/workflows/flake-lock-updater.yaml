@@ -19,16 +19,6 @@ jobs:
       - uses: DeterminateSystems/update-flake-lock@v24
         with:
           pr-assignees: ${{ github.repository_owner }}
-          pr-body: |
-            Automated changes by the [update-flake-lock]
-            (https://github.com/DeterminateSystems/update-flake-lock) GitHub Action.
-
-            ```
-            {{ env.GIT_COMMIT_MESSAGE }}
-            ```
-
-            @${{ github.repository_owner }}
-
           pr-labels: |
             automated
             dependencies
