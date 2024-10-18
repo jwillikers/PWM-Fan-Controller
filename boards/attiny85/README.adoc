@@ -218,8 +218,8 @@ Refer to the project's link:../../CODE_OF_CONDUCT.adoc[Code of Conduct] for deta
 
 Licensed under either of
 
-* Apache License, Version 2.0 (link:../../LICENSE-APACHE[LICENSE-APACHE] or http://www.apache.org/licenses/LICENSE-2.0)
-* MIT license (link:../../LICENSE-MIT[LICENSE-MIT] or http://opensource.org/licenses/MIT)
+* Apache License, Version 2.0 (link:../../LICENSE-APACHE[LICENSE-APACHE] or https://www.apache.org/licenses/LICENSE-2.0)
+* MIT license (link:../../LICENSE-MIT[LICENSE-MIT] or https://opensource.org/licenses/MIT)
 
 at your option.
 
