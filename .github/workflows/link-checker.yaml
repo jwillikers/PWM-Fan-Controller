@@ -8,6 +8,8 @@ name: Check URLs with Lychee
       - '**.nix'
       - .github/workflows/link-checker.yaml
       - flake.lock
+      - LICENSE-*
+      - lychee.toml
   push:
     branches: [main]
     paths:
@@ -15,6 +17,8 @@ name: Check URLs with Lychee
       - '**.nix'
       - .github/workflows/link-checker.yaml
       - flake.lock
+      - LICENSE-*
+      - lychee.toml
   schedule:
     # Run once a month on the 14th.
     - cron: "0 0 14 * *"
