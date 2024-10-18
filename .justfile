@@ -8,7 +8,7 @@ check: && format
     #!/usr/bin/env nu
     ^yamllint .
     ^asciidoctor '**/*.adoc'
-    ^lychee --cache **/*.html
+    ^lychee --cache **/*.html LICENSE-*
 
 alias b := build
 
