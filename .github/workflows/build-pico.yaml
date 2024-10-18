@@ -4,33 +4,33 @@ name: Build Raspberry Pi Pico
   pull_request:
     branches: ["main"]
     paths:
+      - '*.nix'
       - .github/workflows/build-pico.yaml
       - .justfile
-      - flake.lock
-      - flake.nix
       - boards/pico/.cargo/**
       - boards/pico/build.rs
       - boards/pico/memory.x
       - boards/pico/Cargo.lock
       - boards/pico/Cargo.toml
-      - boards/pico/default.nix
+      - boards/pico/**.nix
       - boards/pico/rust-toolchain.toml
       - boards/pico/src/**
+      - flake.lock
   push:
     branches: ["main"]
     paths:
+      - '*.nix'
       - .github/workflows/build-pico.yaml
       - .justfile
-      - flake.lock
-      - flake.nix
       - boards/pico/.cargo/**
       - boards/pico/build.rs
       - boards/pico/memory.x
       - boards/pico/Cargo.lock
       - boards/pico/Cargo.toml
-      - boards/pico/default.nix
+      - boards/pico/**.nix
       - boards/pico/rust-toolchain.toml
       - boards/pico/src/**
+      - flake.lock
   workflow_dispatch:
 
 jobs:

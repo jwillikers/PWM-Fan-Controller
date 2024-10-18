@@ -3,19 +3,31 @@ name: Lint Rust code with Clippy
   pull_request:
     branches: ["main"]
     paths:
+      - '*.nix'
       - .github/workflows/clippy-attiny85.yaml
-      - flake.lock
-      - boards/attiny85/**.rs
+      - .justfile
       - boards/attiny85/.cargo/**
+      - boards/attiny85/avr-unknown-none-attiny85.json
+      - boards/attiny85/Cargo.lock
+      - boards/attiny85/Cargo.toml
+      - boards/attiny85/**.nix
       - boards/attiny85/rust-toolchain.toml
+      - boards/attiny85/src/**
+      - flake.lock
   push:
     branches: ["main"]
     paths:
+      - '*.nix'
       - .github/workflows/clippy-attiny85.yaml
-      - flake.lock
-      - boards/attiny85/**.rs
+      - .justfile
       - boards/attiny85/.cargo/**
+      - boards/attiny85/avr-unknown-none-attiny85.json
+      - boards/attiny85/Cargo.lock
+      - boards/attiny85/Cargo.toml
+      - boards/attiny85/**.nix
       - boards/attiny85/rust-toolchain.toml
+      - boards/attiny85/src/**
+      - flake.lock
 
 jobs:
   clippy-attiny85:

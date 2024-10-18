@@ -4,33 +4,33 @@ name: Build QT Py CH32V203
   pull_request:
     branches: ["main"]
     paths:
+      - '*.nix'
       - .github/workflows/build-qt-py-ch32v203.yaml
       - .justfile
-      - flake.lock
-      - flake.nix
       - boards/qt-py-ch32v203/.cargo/**
       - boards/qt-py-ch32v203/build.rs
       - boards/qt-py-ch32v203/memory.x
       - boards/qt-py-ch32v203/Cargo.lock
       - boards/qt-py-ch32v203/Cargo.toml
-      - boards/qt-py-ch32v203/default.nix
+      - boards/qt-py-ch32v203/**.nix
       - boards/qt-py-ch32v203/rust-toolchain.toml
       - boards/qt-py-ch32v203/src/**
+      - flake.lock
   push:
     branches: ["main"]
     paths:
+      - '*.nix'
       - .github/workflows/build-qt-py-ch32v203.yaml
       - .justfile
-      - flake.lock
-      - flake.nix
       - boards/qt-py-ch32v203/.cargo/**
       - boards/qt-py-ch32v203/build.rs
       - boards/qt-py-ch32v203/memory.x
       - boards/qt-py-ch32v203/Cargo.lock
       - boards/qt-py-ch32v203/Cargo.toml
-      - boards/qt-py-ch32v203/default.nix
+      - boards/qt-py-ch32v203/**.nix
       - boards/qt-py-ch32v203/rust-toolchain.toml
       - boards/qt-py-ch32v203/src/**
+      - flake.lock
   workflow_dispatch:
 
 jobs:

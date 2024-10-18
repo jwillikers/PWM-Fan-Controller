@@ -3,11 +3,13 @@ name: Check Nix Flake
   pull_request:
     branches: ["main"]
     paths:
+      - '**.nix'
       - .github/workflows/flake-checker.yaml
       - flake.lock
   push:
     branches: ["main"]
     paths:
+      - '**.nix'
       - .github/workflows/flake-checker.yaml
       - flake.lock
 
