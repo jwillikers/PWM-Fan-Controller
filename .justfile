@@ -69,11 +69,6 @@ alias pack := package
 package board="attiny85":
     ^nix build ".#pwm-fan-controller-{{ board }}"
 
-alias t := test
-
-test:
-    nu update-nix-direnv-tests.nu
-
 alias u := update
 alias up := update
 
@@ -85,4 +80,3 @@ update:
     ^cargo update
     cd "{{ justfile_directory() }}/boards/qt-py-ch32v203"
     ^cargo update
-    nu update-nix-direnv.nu

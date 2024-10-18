@@ -6,6 +6,7 @@
     };
     crane.url = "github:ipetkov/crane";
     flake-utils.url = "github:numtide/flake-utils";
+    nix-update-scripts.url = "github:jwillikers/nix-update-scripts";
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     pre-commit-hooks = {
       url = "github:cachix/pre-commit-hooks.nix";
@@ -28,6 +29,7 @@
       advisory-db,
       crane,
       flake-utils,
+      nix-update-scripts,
       nixpkgs,
       pre-commit-hooks,
       rust-overlay,
@@ -433,6 +435,7 @@
       in
       {
         apps = {
+          inherit (nix-update-scripts.apps.${system}) update-nix-direnv;
           attiny85.flash.avrdude = boards.attiny85.apps.flash.avrdude;
           default = self.apps.${system}.attiny85.flash.avrdude;
           pico.flash.elf2uf2-rs = boards.pico.apps.flash.elf2uf2-rs;
