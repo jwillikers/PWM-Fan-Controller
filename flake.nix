@@ -208,30 +208,12 @@
 
             cargoArtifacts = boards.attiny85.craneLib.buildDepsOnly boards.attiny85.commonArgs;
 
-            pwm-fan-controller = pkgs.callPackage ./boards/attiny85/default.nix {
+            packages.pwm-fan-controller = pkgs.callPackage ./boards/attiny85/default.nix {
               inherit (boards.attiny85) cargoArtifacts;
               inherit (boards.attiny85) commonArgs;
               inherit (boards.attiny85) craneLib;
               inherit (boards.attiny85.avrCrossPkgs) stdenv;
             };
-            devShell =
-              with boards.attiny85;
-              craneLib.devShell {
-                env = {
-                  # Required by rust-analyzer
-                  # todo Check if I actually need this.
-                  RUST_SRC_PATH = "${boards.attiny85.rustToolchain.passthru.availableComponents.rust-src}/lib/rustlib/src/rust/library";
-                };
-                packages =
-                  boards.attiny85.nativeBuildInputs
-                  ++ [
-                    treefmtEval.config.build.wrapper
-                    # Make formatters available for IDE's.
-                    (pkgs.lib.attrValues treefmtEval.config.build.programs)
-                  ]
-                  ++ pre-commit.enabledPackages;
-                inherit (pre-commit) shellHook;
-              };
             apps = {
               flash = {
                 avrdude =
@@ -252,16 +234,26 @@
                   };
               };
             };
+            devShell =
+              with boards.attiny85;
+              craneLib.devShell {
+                env = {
+                  # Required by rust-analyzer
+                  # todo Check if I actually need this.
+                  RUST_SRC_PATH = "${boards.attiny85.rustToolchain.passthru.availableComponents.rust-src}/lib/rustlib/src/rust/library";
+                };
+                packages =
+                  boards.attiny85.nativeBuildInputs
+                  ++ [
+                    treefmtEval.config.build.wrapper
+                    # Make formatters available for IDE's.
+                    (pkgs.lib.attrValues treefmtEval.config.build.programs)
+                  ]
+                  ++ pre-commit.enabledPackages;
+                inherit (pre-commit) shellHook;
+              };
           };
           pico = {
-            nativeBuildInputs =
-              with pkgs;
-              [
-                elf2uf2-rs
-                flip-link
-                probe-rs
-              ]
-              ++ commonNativeBuildInputs;
             craneLib = (crane.mkLib pkgs).overrideToolchain (
               p: p.rust-bin.fromRustupToolchainFile ./boards/pico/rust-toolchain.toml
             );
@@ -298,22 +290,6 @@
 
             cargoArtifacts = boards.pico.craneLib.buildDepsOnly boards.pico.commonArgs;
 
-            pwm-fan-controller = pkgs.callPackage ./boards/pico/default.nix {
-              inherit (boards.pico) commonArgs;
-              inherit (boards.pico) cargoArtifacts;
-              inherit (boards.pico) craneLib;
-            };
-            devShell = boards.pico.craneLib.devShell {
-              packages =
-                boards.pico.nativeBuildInputs
-                ++ [
-                  treefmtEval.config.build.wrapper
-                  # Make formatters available for IDE's.
-                  (pkgs.lib.attrValues treefmtEval.config.build.programs)
-                ]
-                ++ pre-commit.enabledPackages;
-              inherit (pre-commit) shellHook;
-            };
             apps = {
               flash = {
                 elf2uf2-rs =
@@ -352,15 +328,29 @@
                   };
               };
             };
+            devShell = boards.pico.craneLib.devShell {
+              packages =
+                with pkgs;
+                [
+                  elf2uf2-rs
+                  flip-link
+                  probe-rs
+                  treefmtEval.config.build.wrapper
+                  # Make formatters available for IDE's.
+                  (pkgs.lib.attrValues treefmtEval.config.build.programs)
+                ]
+                ++ commonArgs.nativeBuildInputs
+                ++ commonNativeBuildInputs
+                ++ pre-commit.enabledPackages;
+              inherit (pre-commit) shellHook;
+            };
+            packages.pwm-fan-controller = pkgs.callPackage ./boards/pico/default.nix {
+              inherit (boards.pico) commonArgs;
+              inherit (boards.pico) cargoArtifacts;
+              inherit (boards.pico) craneLib;
+            };
           };
           qt-py-ch32v203 = {
-            nativeBuildInputs =
-              with pkgs;
-              [
-                wchisp
-                # probe-rs
-              ]
-              ++ commonNativeBuildInputs;
             craneLib = (crane.mkLib pkgs).overrideToolchain (
               p: p.rust-bin.fromRustupToolchainFile ./boards/qt-py-ch32v203/rust-toolchain.toml
             );
@@ -393,23 +383,6 @@
             };
 
             cargoArtifacts = boards.qt-py-ch32v203.craneLib.buildDepsOnly boards.qt-py-ch32v203.commonArgs;
-
-            pwm-fan-controller = pkgs.callPackage ./boards/qt-py-ch32v203/default.nix {
-              inherit (boards.qt-py-ch32v203) cargoArtifacts;
-              inherit (boards.qt-py-ch32v203) commonArgs;
-              inherit (boards.qt-py-ch32v203) craneLib;
-            };
-            devShell = boards.qt-py-ch32v203.craneLib.devShell {
-              packages =
-                boards.qt-py-ch32v203.nativeBuildInputs
-                ++ [
-                  treefmtEval.config.build.wrapper
-                  # Make formatters available for IDE's.
-                  (pkgs.lib.attrValues treefmtEval.config.build.programs)
-                ]
-                ++ pre-commit.enabledPackages;
-              inherit (pre-commit) shellHook;
-            };
             apps = {
               flash = {
                 wchisp =
@@ -429,6 +402,25 @@
                     program = "${script}/bin/flash-wchisp";
                   };
               };
+            };
+            devShell = boards.qt-py-ch32v203.craneLib.devShell {
+              packages =
+                with pkgs;
+                [
+                  wchisp
+                  # probe-rs
+                  treefmtEval.config.build.wrapper
+                  # Make formatters available for IDE's.
+                  (pkgs.lib.attrValues treefmtEval.config.build.programs)
+                ]
+                ++ commonNativeBuildInputs
+                ++ pre-commit.enabledPackages;
+              inherit (pre-commit) shellHook;
+            };
+            packages.pwm-fan-controller = pkgs.callPackage ./boards/qt-py-ch32v203/default.nix {
+              inherit (boards.qt-py-ch32v203) cargoArtifacts;
+              inherit (boards.qt-py-ch32v203) commonArgs;
+              inherit (boards.qt-py-ch32v203) craneLib;
             };
           };
         };
@@ -548,10 +540,10 @@
         formatter = treefmtEval.config.build.wrapper;
         packages = {
           default = self.packages.${system}.pwm-fan-controller-attiny85;
-          pwm-fan-controller-attiny85 = boards.attiny85.pwm-fan-controller;
+          pwm-fan-controller-attiny85 = boards.attiny85.packages.pwm-fan-controller;
           # todo Why can't it be pwm-fan-controller.pico?
-          pwm-fan-controller-pico = boards.pico.pwm-fan-controller;
-          pwm-fan-controller-qt-py-ch32v203 = boards.qt-py-ch32v203.pwm-fan-controller;
+          pwm-fan-controller-pico = boards.pico.packages.pwm-fan-controller;
+          pwm-fan-controller-qt-py-ch32v203 = boards.qt-py-ch32v203.packages.pwm-fan-controller;
 
           # attiny85-llvm-coverage = craneLibLLvmTools.cargoLlvmCov (boards.attiny85.commonArgs // {
           #   cargoArtifacts = boards.attiny85.cargoArtifacts;
