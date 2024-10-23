@@ -220,7 +220,6 @@
                   let
                     script = pkgs.writeShellApplication {
                       name = "flash-avrdude";
-                      runtimeInputs = with pkgs; [ avrdude ];
                       text = ''
                         ${pkgs.avrdude}/bin/avrdude -c USBtiny -B 4 -p attiny85 -U flash:w:${
                           self.packages.${system}.pwm-fan-controller-attiny85
@@ -296,7 +295,6 @@
                   let
                     script = pkgs.writeShellApplication {
                       name = "flash-elf2uf2-rs";
-                      runtimeInputs = with pkgs; [ elf2uf2-rs ];
                       text = ''
                         ${pkgs.elf2uf2-rs}/bin/elf2uf2-rs --deploy ${
                           self.packages.${system}.pwm-fan-controller-pico
@@ -314,7 +312,6 @@
                   let
                     script = pkgs.writeShellApplication {
                       name = "run-probe-rs";
-                      runtimeInputs = with pkgs; [ probe-rs ];
                       text = ''
                         ${pkgs.probe-rs}/bin/probe-rs run --chip RP2040 --protocol swd ${
                           self.packages.${system}.pwm-fan-controller-pico
@@ -389,7 +386,6 @@
                   let
                     script = pkgs.writeShellApplication {
                       name = "flash-wchisp";
-                      runtimeInputs = with pkgs; [ wchisp ];
                       text = ''
                         ${pkgs.wchisp}/bin/wchisp flash ${
                           self.packages.${system}.pwm-fan-controller-qt-py-ch32v203
