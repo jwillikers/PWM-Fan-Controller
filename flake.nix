@@ -214,23 +214,21 @@
               inherit (avrCrossPkgs) stdenv;
             };
             apps = {
-              flash = {
-                avrdude =
-                  let
-                    script = pkgs.writeShellApplication {
-                      name = "flash-avrdude";
-                      text = ''
-                        ${pkgs.avrdude}/bin/avrdude -c USBtiny -B 4 -p attiny85 -U flash:w:${
-                          self.packages.${system}.pwm-fan-controller-attiny85
-                        }/bin/pwm-fan-controller-attiny85.hex:i
-                      '';
-                    };
-                  in
-                  {
-                    type = "app";
-                    program = "${script}/bin/flash-avrdude";
+              flash =
+                let
+                  script = pkgs.writeShellApplication {
+                    name = "flash-avrdude";
+                    text = ''
+                      ${pkgs.avrdude}/bin/avrdude -c USBtiny -B 4 -p attiny85 -U flash:w:${
+                        self.packages.${system}.pwm-fan-controller-attiny85
+                      }/bin/pwm-fan-controller-attiny85.hex:i
+                    '';
                   };
-              };
+                in
+                {
+                  type = "app";
+                  program = "${script}/bin/flash-avrdude";
+                };
             };
             devShell = craneLib.devShell {
               env = {
@@ -286,40 +284,36 @@
             cargoArtifacts = craneLib.buildDepsOnly commonArgs;
 
             apps = {
-              flash = {
-                elf2uf2-rs =
-                  let
-                    script = pkgs.writeShellApplication {
-                      name = "flash-elf2uf2-rs";
-                      text = ''
-                        ${pkgs.elf2uf2-rs}/bin/elf2uf2-rs --deploy ${
-                          self.packages.${system}.pwm-fan-controller-pico
-                        }/bin/pwm-fan-controller-pico
-                      '';
-                    };
-                  in
-                  {
-                    type = "app";
-                    program = "${script}/bin/flash-elf2uf2-rs";
+              flash =
+                let
+                  script = pkgs.writeShellApplication {
+                    name = "flash-elf2uf2-rs";
+                    text = ''
+                      ${pkgs.elf2uf2-rs}/bin/elf2uf2-rs --deploy ${
+                        self.packages.${system}.pwm-fan-controller-pico
+                      }/bin/pwm-fan-controller-pico
+                    '';
                   };
-              };
-              run = {
-                probe-rs =
-                  let
-                    script = pkgs.writeShellApplication {
-                      name = "run-probe-rs";
-                      text = ''
-                        ${pkgs.probe-rs}/bin/probe-rs run --chip RP2040 --protocol swd ${
-                          self.packages.${system}.pwm-fan-controller-pico
-                        }/bin/pwm-fan-controller-pico
-                      '';
-                    };
-                  in
-                  {
-                    type = "app";
-                    program = "${script}/bin/run-probe-rs";
+                in
+                {
+                  type = "app";
+                  program = "${script}/bin/flash-elf2uf2-rs";
+                };
+              run =
+                let
+                  script = pkgs.writeShellApplication {
+                    name = "run-probe-rs";
+                    text = ''
+                      ${pkgs.probe-rs}/bin/probe-rs run --chip RP2040 --protocol swd ${
+                        self.packages.${system}.pwm-fan-controller-pico
+                      }/bin/pwm-fan-controller-pico
+                    '';
                   };
-              };
+                in
+                {
+                  type = "app";
+                  program = "${script}/bin/run-probe-rs";
+                };
             };
             devShell = craneLib.devShell {
               packages =
@@ -373,23 +367,21 @@
 
             cargoArtifacts = craneLib.buildDepsOnly commonArgs;
             apps = {
-              flash = {
-                wchisp =
-                  let
-                    script = pkgs.writeShellApplication {
-                      name = "flash-wchisp";
-                      text = ''
-                        ${pkgs.wchisp}/bin/wchisp flash ${
-                          self.packages.${system}.pwm-fan-controller-qt-py-ch32v203
-                        }/bin/pwm-fan-controller-qt-py-ch32v203
-                      '';
-                    };
-                  in
-                  {
-                    type = "app";
-                    program = "${script}/bin/flash-wchisp";
+              flash =
+                let
+                  script = pkgs.writeShellApplication {
+                    name = "flash-wchisp";
+                    text = ''
+                      ${pkgs.wchisp}/bin/wchisp flash ${
+                        self.packages.${system}.pwm-fan-controller-qt-py-ch32v203
+                      }/bin/pwm-fan-controller-qt-py-ch32v203
+                    '';
                   };
-              };
+                in
+                {
+                  type = "app";
+                  program = "${script}/bin/flash-wchisp";
+                };
             };
             devShell = craneLib.devShell {
               packages =
@@ -416,7 +408,7 @@
       {
         apps = pkgs.lib.attrsets.genAttrs (builtins.attrNames boards) (board: boards.${board}.apps) // {
           inherit (nix-update-scripts.apps.${system}) update-nix-direnv;
-          default = self.apps.${system}.${defaultBoard}.flash.avrdude;
+          default = self.apps.${system}.${defaultBoard}.flash;
         };
         checks = {
           # attiny85-pwm-fan-controller = boards.attiny85.pwm-fan-controller;
