@@ -32,7 +32,7 @@ alias p := package
 alias pack := package
 
 package:
-    ^nix build ".#pwm-fan-controller-pico"
+    ^nix build ".#pico"
 
 uf2 profile="dev":
     #!/usr/bin/env nu

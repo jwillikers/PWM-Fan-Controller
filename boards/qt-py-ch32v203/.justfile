@@ -30,7 +30,7 @@ alias p := package
 alias pack := package
 
 package:
-    ^nix build ".#pwm-fan-controller-qt-py-ch32v203"
+    ^nix build ".#qt-py-ch32v203"
 
 alias u := update
 alias up := package
