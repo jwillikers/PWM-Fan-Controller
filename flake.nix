@@ -413,14 +413,9 @@
         };
       in
       {
-        apps = {
+        apps = pkgs.lib.attrsets.genAttrs (builtins.attrNames boards) (board: boards.${board}.apps) // {
           inherit (nix-update-scripts.apps.${system}) update-nix-direnv;
-          # attiny85.flash.avrdude = boards.attiny85.apps.flash.avrdude;
-          attiny85 = boards.attiny85.apps;
           default = self.apps.${system}.attiny85.flash.avrdude;
-          pico.flash.elf2uf2-rs = boards.pico.apps.flash.elf2uf2-rs;
-          pico.run.probe-rs = boards.pico.apps.run.probe-rs;
-          qt-py-ch32v203.flash.wchisp = boards.qt-py-ch32v203.apps.flash.wchisp;
         };
         checks = {
           # attiny85-pwm-fan-controller = boards.attiny85.pwm-fan-controller;
@@ -509,34 +504,32 @@
           #   partitionType = "count";
           # });
         };
-        devShells = {
-          attiny85 = boards.attiny85.devShell;
-          default = pkgs.mkShell {
-            nativeBuildInputs =
-              commonNativeBuildInputs
-              ++ [
-                treefmtEval.config.build.wrapper
-                # Make formatters available for IDE's.
-                (pkgs.lib.attrValues treefmtEval.config.build.programs)
-              ]
-              ++ pre-commit.enabledPackages;
-            inherit (pre-commit) shellHook;
+        devShells =
+          pkgs.lib.attrsets.genAttrs (builtins.attrNames boards) (board: boards.${board}.devShell)
+          // {
+            default = pkgs.mkShell {
+              nativeBuildInputs =
+                commonNativeBuildInputs
+                ++ [
+                  treefmtEval.config.build.wrapper
+                  # Make formatters available for IDE's.
+                  (pkgs.lib.attrValues treefmtEval.config.build.programs)
+                ]
+                ++ pre-commit.enabledPackages;
+              inherit (pre-commit) shellHook;
+            };
           };
-          pico = boards.pico.devShell;
-          qt-py-ch32v203 = boards.qt-py-ch32v203.devShell;
-        };
         formatter = treefmtEval.config.build.wrapper;
-        packages = {
-          default = self.packages.${system}.pwm-fan-controller-attiny85;
-          pwm-fan-controller-attiny85 = boards.attiny85.packages.pwm-fan-controller;
-          # todo Why can't it be pwm-fan-controller.pico?
-          pwm-fan-controller-pico = boards.pico.packages.pwm-fan-controller;
-          pwm-fan-controller-qt-py-ch32v203 = boards.qt-py-ch32v203.packages.pwm-fan-controller;
-
-          # attiny85-llvm-coverage = craneLibLLvmTools.cargoLlvmCov (boards.attiny85.commonArgs // {
-          #   cargoArtifacts = boards.attiny85.cargoArtifacts;
-          # });
-        };
+        packages =
+          pkgs.lib.attrsets.genAttrs (builtins.attrNames boards) (
+            board: boards.${board}.packages.pwm-fan-controller
+          )
+          // {
+            default = self.packages.${system}.pwm-fan-controller-attiny85;
+            # attiny85-llvm-coverage = craneLibLLvmTools.cargoLlvmCov (boards.attiny85.commonArgs // {
+            #   cargoArtifacts = boards.attiny85.cargoArtifacts;
+            # });
+          };
       }
     );
 }
