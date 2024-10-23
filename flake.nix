@@ -124,7 +124,7 @@
           };
         };
         boards = {
-          attiny85 = {
+          attiny85 = rec {
             # The development shell requires the GCC AVR toolchain to be available.
             # Thus, this cross-compilation configuration here does the trick.
             avrCrossPkgs = import nixpkgs {
@@ -151,16 +151,16 @@
                 # The AVR toolchain is unstable and does not include std.
                 targets = [ p.stdenv.hostPlatform.rust.rustcTarget ];
               };
-            rustToolchain = boards.attiny85.rustToolchainFor pkgs;
+            rustToolchain = rustToolchainFor pkgs;
 
-            craneLib = (crane.mkLib pkgs).overrideToolchain boards.attiny85.rustToolchainFor;
+            craneLib = (crane.mkLib pkgs).overrideToolchain rustToolchainFor;
             nativeBuildInputs =
               with pkgs;
               [
                 avrdude
-                boards.attiny85.avrCrossPkgs.avrlibc
-                boards.attiny85.avrCrossPkgs.buildPackages.binutils
-                boards.attiny85.avrCrossPkgs.buildPackages.gcc
+                avrCrossPkgs.avrlibc
+                avrCrossPkgs.buildPackages.binutils
+                avrCrossPkgs.buildPackages.gcc
                 cargo-binutils
                 # ravedude
               ]
@@ -177,12 +177,12 @@
                 # See https://github.com/ipetkov/crane/issues/444
                 filter =
                   path: type:
-                  (boards.attiny85.craneLib.filterCargoSources path type)
+                  (craneLib.filterCargoSources path type)
                   || (builtins.baseNameOf path == "avr-unknown-none-attiny85.json");
               };
 
-              cargoVendorDir = boards.attiny85.craneLib.vendorMultipleCargoDeps {
-                inherit (boards.attiny85.craneLib.findCargoFiles boards.attiny85.commonArgs.src) cargoConfigs;
+              cargoVendorDir = craneLib.vendorMultipleCargoDeps {
+                inherit (craneLib.findCargoFiles commonArgs.src) cargoConfigs;
                 cargoLockList = [
                   ./boards/attiny85/Cargo.lock
 
@@ -194,11 +194,11 @@
                   # to the repo and import it with `./path/to/rustlib/Cargo.lock` which
                   # will avoid IFD entirely but will require manually keeping the file
                   # up to date!
-                  "${boards.attiny85.rustToolchain.passthru.availableComponents.rust-src}/lib/rustlib/src/rust/Cargo.lock"
+                  "${rustToolchain.passthru.availableComponents.rust-src}/lib/rustlib/src/rust/Cargo.lock"
                 ];
               };
               cargoExtraArgs = "--target avr-unknown-none-attiny85.json -Z build-std=core";
-              inherit (boards.attiny85) nativeBuildInputs;
+              inherit nativeBuildInputs;
 
               extraDummyScript = ''
                 cp --archive ${./boards/attiny85/avr-unknown-none-attiny85.json} $out/avr-unknown-none-attiny85.json
@@ -206,13 +206,11 @@
               '';
             };
 
-            cargoArtifacts = boards.attiny85.craneLib.buildDepsOnly boards.attiny85.commonArgs;
+            cargoArtifacts = craneLib.buildDepsOnly commonArgs;
 
             packages.pwm-fan-controller = pkgs.callPackage ./boards/attiny85/default.nix {
-              inherit (boards.attiny85) cargoArtifacts;
-              inherit (boards.attiny85) commonArgs;
-              inherit (boards.attiny85) craneLib;
-              inherit (boards.attiny85.avrCrossPkgs) stdenv;
+              inherit cargoArtifacts commonArgs craneLib;
+              inherit (avrCrossPkgs) stdenv;
             };
             apps = {
               flash = {
@@ -233,26 +231,24 @@
                   };
               };
             };
-            devShell =
-              with boards.attiny85;
-              craneLib.devShell {
-                env = {
-                  # Required by rust-analyzer
-                  # todo Check if I actually need this.
-                  RUST_SRC_PATH = "${boards.attiny85.rustToolchain.passthru.availableComponents.rust-src}/lib/rustlib/src/rust/library";
-                };
-                packages =
-                  boards.attiny85.nativeBuildInputs
-                  ++ [
-                    treefmtEval.config.build.wrapper
-                    # Make formatters available for IDE's.
-                    (pkgs.lib.attrValues treefmtEval.config.build.programs)
-                  ]
-                  ++ pre-commit.enabledPackages;
-                inherit (pre-commit) shellHook;
+            devShell = craneLib.devShell {
+              env = {
+                # Required by rust-analyzer
+                # todo Check if I actually need this.
+                RUST_SRC_PATH = "${rustToolchain.passthru.availableComponents.rust-src}/lib/rustlib/src/rust/library";
               };
+              packages =
+                nativeBuildInputs
+                ++ [
+                  treefmtEval.config.build.wrapper
+                  # Make formatters available for IDE's.
+                  (pkgs.lib.attrValues treefmtEval.config.build.programs)
+                ]
+                ++ pre-commit.enabledPackages;
+              inherit (pre-commit) shellHook;
+            };
           };
-          pico = {
+          pico = rec {
             craneLib = (crane.mkLib pkgs).overrideToolchain (
               p: p.rust-bin.fromRustupToolchainFile ./boards/pico/rust-toolchain.toml
             );
@@ -266,8 +262,7 @@
                 src = ./boards/pico;
                 # Don't remove the memory.x linker script file from the sources.
                 filter =
-                  path: type:
-                  (boards.pico.craneLib.filterCargoSources path type) || (builtins.baseNameOf path == "memory.x");
+                  path: type: (craneLib.filterCargoSources path type) || (builtins.baseNameOf path == "memory.x");
               };
 
               # Need to make the memory.x linker script available to the dummy crate.
@@ -287,7 +282,7 @@
               ];
             };
 
-            cargoArtifacts = boards.pico.craneLib.buildDepsOnly boards.pico.commonArgs;
+            cargoArtifacts = craneLib.buildDepsOnly commonArgs;
 
             apps = {
               flash = {
@@ -325,7 +320,7 @@
                   };
               };
             };
-            devShell = boards.pico.craneLib.devShell {
+            devShell = craneLib.devShell {
               packages =
                 with pkgs;
                 [
@@ -342,12 +337,10 @@
               inherit (pre-commit) shellHook;
             };
             packages.pwm-fan-controller = pkgs.callPackage ./boards/pico/default.nix {
-              inherit (boards.pico) commonArgs;
-              inherit (boards.pico) cargoArtifacts;
-              inherit (boards.pico) craneLib;
+              inherit commonArgs cargoArtifacts craneLib;
             };
           };
-          qt-py-ch32v203 = {
+          qt-py-ch32v203 = rec {
             craneLib = (crane.mkLib pkgs).overrideToolchain (
               p: p.rust-bin.fromRustupToolchainFile ./boards/qt-py-ch32v203/rust-toolchain.toml
             );
@@ -361,9 +354,7 @@
                 src = ./boards/qt-py-ch32v203;
                 # Don't remove the memory.x linker script file from the sources.
                 filter =
-                  path: type:
-                  (boards.qt-py-ch32v203.craneLib.filterCargoSources path type)
-                  || (builtins.baseNameOf path == "memory.x");
+                  path: type: (craneLib.filterCargoSources path type) || (builtins.baseNameOf path == "memory.x");
               };
 
               # Need to make the memory.x linker script available to the dummy crate.
@@ -379,7 +370,7 @@
               cargoExtraArgs = "--target riscv32imac-unknown-none-elf";
             };
 
-            cargoArtifacts = boards.qt-py-ch32v203.craneLib.buildDepsOnly boards.qt-py-ch32v203.commonArgs;
+            cargoArtifacts = craneLib.buildDepsOnly commonArgs;
             apps = {
               flash = {
                 wchisp =
@@ -399,7 +390,7 @@
                   };
               };
             };
-            devShell = boards.qt-py-ch32v203.craneLib.devShell {
+            devShell = craneLib.devShell {
               packages =
                 with pkgs;
                 [
@@ -424,16 +415,17 @@
       {
         apps = {
           inherit (nix-update-scripts.apps.${system}) update-nix-direnv;
-          attiny85.flash.avrdude = boards.attiny85.apps.flash.avrdude;
+          # attiny85.flash.avrdude = boards.attiny85.apps.flash.avrdude;
+          attiny85 = boards.attiny85.apps;
           default = self.apps.${system}.attiny85.flash.avrdude;
           pico.flash.elf2uf2-rs = boards.pico.apps.flash.elf2uf2-rs;
           pico.run.probe-rs = boards.pico.apps.run.probe-rs;
           qt-py-ch32v203.flash.wchisp = boards.qt-py-ch32v203.apps.flash.wchisp;
         };
         checks = {
-          attiny85-pwm-fan-controller = boards.attiny85.pwm-fan-controller;
-          pico-pwm-fan-controller = boards.pico.pwm-fan-controller;
-          qt-py-ch32v203-pwm-fan-controller = boards.qt-py-ch32v203.pwm-fan-controller;
+          # attiny85-pwm-fan-controller = boards.attiny85.pwm-fan-controller;
+          # pico-pwm-fan-controller = boards.pico.pwm-fan-controller;
+          # qt-py-ch32v203-pwm-fan-controller = boards.qt-py-ch32v203.pwm-fan-controller;
 
           attiny85-clippy = boards.attiny85.craneLib.cargoClippy (
             boards.attiny85.commonArgs
