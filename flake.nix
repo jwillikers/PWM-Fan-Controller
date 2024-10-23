@@ -213,23 +213,21 @@
               inherit cargoArtifacts commonArgs craneLib;
               inherit (avrCrossPkgs) stdenv;
             };
-            apps = {
-              flash =
-                let
-                  script = pkgs.writeShellApplication {
-                    name = "flash-avrdude";
-                    text = ''
-                      ${pkgs.avrdude}/bin/avrdude -c USBtiny -B 4 -p attiny85 -U flash:w:${
-                        self.packages.${system}.pwm-fan-controller-attiny85
-                      }/bin/pwm-fan-controller-attiny85.hex:i
-                    '';
-                  };
-                in
-                {
-                  type = "app";
-                  program = "${script}/bin/flash-avrdude";
+            apps.flash =
+              let
+                script = pkgs.writeShellApplication {
+                  name = "flash-avrdude";
+                  text = ''
+                    ${pkgs.avrdude}/bin/avrdude -c USBtiny -B 4 -p attiny85 -U flash:w:${
+                      self.packages.${system}.pwm-fan-controller-attiny85
+                    }/bin/pwm-fan-controller-attiny85.hex:i
+                  '';
                 };
-            };
+              in
+              {
+                type = "app";
+                program = "${script}/bin/flash-avrdude";
+              };
             devShell = craneLib.devShell {
               env = {
                 # Required by rust-analyzer
@@ -366,23 +364,21 @@
             };
 
             cargoArtifacts = craneLib.buildDepsOnly commonArgs;
-            apps = {
-              flash =
-                let
-                  script = pkgs.writeShellApplication {
-                    name = "flash-wchisp";
-                    text = ''
-                      ${pkgs.wchisp}/bin/wchisp flash ${
-                        self.packages.${system}.pwm-fan-controller-qt-py-ch32v203
-                      }/bin/pwm-fan-controller-qt-py-ch32v203
-                    '';
-                  };
-                in
-                {
-                  type = "app";
-                  program = "${script}/bin/flash-wchisp";
+            apps.flash =
+              let
+                script = pkgs.writeShellApplication {
+                  name = "flash-wchisp";
+                  text = ''
+                    ${pkgs.wchisp}/bin/wchisp flash ${
+                      self.packages.${system}.pwm-fan-controller-qt-py-ch32v203
+                    }/bin/pwm-fan-controller-qt-py-ch32v203
+                  '';
                 };
-            };
+              in
+              {
+                type = "app";
+                program = "${script}/bin/flash-wchisp";
+              };
             devShell = craneLib.devShell {
               packages =
                 with pkgs;
