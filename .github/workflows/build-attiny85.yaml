@@ -39,7 +39,7 @@ jobs:
       - uses: DeterminateSystems/nix-installer-action@v14
       - uses: DeterminateSystems/magic-nix-cache-action@v8
       - name: Build
-        run: nix build '.#pwm-fan-controller-attiny85'
+        run: nix build '.#attiny85'
       - name: Upload firmware
         uses: actions/upload-artifact@v4
         with:
