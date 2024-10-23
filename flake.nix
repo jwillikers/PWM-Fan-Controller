@@ -38,6 +38,7 @@
     flake-utils.lib.eachDefaultSystem (
       system:
       let
+        defaultBoard = "attiny85";
         overlays = [ (import rust-overlay) ];
         pkgs = import nixpkgs {
           inherit overlays system;
@@ -415,7 +416,7 @@
       {
         apps = pkgs.lib.attrsets.genAttrs (builtins.attrNames boards) (board: boards.${board}.apps) // {
           inherit (nix-update-scripts.apps.${system}) update-nix-direnv;
-          default = self.apps.${system}.attiny85.flash.avrdude;
+          default = self.apps.${system}.${defaultBoard}.flash.avrdude;
         };
         checks = {
           # attiny85-pwm-fan-controller = boards.attiny85.pwm-fan-controller;
@@ -525,7 +526,7 @@
             board: boards.${board}.packages.pwm-fan-controller
           )
           // {
-            default = self.packages.${system}.pwm-fan-controller-attiny85;
+            default = self.packages.${system}.${defaultBoard};
             # attiny85-llvm-coverage = craneLibLLvmTools.cargoLlvmCov (boards.attiny85.commonArgs // {
             #   cargoArtifacts = boards.attiny85.cargoArtifacts;
             # });
