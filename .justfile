@@ -67,7 +67,7 @@ alias p := package
 alias pack := package
 
 package board="attiny85":
-    ^nix build ".#pwm-fan-controller-{{ board }}"
+    ^nix build ".#{{ board }}"
 
 alias u := update
 alias up := update

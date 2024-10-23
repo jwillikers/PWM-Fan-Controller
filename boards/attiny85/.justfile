@@ -19,7 +19,7 @@ run profile="dev": (build profile)
 # alias pack := package
 
 # package:
-#     ^nix build ".#pwm-fan-controller-attiny85"
+#     ^nix build ".#attiny85"
 
 alias u := update
 alias up := update
