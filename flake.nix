@@ -6,12 +6,22 @@
     };
     crane.url = "github:ipetkov/crane";
     flake-utils.url = "github:numtide/flake-utils";
-    nix-update-scripts.url = "github:jwillikers/nix-update-scripts";
+    nix-update-scripts = {
+      url = "github:jwillikers/nix-update-scripts";
+      inputs = {
+        flake-utils.follows = "flake-utils";
+        nixpkgs.follows = "nixpkgs";
+        nixpkgs-unstable.follows = "nixpkgs";
+        pre-commit-hooks.follows = "pre-commit-hooks";
+        treefmt-nix.follows = "treefmt-nix";
+      };
+    };
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     pre-commit-hooks = {
       url = "github:cachix/pre-commit-hooks.nix";
       inputs = {
         nixpkgs.follows = "nixpkgs";
+        nixpkgs-stable.follows = "nixpkgs";
       };
     };
     rust-overlay = {
@@ -20,7 +30,10 @@
       };
       url = "github:oxalica/rust-overlay";
     };
-    treefmt-nix.url = "github:numtide/treefmt-nix";
+    treefmt-nix = {
+      url = "github:numtide/treefmt-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
   outputs =
     {
@@ -52,78 +65,10 @@
           nil
           nushell
         ];
-        treefmt.config = {
-          programs = {
-            actionlint.enable = true;
-            jsonfmt.enable = true;
-            just.enable = true;
-            nixfmt.enable = true;
-            rustfmt.enable = true;
-            statix.enable = true;
-            taplo.enable = true;
-            typos.enable = true;
-            yamlfmt.enable = true;
-          };
-          projectRootFile = "flake.nix";
-          settings.formatter.typos.excludes = [
-            "*.avif"
-            "*.bmp"
-            "*.gif"
-            "*.jpeg"
-            "*.jpg"
-            "*.png"
-            "*.svg"
-            "*.tiff"
-            "*.webp"
-            ".vscode/settings.json"
-          ];
-        };
-        treefmtEval = treefmt-nix.lib.evalModule pkgs treefmt.config;
-        pre-commit = pre-commit-hooks.lib.${system}.run {
-          src = ./.;
-          hooks = {
-            check-added-large-files.enable = true;
-            check-builtin-literals.enable = true;
-            check-case-conflicts.enable = true;
-            check-executables-have-shebangs.enable = true;
-
-            # todo Not integrated with Nix?
-            check-format = {
-              enable = true;
-              entry = "${treefmtEval.config.build.wrapper}/bin/treefmt --fail-on-change";
-            };
-
-            check-json.enable = true;
-            check-shebang-scripts-are-executable.enable = true;
-            check-toml.enable = true;
-            check-yaml.enable = true;
-            # todo Is it possible to support clippy as a pre-commit hook for a workspace project like this?
-            # clippy.enable = true;
-            deadnix.enable = true;
-            detect-private-keys.enable = true;
-            editorconfig-checker.enable = true;
-            end-of-file-fixer.enable = true;
-            fix-byte-order-marker.enable = true;
-            flake-checker.enable = true;
-            forbid-new-submodules.enable = true;
-            # todo Enable lychee when asciidoc is supported.
-            # See https://github.com/lycheeverse/lychee/issues/291
-            # lychee.enable = true;
-            mixed-line-endings.enable = true;
-            nil.enable = true;
-
-            strip-location-metadata = {
-              name = "Strip location metadata";
-              description = "Strip geolocation metadata from image files";
-              enable = true;
-              entry = "${pkgs.exiftool}/bin/exiftool -duplicates -overwrite_original '-gps*='";
-              package = pkgs.exiftool;
-              types = [ "image" ];
-            };
-            trim-trailing-whitespace.enable = true;
-            yamllint.enable = true;
-          };
-        };
+        pre-commit = pre-commit-hooks.lib.${system}.run (
+          import ./pre-commit-hooks.nix { inherit pkgs treefmtEval; }
+        );
+        treefmtEval = treefmt-nix.lib.evalModule pkgs ./treefmt.nix;
         boards = {
           attiny85 = rec {
             # The development shell requires the GCC AVR toolchain to be available.
@@ -209,7 +154,7 @@
 
             cargoArtifacts = craneLib.buildDepsOnly commonArgs;
 
-            packages.pwm-fan-controller = pkgs.callPackage ./boards/attiny85/default.nix {
+            packages.pwm-fan-controller = pkgs.callPackage ./boards/attiny85/package.nix {
               inherit cargoArtifacts commonArgs craneLib;
               inherit (avrCrossPkgs) stdenv;
             };
@@ -329,7 +274,7 @@
                 ++ pre-commit.enabledPackages;
               inherit (pre-commit) shellHook;
             };
-            packages.pwm-fan-controller = pkgs.callPackage ./boards/pico/default.nix {
+            packages.pwm-fan-controller = pkgs.callPackage ./boards/pico/package.nix {
               inherit commonArgs cargoArtifacts craneLib;
             };
           };
@@ -393,7 +338,7 @@
                 ++ pre-commit.enabledPackages;
               inherit (pre-commit) shellHook;
             };
-            packages.pwm-fan-controller = pkgs.callPackage ./boards/qt-py-ch32v203/default.nix {
+            packages.pwm-fan-controller = pkgs.callPackage ./boards/qt-py-ch32v203/package.nix {
               inherit (boards.qt-py-ch32v203) cargoArtifacts;
               inherit (boards.qt-py-ch32v203) commonArgs;
               inherit (boards.qt-py-ch32v203) craneLib;
@@ -502,7 +447,7 @@
                 ++ [
                   treefmtEval.config.build.wrapper
                   # Make formatters available for IDE's.
-                  (pkgs.lib.attrValues treefmtEval.config.build.programs)
+                  (builtins.attrValues treefmtEval.config.build.programs)
                 ]
                 ++ pre-commit.enabledPackages;
               inherit (pre-commit) shellHook;
