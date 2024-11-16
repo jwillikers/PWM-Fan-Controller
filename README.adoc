@@ -108,7 +108,7 @@ However, the top-level directory does not load any environment, so use `nix deve
 +
 [,sh]
 ----
-nix develop '.#attiny85' --command just flash attiny85
+nix develop .#attiny85 --command just flash attiny85
 ----
 
 === Serial Port Permissions
