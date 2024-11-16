@@ -77,6 +77,48 @@ I use the 74AHCT125 to perform the logic-level conversion, using pin #40, `VBUS`
 
 The QT Py CH32V203 draws only 1.11 mA of current in this particular configuration.
 
+=== Wiring
+
+The 74AHCT125 is wired as shown in the <<74AHCT125 Wiring>> table.
+All pins omitted from the table are connected to ground.
+
+.74AHCT125 Wiring
+[cols="1,4"]
+|===
+| 74AHCT125 | Signal
+
+| 1
+| 3.3 Volt power
+
+| 9
+| 3.3 Volt PWM input signal
+
+| 10
+| 5 Volt PWM output signal
+|===
+
+The output signal from the logic-level shifter is sent through the 1N4001 power blocking diode to the fan header.
+The pins on the 4-pin fan header are classified in the <<4-pin Fan Header Pinout>> table.
+The pins are numbered one through four from left to right with the pins reaching upwards and the overhang positioned between the viewer and the pins.
+
+.4-pin Fan Header Pinout
+[cols="1,4"]
+|===
+| Fan Header Pin | Signal
+
+| 1
+| GND
+
+| 2
+| +12VDC
+
+| 3
+| Sense
+
+| 4
+| Control
+|===
+
 == Getting Started
 
 . Change to the board's directory.
@@ -100,12 +142,8 @@ SUBSYSTEM=="usb", ATTRS{idVendor}=="4348", ATTRS{idProduct}=="55e0", TAG+="uacce
 +
 [,sh]
 ----
-nix run '../..#qt-py-ch32v203.flash.wchisp'
+nix run ../..#qt-py-ch32v203.flash.wchisp
 ----
-
-== Todo
-
-* Document connections with the 74AHCT125.
 
 == References
 

@@ -15,9 +15,10 @@ endif::[]
 :flip-link: https://github.com/knurling-rs/flip-link[flip-link]
 :Git: https://git-scm.com/[Git]
 :Noctua-NF-P12-redux-1700-PWM-Fan: https://noctua.at/en/nf-p12-redux-1700-pwm[Noctua NF-P12 redux-1700 PWM Fan]
-:Picoprobe-Wiring: https://datasheets.raspberrypi.com/pico/getting-started-with-pico.pdf[Picoprobe Wiring]
+:Picoprobe-Wiring: https://github.com/rgrr/yapicoprobe?tab=readme-ov-file#probe--target-wiring[Picoprobe Wiring]
 :PicoProbe-PCB-kit: https://shop.pimoroni.com/products/picoprobe-pcb-kit?variant=39954095472723[PicoProbe PCB kit]
 :probe-rs: https://probe.rs/[probe-rs]
+:Raspberry-Pi-3-pin-Debug-Connector-Specification: https://datasheets.raspberrypi.com/debug/debug-connector-specification.pdf[Raspberry Pi 3-pin Debug Connector Specification]
 :Raspberry-Pi-Pico: https://www.raspberrypi.com/products/raspberry-pi-pico/[Raspberry Pi Pico]
 :Raspberry-Pi-Debug-Probe: https://www.raspberrypi.com/documentation/microcontrollers/debug-probe.html[Raspberry Pi Debug Probe]
 :rp-hal: https://github.com/rp-rs/rp-hal[rp-hal]
@@ -89,6 +90,48 @@ I use the 74AHCT125 to perform the logic-level conversion, using pin #40, `VBUS`
 
 The Raspberry Pi Pico draws 1.99 mA of current in this particular configuration.
 
+=== Wiring
+
+The 74AHCT125 is wired as shown in the <<74AHCT125 Wiring>> table.
+All pins omitted from the table are connected to ground.
+
+.74AHCT125 Wiring
+[cols="1,4"]
+|===
+| 74AHCT125 | Signal
+
+| 1
+| 3.3 Volt power
+
+| 9
+| 3.3 Volt PWM input signal
+
+| 10
+| 5 Volt PWM output signal
+|===
+
+The output signal from the logic-level shifter is sent through the 1N4001 power blocking diode to the fan header.
+The pins on the 4-pin fan header are classified in the <<4-pin Fan Header Pinout>> table.
+The pins are numbered one through four from left to right with the pins reaching upwards and the overhang positioned between the viewer and the pins.
+
+.4-pin Fan Header Pinout
+[cols="1,4"]
+|===
+| Fan Header Pin | Signal
+
+| 1
+| GND
+
+| 2
+| +12VDC
+
+| 3
+| Sense
+
+| 4
+| Control
+|===
+
 == Getting Started
 
 . Change to the board's directory.
@@ -109,26 +152,25 @@ To mount `/dev/sda1`, as in my case, use the `udisksctl` command like so.
 udisksctl mount --block-device /dev/sda1
 ----
 
+. Double check that link:.cargo/config.toml[.cargo/config.toml] has the runner set to `elf2uf2-rs -d`.
+
 . Flash the board using the `nix run` command with the `pico.flash.elf2uf2-rs` target.
 +
 [,sh]
 ----
-nix run '../..#pico.flash.elf2uf2-rs'
+nix run ../..#pico.flash.elf2uf2-rs
 ----
-
-// == Develop
-
-// . Double check that link:.cargo/config.toml[.cargo/config.toml] has the runner set to `elf2uf2-rs -d`.
 
 == Probe
 
+The `UF2` method is handy for programming microcontrollers without requiring any additional hardware.
+However, debug probes are quite convenient for flashing and debugging code running on the microcontroller.
 Any CMSIS-DAP compatible debug probe should work with probe-rs.
 The {Raspberry-Pi-Debug-Probe} is the most straightforward probe to use for this, and quite affordable.
-If you happen to have another Raspberry Pi Pico on-hand, this can be used as a debug probe by following the directions in the <<Pico Probe>> section.
-
-If you want to use a probe with the `cargo run` command, be sure that link:.cargo/config.toml[.cargo/config.toml] has the runner set to `probe-run --chip RP2040 --protocol swd`.
-
-=== Raspberry Pi Debug Probe
+If you happen to have another Raspberry Pi Pico on-hand, this can be used as a debug probe.
+Follow the instructions in <<Probe Firmware>> to install the necessary firmware to convert the Pico into a debug probe.
+The {PicoProbe-PCB-kit} is a nifty add-on that makes it a bit more convenient to use the Pico as a probe.
+Whichever probe you happen to choose, configure udev to give your user access to the probe by following these instructions.
 
 . Add a udev rule to be able to access the Raspberry Pi Debug Probe as a non-root user.
 +
@@ -140,26 +182,19 @@ SUBSYSTEM=="usb", ATTRS{idVendor}=="2e8a", ATTRS{idProduct}=="000c", TAG+="uacce
 
 . Unplug the probe, and plug it back in for the udev rule to take effect.
 
-// todo Wiring.
-. Connect the probe to the Raspberry Pi Pico.
+If you want to use a probe with the `cargo run` command, be sure that link:.cargo/config.toml[.cargo/config.toml] has the runner set to `probe-run --chip RP2040 --protocol swd`.
 
-. Flash and run the firmware using the `nix run` command with the `pico.run.probe-rs` target.
-Alternatively, use the just command `just run dev probe-rs`.
-+
-[,sh]
-----
-nix run '.#pico.run.probe-rs'
-----
+=== Probe Firmware
 
-=== Pico Probe
+The Pico Probe and the Raspberry Pi Debug Probe use variations of the same firmware.
+The firmware is installed and upgraded in the same way.
+I recommend using the latest firmware.
+It's very easy to install.
+Raspberry Pi releases official firmware in their https://github.com/raspberrypi/debugprobe[Debug Probe] repository.
+I prefer the firmware from the https://github.com/rgrr/yapicoprobe/[Yet Another Picoprobe] project, which is used in these instructions.
+It's a bit faster and provides more information about the connection through the LED.
 
-The `UF2` method is handy for programming microcontrollers without requiring any additional hardware.
-However, debug probes are quite convenient for flashing and debugging code running on the microcontroller.
-There are many debuggers available on the market, but there's something quaint about using a spare Pico as a debugger.
-The {PicoProbe-PCB-kit} is a nifty add-on that makes it a bit more convenient to use the Pico as a probe.
-The steps here describe how to use a Pico as a debug probe with the Raspberry Pi Debug Probe firmware and wire everything up.
-
-. While holding the `BOOTSEL` button on the Raspberry Pi Pico, connect it to the computer.
+. While holding the `BOOTSEL` button on the Raspberry Pi Pico or Raspberry Pi Debug Probe, connect it to the computer.
 
 . Mount the drive provided by the Pico.
 This can be determined by perusing the block devices available from the `lsblk` command.
@@ -170,33 +205,94 @@ To mount `/dev/sda1`, as in my case, use the `udisksctl` command like so.
 udisksctl mount --block-device /dev/sda1
 ----
 
-. Download and install the Raspberry Pi Debug Probe firmware to the Raspberry Pi Pico.
+. Download and install the appropriate firmware for the device.
++
+Raspberry Pi Debug Probe::
 +
 [,sh]
 ----
 curl --location --output-dir=/run/media/$USER/RPI-RP2 --remote-name \
-  https://github.com/raspberrypi/debugprobe/releases/download/debugprobe-v2.0.1/debugprobe_on_pico.uf2
+  https://github.com/rgrr/yapicoprobe/releases/download/v1.21/yapicoprobe-0121-picodebugprobe-11bf6c0.uf2
 ----
 
-. Connect the debug probe Pico to the Pico to flash according to the {Picoprobe-Wiring} documentation.
+Pico Probe::
 +
+[,sh]
+----
+curl --location --output-dir=/run/media/$USER/RPI-RP2 --remote-name \
+  https://github.com/rgrr/yapicoprobe/releases/download/v1.21/yapicoprobe-0121-pico-11bf6c0.uf2
+----
+
+=== Probe Wiring
+
+This Raspberry Pi Pico uses a 3-pin debug connector on end of the board opposite the microUSB connector, right below the Raspberry Pi logo.
+This is documented in detail in the {Raspberry-Pi-3-pin-Debug-Connector-Specification}.
+The pins are numbered one through three from left to right when the board is oriented such that the Raspberry Pi logo is upright.
+The Raspberry Pi Debug Probe utilizes a JST-SH connector.
+If your Pico uses a JST-SH connector, making the connection is straightforward.
+If it doesn't, the following table describes each connection, including the color of each wire for the adapter that comes with the Raspberry Pi Debug Probe.
+
+.Raspberry Pi 3-pin Debug Connector Pinout
+[cols="1,2,2,2"]
+|===
+| Pin
+| SWD
+| UART
+| Wire Color
+
+| 1
+| SWCLK
+| RX
+| Orange
+
+| 2
+| GND
+| GND
+| Black
+
+| 3
+| SWDIO
+| TX
+| Yellow
+|===
+
+When using a standalone Pico as a probe, connect the pins to the target Pico according to the following table.
+Refer to the {Picoprobe-Wiring} documentation for further details.
+
 .Picoprobe Wiring
 [cols="1,1"]
 |===
 | Probe | Pico
 
-| GND | GND
-| GP2 | SWCLK
-| GP3 | SWDIO
-| GP4/UART1 TX | GP1/UART0 RX
-| GP5/UART1 RX | GP0/UART0 TX
+| GND
+| GND
+
+| GP2
+| SWCLK
+
+| GP3
+| SWDIO
+
+| GP4/UART1 TX
+| GP1/UART0 RX
+
+| GP5/UART1 RX
+| GP0/UART0 TX
 |===
 
-. Now just follow the directions in the <<Raspberry Pi Debug Probe>> section to flash the target Pico.
+=== Use the Probe
 
-== Todo
+Follow these steps to run the code on the Raspberry Pi Pico.
 
-* Document connections with the 74AHCT125.
+. Connect the probe to the Raspberry Pi Pico using the connections described in the <<Probe Wiring>> section.
+
+. Flash and run the firmware using the `nix run` command with the `pico.run.probe-rs` target.
+Alternatively, use the just command `just run dev probe-rs`.
++
+[,sh]
+----
+nix run .#pico.run.probe-rs
+----
 
 == References
 
