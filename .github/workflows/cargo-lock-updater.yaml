@@ -18,11 +18,11 @@ jobs:
       - uses: DeterminateSystems/nix-installer-action@v15
       - uses: DeterminateSystems/magic-nix-cache-action@v8
       - name: Update ATtiny85 Cargo lock file
-        run: nix develop '.#attiny85' --command 'cd boards/attiny85 && cargo update'
+        run: nix develop .#attiny85 --command 'cd boards/attiny85 && cargo update'
       - name: Update Pico Cargo lock file
-        run: nix develop '.#pico' --command 'cd boards/pico && cargo update'
+        run: nix develop .#pico --command 'cd boards/pico && cargo update'
       - name: Update QT Py CH32V203 Cargo lock file
-        run: nix develop '.#qt-py-ch32v203' --command 'cd boards/qt-py-ch32v203 && cargo update'
+        run: nix develop .#qt-py-ch32v203 --command 'cd boards/qt-py-ch32v203 && cargo update'
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v7
         with:
