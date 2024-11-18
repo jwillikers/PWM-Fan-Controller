@@ -161,7 +161,7 @@
               type = "app";
               program = builtins.toString (
                 pkgs.writers.writeNu "flash-avrdude" ''
-                  ${pkgs.lib.getExe pkgs.avrdude} -c USBtiny -B 4 -p attiny85 -U flash:w:${
+                  ^${pkgs.lib.getExe pkgs.avrdude} -c USBtiny -B 4 -p attiny85 -U flash:w:${
                     self.packages.${system}.pwm-fan-controller-attiny85
                   }/bin/pwm-fan-controller-attiny85.hex:i
                 ''
@@ -225,7 +225,7 @@
                 type = "app";
                 program = builtins.toString (
                   pkgs.writers.writeNu "flash-elf2uf2-rs" ''
-                    ${pkgs.lib.getExe pkgs.elf2uf2-rs} --deploy ${
+                    ^${pkgs.lib.getExe pkgs.elf2uf2-rs} --deploy ${
                       self.packages.${system}.pwm-fan-controller-pico
                     }/bin/pwm-fan-controller-pico
                   ''
@@ -297,7 +297,7 @@
               type = "app";
               program = builtins.toString (
                 pkgs.writers.writeNu "flash-wchisp" ''
-                  ${pkgs.lib.getExe pkgs.wchisp} flash ${
+                  ^${pkgs.lib.getExe pkgs.wchisp} flash ${
                     self.packages.${system}.pwm-fan-controller-qt-py-ch32v203
                   }/bin/pwm-fan-controller-qt-py-ch32v203
                 ''
@@ -327,7 +327,7 @@
       in
       {
         apps = pkgs.lib.attrsets.genAttrs (builtins.attrNames boards) (board: boards.${board}.apps) // {
-          inherit (nix-update-scripts.apps.${system}) update-nix-direnv;
+          inherit (nix-update-scripts.apps.${system}) update-nix-direnv update-nixos-release;
           default = self.apps.${system}.${defaultBoard}.flash;
         };
         checks = {
