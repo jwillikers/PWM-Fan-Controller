@@ -123,6 +123,9 @@ The fan setup might evolve in the future to take into account temperature sensin
 
 == Circuit
 
+// todo Improve documentation of the wiring.
+// Breadboard::
+// +
 . Gently place the ATtiny85 in the breadboard.
 . Connect pin #4 to ground.
 . Attach pin #8 to 5V.
@@ -132,7 +135,7 @@ This should be the pin opposite the one attached to ground on the fan header.
 +
 [cols="1,1"]
 |===
-| ATtiny85 pin | ISP Breakout pin
+| ATtiny85 Pin | ISP Breakout Pin
 
 | 1 | RST
 | 4 | GND
@@ -144,6 +147,11 @@ This should be the pin opposite the one attached to ground on the fan header.
 . Set the USB µISP's slider to 5V to power the ATtiny85 microcontroller for testing.
 . Attach the USB µISP programmer to the 6-pin ISP breakout board.
 . Connect the 12V power supply to the 2nd pin in the fan header, the one immediately next to ground.
+
+// todo Document the wiring for the protoboard.
+// Protoboard::
+// +
+// .
 
 == Permissions
 

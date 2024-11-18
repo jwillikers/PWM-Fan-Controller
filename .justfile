@@ -9,6 +9,7 @@ check: && format
     ^yamllint .
     ^asciidoctor '**/*.adoc'
     ^lychee --cache **/*.html LICENSE-*
+    ^nix flake check
 
 alias b := build
 
@@ -67,16 +68,18 @@ alias p := package
 alias pack := package
 
 package board="attiny85":
-    ^nix build ".#{{ board }}"
+    nix build ".#{{ board }}"
 
 alias u := update
 alias up := update
 
 update:
-    ^nix flake update
+    nix run ".#update-nix-direnv"
+    nix run ".#update-nixos-release"
+    nix flake update
     cd "{{ justfile_directory() }}/boards/attiny85"
-    ^cargo update
+    cargo update
     cd "{{ justfile_directory() }}/boards/pico"
-    ^cargo update
+    cargo update
     cd "{{ justfile_directory() }}/boards/qt-py-ch32v203"
-    ^cargo update
+    cargo update
