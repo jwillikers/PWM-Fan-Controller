@@ -5,7 +5,7 @@ default: build
 alias b := build
 
 build profile="dev":
-    ^cargo build --profile "{{ profile }}"
+    cargo build --profile "{{ profile }}"
 
 alias f := run
 alias flash := run
@@ -49,5 +49,5 @@ alias u := update
 alias up := package
 
 update:
-    ^nix flake update
-    ^cargo update
+    nix flake update
+    cargo update
