@@ -72,8 +72,8 @@ This is a dead-simple PWM fan controller that simply lowers the speed of the {No
 The microcontroller simply sets the fan speed and then does nothing.
 The fan setup might evolve in the future to take into account temperature sensing and dynamic speed adjustment.
 
-The 3.3V QT Py CH32V203 requires a logic-level shifter to boost the PWM signal up to 5V for the fan.
-I use the 74AHCT125 to perform the logic-level conversion, using pin #40, `VBUS`, to provide the 5V reference voltage.
+The 3.3V QT Py CH32V203 requires a logic level shifter to boost the PWM signal up to 5V for the fan.
+I use the 74AHCT125 to perform the logic level conversion, using pin #40, `VBUS`, to provide the 5V reference voltage.
 
 The QT Py CH32V203 draws only 1.11 mA of current in this particular configuration.
 
@@ -83,28 +83,34 @@ The 74AHCT125 is wired as shown in the <<74AHCT125 Wiring>> table.
 All pins omitted from the table are connected to ground.
 
 .74AHCT125 Wiring
-[cols="1,4"]
+[cols="1,2,2"]
 |===
-| 74AHCT125 | Signal
+| 74AHCT125 Pin
+| Signal
+| Connection
 
-| 1
-| 3.3 Volt power
+| 2
+| 3.3V logic level input
+| QT Py CH32V203 pin #5 (SDA)
 
-| 9
-| 3.3 Volt PWM input signal
+| 3
+| 5V logic level output
+| 1N4001 to fan header pin #4 (Control)
 
-| 10
-| 5 Volt PWM output signal
+| 8
+| 5V
+| QT Py CH32V203 pin #14 (5V)
 |===
 
-The output signal from the logic-level shifter is sent through the 1N4001 power blocking diode to the fan header.
+The output signal from the logic level shifter is sent through the 1N4001 power blocking diode to the fan header.
 The pins on the 4-pin fan header are classified in the <<4-pin Fan Header Pinout>> table.
 The pins are numbered one through four from left to right with the pins reaching upwards and the overhang positioned between the viewer and the pins.
 
 .4-pin Fan Header Pinout
 [cols="1,4"]
 |===
-| Fan Header Pin | Signal
+| Fan Header Pin
+| Signal
 
 | 1
 | GND
