@@ -74,6 +74,8 @@ alias u := update
 alias up := update
 
 update:
+    nix run ".#update-nix-direnv"
+    nix run ".#update-nixos-release"
     nix flake update
     cd "{{ justfile_directory() }}/boards/attiny85"
     cargo update
