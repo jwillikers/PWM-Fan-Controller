@@ -92,7 +92,7 @@
               p:
               (p.rust-bin.fromRustupToolchainFile ./boards/attiny85/rust-toolchain.toml).override {
                 # Remove the avr-unknown-none-attiny85.json file from the list of targets for the Rust toolchain.
-                # Nix doesn't really support target JSON files specified in the toolchain and even if it did, it won't be ablet to build a toolchain for AVR.
+                # Nix doesn't really support target JSON files specified in the toolchain and even if it did, it won't be able to build a toolchain for AVR.
                 # The AVR toolchain is unstable and does not include std.
                 targets = [ p.stdenv.hostPlatform.rust.rustcTarget ];
               };
@@ -140,6 +140,7 @@
                   # will avoid IFD entirely but will require manually keeping the file
                   # up to date!
                   "${rustToolchain.passthru.availableComponents.rust-src}/lib/rustlib/src/rust/Cargo.lock"
+                  # "${rustToolchain.passthru.availableComponents.rust-src}/lib/rustlib/src/rust/library/Cargo.lock"
                 ];
               };
               cargoExtraArgs = "--target avr-unknown-none-attiny85.json -Z build-std=core";
@@ -147,8 +148,9 @@
 
               extraDummyScript = ''
                 cp --archive ${./boards/attiny85/avr-unknown-none-attiny85.json} $out/avr-unknown-none-attiny85.json
-                rm --force --recursive $out/src/bin/crane-dummy-*
+                (shopt -s globstar; rm --force --recursive $out/**/src/bin/crane-dummy-*)
               '';
+              #   # rm --force --recursive $out/src/bin/crane-dummy-*
             };
 
             cargoArtifacts = craneLib.buildDepsOnly commonArgs;

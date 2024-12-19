@@ -2,8 +2,6 @@
   cargoArtifacts,
   commonArgs,
   craneLib,
-  # deadnix: skip
-  stdenv,
 }:
 craneLib.buildPackage commonArgs
 // {

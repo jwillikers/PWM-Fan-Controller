@@ -15,7 +15,7 @@ indent_size = unset
 [*.lock]
 indent_style = unset
 
-[*.{adoc,envrc,nix,nu,yaml,yml}]
+[*.{adoc,envrc,lock,nix,nu,yaml,yml}]
 max_line_length = off
 
 [{justfile,.justfile,*.just,*.rs}]
