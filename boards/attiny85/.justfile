@@ -26,4 +26,4 @@ alias up := update
 
 update:
     nix flake update
-    cargo update
+    cargo update --verbose

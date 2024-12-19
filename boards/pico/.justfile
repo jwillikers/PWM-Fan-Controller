@@ -50,4 +50,4 @@ alias up := package
 
 update:
     nix flake update
-    cargo update
+    cargo update --verbose
