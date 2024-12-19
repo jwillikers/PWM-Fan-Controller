@@ -9,8 +9,11 @@ indent_style = space
 max_line_length = 120
 trim_trailing_whitespace = true
 
-[*.adoc]
+[*.adoc,*.lock]
 indent_size = unset
+
+[*.lock]
+indent_style = unset
 
 [*.{adoc,envrc,nix,nu,yaml,yml}]
 max_line_length = off
