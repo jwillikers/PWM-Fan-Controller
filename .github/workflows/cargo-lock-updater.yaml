@@ -16,7 +16,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: DeterminateSystems/nix-installer-action@v16
-      - uses: DeterminateSystems/magic-nix-cache-action@v8
+      - uses: DeterminateSystems/magic-nix-cache-action@v9
       - name: Update ATtiny85 Cargo lock file
         run: nix develop .#attiny85 --command 'cd boards/attiny85 && cargo update'
       - name: Update Pico Cargo lock file
