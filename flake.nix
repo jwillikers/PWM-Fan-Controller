@@ -290,7 +290,6 @@
                 rm --force --recursive $out/src/bin/crane-dummy-*
               '';
 
-              # cargoExtraArgs = "--target riscv32imfc-unknown-none-elf.json -Z build-std=core";
               cargoExtraArgs = "--target riscv32imc-unknown-none-elf";
             };
 

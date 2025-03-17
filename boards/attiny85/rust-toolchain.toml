@@ -1,6 +1,6 @@
 [toolchain]
-channel = "nightly-2024-03-22"
-# channel = "nightly"
+# channel = "nightly-2024-03-22"
+channel = "nightly"
 components = ["llvm-tools-preview", "rust-src"]
 profile = "minimal"
 targets = ["avr-unknown-none-attiny85.json"]
