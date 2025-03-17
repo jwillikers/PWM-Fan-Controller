@@ -18,22 +18,26 @@ features = [
   # The PWM is attached to timer 4 though, in case it matters.
   "time-driver-tim4",
   # "time-driver-tim2",
+  "memory-x",
 ]
 git = "https://github.com/ch32-rs/ch32-hal.git"
 
 [dependencies]
 embedded-hal = "1.0"
-qingke-rt = "0.2"
-qingke = "0.2"
-panic-halt = "0.2"
+qingke-rt = "0.5"
+qingke = "0.5"
+panic-halt = "1.0"
 
 # Dev builds need to be optimized for code size or they won't fit in flash.
 [profile.dev]
-lto = true
 opt-level = "z"
-strip = false
 
 [profile.release]
-lto = true
-opt-level = "z" # Optimize for size.
-strip = false   # symbols are not flashed to the microcontroller, so don't strip them.
+opt-level = "z"          # Optimize for size.
+strip = false            # symbols are not flashed to the microcontroller, so don't strip them.
+codegen-units = 1        # LLVM can perform better optimizations using a single thread
+debug = 2
+debug-assertions = false
+incremental = false
+lto = "fat"
+overflow-checks = false
