@@ -17,7 +17,6 @@ run profile="dev": (build profile)
 
 # alias p := package
 # alias pack := package
-
 # package:
 #     ^nix build ".#attiny85"
 
