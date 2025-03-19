@@ -48,6 +48,7 @@
     "Pinout",
     "Pinouts",
     "pkgs",
+    "pname",
     "proto",
     "Protoboard",
     "rustc",
