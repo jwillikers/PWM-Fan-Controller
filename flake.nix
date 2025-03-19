@@ -212,10 +212,6 @@
               '';
 
               cargoExtraArgs = "--target thumbv6m-none-eabi";
-
-              nativeBuildInputs = with pkgs; [
-                flip-link
-              ];
             };
 
             cargoArtifacts = craneLib.buildDepsOnly commonArgs;
