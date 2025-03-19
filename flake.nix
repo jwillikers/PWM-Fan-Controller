@@ -283,7 +283,6 @@
               # See https://github.com/ipetkov/crane/issues/444
               # Should I symlink instead of copy?
               # ln --symbolic ${./memory.x} memory.x
-              CARGO_TARGET_RISCV32IMAC_UNKNOWN_NONE_ELF_RUSTFLAGS = "-C link-arg=--library-path=.";
               extraDummyScript = ''
                 cp --archive ${./boards/qt-py-ch32v203/memory.x} $out/memory.x
                 rm --force --recursive $out/src/bin/crane-dummy-*
