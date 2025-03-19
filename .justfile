@@ -24,7 +24,7 @@ build board="attiny85" profile="dev":
 alias fmt := format
 
 format:
-    treefmt
+    treefmt-nix
 
 alias f := run
 alias flash := run
@@ -78,8 +78,8 @@ update:
     nix run ".#update-nixos-release"
     nix flake update
     cd "{{ justfile_directory() }}/boards/attiny85"
-    cargo update
+    cargo update --verbose
     cd "{{ justfile_directory() }}/boards/pico"
-    cargo update
+    cargo update --verbose
     cd "{{ justfile_directory() }}/boards/qt-py-ch32v203"
-    cargo update
+    cargo update --verbose

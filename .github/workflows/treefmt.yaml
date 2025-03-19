@@ -43,4 +43,4 @@ jobs:
         with:
           fail_on_error: true
           github_token: ${{ secrets.GH_TOKEN_FOR_UPDATES }}
-          tool_name: treefmt
+          tool_name: treefmt-nix

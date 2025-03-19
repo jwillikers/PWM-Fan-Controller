@@ -1,27 +1,27 @@
 /* CH32V203G8 */
 MEMORY
 {
-	FLASH : ORIGIN = 0x00000000, LENGTH = 32k
-	RAM : ORIGIN = 0x20000000, LENGTH = 10k
-	/* Non Zero Wait Flash, 224K - 32K = 192K */
-	FLASH1 : ORIGIN = 0x00008000, LENGTH = 192K
+  FLASH : ORIGIN = 0x00000000, LENGTH = 32k
+  RAM : ORIGIN = 0x20000000, LENGTH = 10k
+  /* Non Zero Wait Flash, 224K - 32K = 192K */
+  FLASH1 : ORIGIN = 0x00008000, LENGTH = 192K
 }
 
 SECTIONS
 {
-    .coldtext :
-    {
-        . = ALIGN(4);
-        KEEP(*(SORT_NONE(.coldtext .coldtext.*)))
-        . = ALIGN(4);
-    } >FLASH1 AT>FLASH1
+  .coldtext :
+  {
+    . = ALIGN(4);
+    KEEP(*(SORT_NONE(.coldtext .coldtext.*)))
+    . = ALIGN(4);
+  } >FLASH1 AT>FLASH1
 
-	.coldrodata :
-	{
-		. = ALIGN(4);
-		KEEP(*(SORT_NONE(.coldrodata .coldrodata.*)))
-		. = ALIGN(4);
-	} >FLASH1 AT>FLASH1
+  .coldrodata :
+  {
+    . = ALIGN(4);
+    KEEP(*(SORT_NONE(.coldrodata .coldrodata.*)))
+    . = ALIGN(4);
+  } >FLASH1 AT>FLASH1
 }
 
 REGION_ALIAS("REGION_TEXT", FLASH);

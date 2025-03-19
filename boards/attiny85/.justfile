@@ -17,7 +17,6 @@ run profile="dev": (build profile)
 
 # alias p := package
 # alias pack := package
-
 # package:
 #     ^nix build ".#attiny85"
 
@@ -26,4 +25,4 @@ alias up := update
 
 update:
     nix flake update
-    cargo update
+    cargo update --verbose

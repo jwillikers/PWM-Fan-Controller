@@ -20,7 +20,6 @@
       url = "github:cachix/pre-commit-hooks.nix";
       inputs = {
         nixpkgs.follows = "nixpkgs";
-        nixpkgs-stable.follows = "nixpkgs";
       };
     };
     rust-overlay = {
@@ -92,7 +91,7 @@
               p:
               (p.rust-bin.fromRustupToolchainFile ./boards/attiny85/rust-toolchain.toml).override {
                 # Remove the avr-unknown-none-attiny85.json file from the list of targets for the Rust toolchain.
-                # Nix doesn't really support target JSON files specified in the toolchain and even if it did, it won't be ablet to build a toolchain for AVR.
+                # Nix doesn't really support target JSON files specified in the toolchain and even if it did, it won't be able to build a toolchain for AVR.
                 # The AVR toolchain is unstable and does not include std.
                 targets = [ p.stdenv.hostPlatform.rust.rustcTarget ];
               };
@@ -140,6 +139,7 @@
                   # will avoid IFD entirely but will require manually keeping the file
                   # up to date!
                   "${rustToolchain.passthru.availableComponents.rust-src}/lib/rustlib/src/rust/Cargo.lock"
+                  # "${rustToolchain.passthru.availableComponents.rust-src}/lib/rustlib/src/rust/library/Cargo.lock"
                 ];
               };
               cargoExtraArgs = "--target avr-unknown-none-attiny85.json -Z build-std=core";
@@ -147,8 +147,9 @@
 
               extraDummyScript = ''
                 cp --archive ${./boards/attiny85/avr-unknown-none-attiny85.json} $out/avr-unknown-none-attiny85.json
-                rm --force --recursive $out/src/bin/crane-dummy-*
+                (shopt -s globstar; rm --force --recursive $out/**/src/bin/crane-dummy-*)
               '';
+              #   # rm --force --recursive $out/src/bin/crane-dummy-*
             };
 
             cargoArtifacts = craneLib.buildDepsOnly commonArgs;
@@ -205,17 +206,12 @@
               # See https://github.com/ipetkov/crane/issues/444
               # Should I symlink instead of copy?
               # ln --symbolic ${./memory.x} memory.x
-              CARGO_TARGET_THUMBV6M_NONE_EABI_RUSTFLAGS = "-C link-arg=--library-path=.";
               extraDummyScript = ''
                 cp --archive ${./boards/pico/memory.x} $out/memory.x
                 rm --force --recursive $out/src/bin/crane-dummy-*
               '';
 
               cargoExtraArgs = "--target thumbv6m-none-eabi";
-
-              nativeBuildInputs = with pkgs; [
-                flip-link
-              ];
             };
 
             cargoArtifacts = craneLib.buildDepsOnly commonArgs;
@@ -283,13 +279,12 @@
               # See https://github.com/ipetkov/crane/issues/444
               # Should I symlink instead of copy?
               # ln --symbolic ${./memory.x} memory.x
-              CARGO_TARGET_RISCV32IMAC_UNKNOWN_NONE_ELF_RUSTFLAGS = "-C link-arg=--library-path=.";
               extraDummyScript = ''
                 cp --archive ${./boards/qt-py-ch32v203/memory.x} $out/memory.x
                 rm --force --recursive $out/src/bin/crane-dummy-*
               '';
 
-              cargoExtraArgs = "--target riscv32imac-unknown-none-elf";
+              cargoExtraArgs = "--target riscv32imc-unknown-none-elf";
             };
 
             cargoArtifacts = craneLib.buildDepsOnly commonArgs;
