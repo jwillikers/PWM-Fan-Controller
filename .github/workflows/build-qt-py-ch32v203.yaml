@@ -37,7 +37,7 @@ jobs:
   build-qt-py-ch32v203:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: DeterminateSystems/nix-installer-action@v19
       - name: Build
         run: nix build .#qt-py-ch32v203
