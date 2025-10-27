@@ -40,7 +40,7 @@ jobs:
       - name: Build
         run: nix build .#attiny85
       - name: Upload firmware
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: pwm-fan-controller-attiny85
           path: |
