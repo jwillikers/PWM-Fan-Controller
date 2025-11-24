@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
-      - uses: DeterminateSystems/nix-installer-action@v20
+      - uses: DeterminateSystems/nix-installer-action@v21
       - name: Update ATtiny85 Cargo lock file
         run: nix develop .#attiny85 --command 'cd boards/attiny85 && cargo update'
       - name: Update Pico Cargo lock file
