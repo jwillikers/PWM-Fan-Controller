@@ -35,7 +35,7 @@ jobs:
   build-attiny85:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - uses: DeterminateSystems/nix-installer-action@v21
       - name: Build
         run: nix build .#attiny85
