@@ -42,7 +42,7 @@ jobs:
       - name: Build
         run: nix build .#qt-py-ch32v203
       - name: Upload firmware
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: pwm-fan-controller-qt-py-ch32v203
           path: |
