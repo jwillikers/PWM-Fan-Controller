@@ -11,10 +11,16 @@
     check-format = {
       enable = true;
       entry = "${treefmtEval.config.build.wrapper}/bin/treefmt --fail-on-change";
+      # Running treefmt concurrently causes contention on its cache.
+      require_serial = true;
     };
 
     check-json.enable = true;
-    check-shebang-scripts-are-executable.enable = true;
+    check-shebang-scripts-are-executable = {
+      enable = true;
+      # Rust's inner attributes, i.e. #![no_std], look like shebangs.
+      excludes = [ "\\.rs$" ];
+    };
     check-toml.enable = true;
     check-yaml.enable = true;
     # todo Is it possible to support clippy as a pre-commit hook for a workspace project like this?

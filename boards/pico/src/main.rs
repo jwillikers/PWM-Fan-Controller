@@ -40,7 +40,9 @@ fn main() -> ! {
         .set_duty_cycle(channel.max_duty_cycle() / 5 * 2)
         .unwrap();
 
-    loop {}
+    loop {
+        core::hint::spin_loop();
+    }
 }
 
 // End of file

@@ -160,11 +160,11 @@ udisksctl mount --block-device /dev/sda1
 
 . Double check that link:.cargo/config.toml[.cargo/config.toml] has the runner set to `elf2uf2-rs -d`.
 
-. Flash the board using the `nix run` command with the `pico.flash.elf2uf2-rs` target.
+. Flash the board using the `nix run` command with the `pico-flash` app.
 +
 [,sh]
 ----
-nix run ../..#pico.flash.elf2uf2-rs
+nix run ../..#pico-flash
 ----
 
 == Probe
@@ -188,7 +188,7 @@ SUBSYSTEM=="usb", ATTRS{idVendor}=="2e8a", ATTRS{idProduct}=="000c", TAG+="uacce
 
 . Unplug the probe, and plug it back in for the udev rule to take effect.
 
-If you want to use a probe with the `cargo run` command, be sure that link:.cargo/config.toml[.cargo/config.toml] has the runner set to `probe-run --chip RP2040 --protocol swd`.
+If you want to use a probe with the `cargo run` command, be sure that link:.cargo/config.toml[.cargo/config.toml] has the runner set to `probe-rs run --chip RP2040 --protocol swd`.
 
 === Probe Firmware
 
@@ -292,12 +292,12 @@ Follow these steps to run the code on the Raspberry Pi Pico.
 
 . Connect the probe to the Raspberry Pi Pico using the connections described in the <<Probe Wiring>> section.
 
-. Flash and run the firmware using the `nix run` command with the `pico.run.probe-rs` target.
+. Flash and run the firmware using the `nix run` command with the `pico-run` app.
 Alternatively, use the just command `just run dev probe-rs`.
 +
 [,sh]
 ----
-nix run .#pico.run.probe-rs
+nix run ../..#pico-run
 ----
 
 == References

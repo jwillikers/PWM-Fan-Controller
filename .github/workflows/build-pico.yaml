@@ -15,6 +15,7 @@ name: Build Raspberry Pi Pico
       - boards/pico/**.nix
       - boards/pico/rust-toolchain.toml
       - boards/pico/src/**
+      - deny.toml
       - flake.lock
   push:
     branches: ["main"]
@@ -30,6 +31,7 @@ name: Build Raspberry Pi Pico
       - boards/pico/**.nix
       - boards/pico/rust-toolchain.toml
       - boards/pico/src/**
+      - deny.toml
       - flake.lock
   workflow_dispatch:
 
@@ -37,12 +39,10 @@ jobs:
   build-pico:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
-      - uses: DeterminateSystems/nix-installer-action@v22
+      - uses: actions/checkout@v7
+      - uses: DeterminateSystems/nix-installer-action@v23
       - name: Build
-        run: nix build .#pico
-      - name: Generate UF2
-        run: nix develop .#pico --command elf2uf2-rs result/bin/pwm-fan-controller-pico pwm-fan-controller-pico
+        run: nix build --print-build-logs .#pico
       - name: Upload firmware
         uses: actions/upload-artifact@v7
         with:
@@ -50,3 +50,16 @@ jobs:
           path: |
             result/bin/pwm-fan-controller-pico
             result/bin/pwm-fan-controller-pico.uf2
+  check-pico:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: DeterminateSystems/nix-installer-action@v23
+      - name: Lint with Clippy
+        run: nix build --print-build-logs .#checks.x86_64-linux.pico-clippy
+      - name: Check licenses, bans, and sources with cargo-deny
+        if: success() || failure()
+        run: nix build --print-build-logs .#checks.x86_64-linux.pico-deny
+      - name: Audit dependencies for security vulnerabilities with cargo-audit
+        if: success() || failure()
+        run: nix build --print-build-logs .#checks.x86_64-linux.pico-audit

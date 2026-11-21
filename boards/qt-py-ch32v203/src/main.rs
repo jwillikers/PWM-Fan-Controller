@@ -1,7 +1,5 @@
 #![no_std]
 #![no_main]
-#![feature(type_alias_impl_trait)]
-#![feature(impl_trait_in_assoc_type)]
 
 // use embedded_hal::pwm::SetDutyCycle;
 use hal::time::Hertz;
@@ -34,5 +32,7 @@ fn main() -> ! {
         .set_duty(hal::timer::Channel::Ch2, pwm.get_max_duty() / 5 * 2);
     // .unwrap();
 
-    loop {}
+    loop {
+        core::hint::spin_loop();
+    }
 }

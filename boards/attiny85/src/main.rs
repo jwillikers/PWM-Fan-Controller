@@ -19,5 +19,7 @@ fn main() -> ! {
     // 40% of 255
     pwm_fan.set_duty(102);
 
-    loop {}
+    loop {
+        core::hint::spin_loop();
+    }
 }

@@ -11,27 +11,17 @@ repository = "https://github.com/jwillikers/pwm-fan-controller.git"
 [dependencies]
 embedded-hal = "1.0.0"
 nb = "1.1.0"
-panic-halt = "0.2.0"
+panic-halt = "1.0.0"
 ufmt = "0.2.0"
-
-#[dependencies.avr-device]
-#version = "0.4.0"
-#features = ["attiny85"]
 
 [dependencies.avr-hal-generic]
 git = "https://github.com/rahix/avr-hal"
-rev = "544e50bdf2c1944281d9f63fa9ef3ccf68b5f684"
+rev = "dec22e4fa573daedc9e3346a26dee23692f1499f"
 
 [dependencies.attiny-hal]
 git = "https://github.com/rahix/avr-hal"
-rev = "544e50bdf2c1944281d9f63fa9ef3ccf68b5f684"
+rev = "dec22e4fa573daedc9e3346a26dee23692f1499f"
 features = ["attiny85", "rt"]
-
-# The latest releases of `proc-macro2` do not support the rust toolchain that
-# we use.  Thus, we must fix this dependency to an older version where our
-# toolchain is still supported.  See https://github.com/Rahix/avr-hal/issues/537
-[build-dependencies.proc-macro2]
-version = "=1.0.79"
 
 [profile.dev]
 panic = "abort"

@@ -25,7 +25,7 @@ run profile="dev" method="": (build profile)
     } else if "{{ method }}" == "elf2uf2-rs" {
         ^elf2uf2-rs --deploy $"target/thumbv6m-none-eabi/($build_type)/pwm-fan-controller-pico"
     } else if "{{ method }}" == "probe-rs" {
-        ^probe-rs --chip RP2040 --protocol swd $"target/thumbv6m-none-eabi/($build_type)/pwm-fan-controller-pico"
+        ^probe-rs run --chip RP2040 --protocol swd $"target/thumbv6m-none-eabi/($build_type)/pwm-fan-controller-pico"
     }
 
 alias p := package
@@ -46,7 +46,7 @@ uf2 profile="dev":
     ^elf2uf2-rs $"target/thumbv6m-none-eabi/($build_type)/pwm-fan-controller-pico" pwm-fan-controller-pico
 
 alias u := update
-alias up := package
+alias up := update
 
 update:
     nix flake update
