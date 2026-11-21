@@ -1,5 +1,4 @@
 [toolchain]
-channel = "nightly-2024-03-22"
-components = ["llvm-tools-preview", "rust-src"]
+channel = "nightly-2026-10-31"
+components = ["clippy", "llvm-tools-preview", "rust-src", "rustfmt"]
 profile = "minimal"
-targets = ["avr-unknown-none-attiny85.json"]

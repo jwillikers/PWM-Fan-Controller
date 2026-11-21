@@ -1,0 +1,42 @@
+# Configuration for cargo-deny, which is shared by every board.
+# See https://embarkstudios.github.io/cargo-deny/checks/cfg.html
+
+[licenses]
+allow = [
+  "Apache-2.0",
+  "BSD-2-Clause",
+  "BSD-3-Clause",
+  "ISC",
+  "MIT",
+  "Unicode-3.0",
+  "Zlib",
+]
+confidence-threshold = 0.8
+# This configuration is shared between boards, so not every license is used by each one.
+unused-allowed-license = "allow"
+exceptions = [
+  # Build-time only dependency of avr-device used to generate the SVD files, so it isn't linked into the firmware.
+  { crate = "atdf2svd", allow = [
+    "GPL-3.0-only",
+  ] },
+  # Dependency of ch32-hal.
+  { crate = "bitmaps", allow = [
+    "MPL-2.0",
+  ] },
+]
+
+[bans]
+# Embedded HAL ecosystems commonly pull in multiple versions of the same crate.
+multiple-versions = "allow"
+# Git dependencies are reported as wildcards, but they are pinned to a specific revision.
+wildcards = "allow"
+
+[sources]
+unknown-registry = "deny"
+unknown-git = "deny"
+allow-git = [
+  "https://github.com/ch32-rs/ch32-hal.git",
+  "https://github.com/ch32-rs/ch32-metapac",
+  "https://github.com/embassy-rs/embassy",
+  "https://github.com/rahix/avr-hal",
+]

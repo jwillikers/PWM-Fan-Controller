@@ -8,12 +8,12 @@ name: Build ATtiny85
       - .github/workflows/build-attiny85.yaml
       - .justfile
       - boards/attiny85/.cargo/**
-      - boards/attiny85/avr-unknown-none-attiny85.json
       - boards/attiny85/Cargo.lock
       - boards/attiny85/Cargo.toml
       - boards/attiny85/**.nix
       - boards/attiny85/rust-toolchain.toml
       - boards/attiny85/src/**
+      - deny.toml
       - flake.lock
   push:
     branches: ["main"]
@@ -22,12 +22,12 @@ name: Build ATtiny85
       - .github/workflows/build-attiny85.yaml
       - .justfile
       - boards/attiny85/.cargo/**
-      - boards/attiny85/avr-unknown-none-attiny85.json
       - boards/attiny85/Cargo.lock
       - boards/attiny85/Cargo.toml
       - boards/attiny85/**.nix
       - boards/attiny85/rust-toolchain.toml
       - boards/attiny85/src/**
+      - deny.toml
       - flake.lock
   workflow_dispatch:
 
@@ -35,10 +35,10 @@ jobs:
   build-attiny85:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
-      - uses: DeterminateSystems/nix-installer-action@v22
+      - uses: actions/checkout@v7
+      - uses: DeterminateSystems/nix-installer-action@v23
       - name: Build
-        run: nix build .#attiny85
+        run: nix build --print-build-logs .#attiny85
       - name: Upload firmware
         uses: actions/upload-artifact@v7
         with:
@@ -46,3 +46,16 @@ jobs:
           path: |
             result/bin/pwm-fan-controller-attiny85.elf
             result/bin/pwm-fan-controller-attiny85.hex
+  check-attiny85:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: DeterminateSystems/nix-installer-action@v23
+      - name: Lint with Clippy
+        run: nix build --print-build-logs .#checks.x86_64-linux.attiny85-clippy
+      - name: Check licenses, bans, and sources with cargo-deny
+        if: success() || failure()
+        run: nix build --print-build-logs .#checks.x86_64-linux.attiny85-deny
+      - name: Audit dependencies for security vulnerabilities with cargo-audit
+        if: success() || failure()
+        run: nix build --print-build-logs .#checks.x86_64-linux.attiny85-audit

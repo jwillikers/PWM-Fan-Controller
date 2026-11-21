@@ -15,13 +15,10 @@
         treefmt-nix.follows = "treefmt-nix";
       };
     };
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-24.11";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-26.05";
     pre-commit-hooks = {
       url = "github:cachix/pre-commit-hooks.nix";
-      inputs = {
-        nixpkgs.follows = "nixpkgs";
-        nixpkgs-stable.follows = "nixpkgs";
-      };
+      inputs.nixpkgs.follows = "nixpkgs";
     };
     rust-overlay = {
       inputs = {
@@ -57,7 +54,6 @@
         };
         commonNativeBuildInputs = with pkgs; [
           asciidoctor
-          clippy
           fish
           just
           lychee
@@ -68,6 +64,10 @@
           import ./pre-commit-hooks.nix { inherit pkgs treefmtEval; }
         );
         treefmtEval = treefmt-nix.lib.evalModule pkgs ./treefmt.nix;
+        # Crane links a dummy binary when building the dependencies.
+        # Embedded targets need the runtime crates linked in for this to succeed.
+        # The build script must remain a regular host program, though.
+        dummyBuildrs = pkgs.writeText "dummy-build.rs" "fn main() {}\n";
         boards = {
           attiny85 = rec {
             # The development shell requires the GCC AVR toolchain to be available.
@@ -78,24 +78,10 @@
               crossSystem = {
                 inherit overlays;
                 config = "avr";
-                # todo Configure Rust for the proper cross-compilation target when that can be done for target without std.
-                # Perhaps once AVR is stabilized for Rust this will be possible?
-                # rust.rustcTarget = "avr-unknown-none-attiny85";
-                # rust.platform = nixpkgs.lib.importJSON "${./boards/attiny85/avr-unknown-none-attiny85.json}";
-                # rustc = {
-                # config = "avr-unknown-none-attiny85";
-                # platform = nixpkgs.lib.importJSON "${./boards/attiny85/avr-unknown-none-attiny85.json}";
-                # };
               };
             };
-            rustToolchainFor =
-              p:
-              (p.rust-bin.fromRustupToolchainFile ./boards/attiny85/rust-toolchain.toml).override {
-                # Remove the avr-unknown-none-attiny85.json file from the list of targets for the Rust toolchain.
-                # Nix doesn't really support target JSON files specified in the toolchain and even if it did, it won't be ablet to build a toolchain for AVR.
-                # The AVR toolchain is unstable and does not include std.
-                targets = [ p.stdenv.hostPlatform.rust.rustcTarget ];
-              };
+            # The avr-none target is a tier 3 target, so core is built from source with build-std.
+            rustToolchainFor = p: p.rust-bin.fromRustupToolchainFile ./boards/attiny85/rust-toolchain.toml;
             rustToolchain = rustToolchainFor pkgs;
 
             craneLib = (crane.mkLib pkgs).overrideToolchain rustToolchainFor;
@@ -103,7 +89,6 @@
               with pkgs;
               [
                 avrdude
-                avrCrossPkgs.avrlibc
                 avrCrossPkgs.buildPackages.binutils
                 avrCrossPkgs.buildPackages.gcc
                 cargo-binutils
@@ -116,15 +101,7 @@
               strictDeps = true;
               doCheck = false;
 
-              src = pkgs.lib.cleanSourceWith {
-                src = ./boards/attiny85;
-                # Don't remove the avr-unknown-none-attiny85.json file from the sources.
-                # See https://github.com/ipetkov/crane/issues/444
-                filter =
-                  path: type:
-                  (craneLib.filterCargoSources path type)
-                  || (builtins.baseNameOf path == "avr-unknown-none-attiny85.json");
-              };
+              src = craneLib.cleanCargoSource ./boards/attiny85;
 
               cargoVendorDir = craneLib.vendorMultipleCargoDeps {
                 inherit (craneLib.findCargoFiles commonArgs.src) cargoConfigs;
@@ -139,19 +116,33 @@
                   # to the repo and import it with `./path/to/rustlib/Cargo.lock` which
                   # will avoid IFD entirely but will require manually keeping the file
                   # up to date!
-                  "${rustToolchain.passthru.availableComponents.rust-src}/lib/rustlib/src/rust/Cargo.lock"
+                  "${rustToolchain.passthru.availableComponents.rust-src}/lib/rustlib/src/rust/library/Cargo.lock"
                 ];
               };
-              cargoExtraArgs = "--target avr-unknown-none-attiny85.json -Z build-std=core";
+              cargoExtraArgs = "--target avr-none -Z build-std=core";
               inherit nativeBuildInputs;
 
               extraDummyScript = ''
-                cp --archive ${./boards/attiny85/avr-unknown-none-attiny85.json} $out/avr-unknown-none-attiny85.json
                 rm --force --recursive $out/src/bin/crane-dummy-*
               '';
             };
 
-            cargoArtifacts = craneLib.buildDepsOnly commonArgs;
+            cargoArtifacts = craneLib.buildDepsOnly (
+              commonArgs
+              // {
+                inherit dummyBuildrs;
+                dummyrs = pkgs.writeText "dummy.rs" ''
+                  #![no_std]
+                  #![no_main]
+                  use panic_halt as _;
+                  #[attiny_hal::entry]
+                  fn main() -> ! {
+                      let _ = attiny_hal::Peripherals::take();
+                      loop {}
+                  }
+                '';
+              }
+            );
 
             packages.pwm-fan-controller = pkgs.callPackage ./boards/attiny85/package.nix {
               inherit cargoArtifacts commonArgs craneLib;
@@ -162,7 +153,7 @@
               program = builtins.toString (
                 pkgs.writers.writeNu "flash-avrdude" ''
                   ^${pkgs.lib.getExe pkgs.avrdude} -c USBtiny -B 4 -p attiny85 -U flash:w:${
-                    self.packages.${system}.pwm-fan-controller-attiny85
+                    self.packages.${system}.attiny85
                   }/bin/pwm-fan-controller-attiny85.hex:i
                 ''
               );
@@ -177,9 +168,9 @@
                 nativeBuildInputs
                 ++ [
                   treefmtEval.config.build.wrapper
-                  # Make formatters available for IDE's.
-                  (pkgs.lib.attrValues treefmtEval.config.build.programs)
                 ]
+                # Make formatters available for IDE's.
+                ++ (pkgs.lib.attrValues treefmtEval.config.build.programs)
                 ++ pre-commit.enabledPackages;
               inherit (pre-commit) shellHook;
             };
@@ -218,16 +209,30 @@
               ];
             };
 
-            cargoArtifacts = craneLib.buildDepsOnly commonArgs;
+            cargoArtifacts = craneLib.buildDepsOnly (
+              commonArgs
+              // {
+                inherit dummyBuildrs;
+                dummyrs = pkgs.writeText "dummy.rs" ''
+                  #![no_std]
+                  #![no_main]
+                  use defmt_rtt as _;
+                  use panic_probe as _;
+                  #[rp_pico::entry]
+                  fn main() -> ! {
+                      let _ = rp_pico::hal::pac::Peripherals::take();
+                      loop {}
+                  }
+                '';
+              }
+            );
 
             apps = {
               flash = {
                 type = "app";
                 program = builtins.toString (
                   pkgs.writers.writeNu "flash-elf2uf2-rs" ''
-                    ^${pkgs.lib.getExe pkgs.elf2uf2-rs} --deploy ${
-                      self.packages.${system}.pwm-fan-controller-pico
-                    }/bin/pwm-fan-controller-pico
+                    ^${pkgs.lib.getExe pkgs.elf2uf2-rs} --deploy ${self.packages.${system}.pico}/bin/pwm-fan-controller-pico
                   ''
                 );
               };
@@ -235,9 +240,7 @@
                 type = "app";
                 program = builtins.toString (
                   pkgs.writers.writeNu "run-probe-rs" ''
-                    ${pkgs.lib.getExe pkgs.probe-rs} run --chip RP2040 --protocol swd ${
-                      self.packages.${system}.pwm-fan-controller-pico
-                    }/bin/pwm-fan-controller-pico
+                    ^${pkgs.lib.getExe pkgs.probe-rs-tools} run --chip RP2040 --protocol swd ${self.packages.${system}.pico}/bin/pwm-fan-controller-pico
                   ''
                 );
               };
@@ -248,11 +251,11 @@
                 [
                   elf2uf2-rs
                   flip-link
-                  probe-rs
+                  probe-rs-tools
                   treefmtEval.config.build.wrapper
-                  # Make formatters available for IDE's.
-                  (pkgs.lib.attrValues treefmtEval.config.build.programs)
                 ]
+                # Make formatters available for IDE's.
+                ++ (pkgs.lib.attrValues treefmtEval.config.build.programs)
                 ++ commonArgs.nativeBuildInputs
                 ++ commonNativeBuildInputs
                 ++ pre-commit.enabledPackages;
@@ -298,7 +301,7 @@
               program = builtins.toString (
                 pkgs.writers.writeNu "flash-wchisp" ''
                   ^${pkgs.lib.getExe pkgs.wchisp} flash ${
-                    self.packages.${system}.pwm-fan-controller-qt-py-ch32v203
+                    self.packages.${system}.qt-py-ch32v203
                   }/bin/pwm-fan-controller-qt-py-ch32v203
                 ''
               );
@@ -310,9 +313,9 @@
                   wchisp
                   # probe-rs
                   treefmtEval.config.build.wrapper
-                  # Make formatters available for IDE's.
-                  (pkgs.lib.attrValues treefmtEval.config.build.programs)
                 ]
+                # Make formatters available for IDE's.
+                ++ (pkgs.lib.attrValues treefmtEval.config.build.programs)
                 ++ commonNativeBuildInputs
                 ++ pre-commit.enabledPackages;
               inherit (pre-commit) shellHook;
@@ -326,10 +329,15 @@
         };
       in
       {
-        apps = pkgs.lib.attrsets.genAttrs (builtins.attrNames boards) (board: boards.${board}.apps) // {
-          inherit (nix-update-scripts.apps.${system}) update-nix-direnv update-nixos-release;
-          default = self.apps.${system}.${defaultBoard}.flash;
-        };
+        # Flake apps must be a flat attribute set, so prefix each board's apps with the board name.
+        apps =
+          pkgs.lib.concatMapAttrs (
+            board: value: pkgs.lib.mapAttrs' (name: pkgs.lib.nameValuePair "${board}-${name}") value.apps
+          ) boards
+          // {
+            inherit (nix-update-scripts.apps.${system}) update-nix-direnv update-nixos-release;
+            default = self.apps.${system}."${defaultBoard}-flash";
+          };
         checks = {
           # attiny85-pwm-fan-controller = boards.attiny85.pwm-fan-controller;
           # pico-pwm-fan-controller = boards.pico.pwm-fan-controller;
@@ -339,21 +347,21 @@
             boards.attiny85.commonArgs
             // {
               inherit (boards.attiny85) cargoArtifacts;
-              cargoClippyExtraArgs = "--all-targets -- --deny warnings";
+              cargoClippyExtraArgs = "-- --deny warnings";
             }
           );
           pico-clippy = boards.pico.craneLib.cargoClippy (
             boards.pico.commonArgs
             // {
               inherit (boards.pico) cargoArtifacts;
-              cargoClippyExtraArgs = "--all-targets -- --deny warnings";
+              cargoClippyExtraArgs = "-- --deny warnings";
             }
           );
           qt-py-ch32v203-clippy = boards.qt-py-ch32v203.craneLib.cargoClippy (
             boards.qt-py-ch32v203.commonArgs
             // {
               inherit (boards.qt-py-ch32v203) cargoArtifacts;
-              cargoClippyExtraArgs = "--all-targets -- --deny warnings";
+              cargoClippyExtraArgs = "-- --deny warnings";
             }
           );
 
@@ -387,6 +395,9 @@
           attiny85-audit = boards.attiny85.craneLib.cargoAudit {
             inherit advisory-db;
             inherit (boards.attiny85.commonArgs) src;
+            # quick-xml is only used at build time by svdtools to parse the SVD files.
+            # avr-device pins svdtools =0.5.0, which requires quick-xml ^0.37, so no fix is available yet.
+            cargoAuditExtraArgs = "--ignore yanked --ignore RUSTSEC-2026-0194 --ignore RUSTSEC-2026-0195";
           };
           pico-audit = boards.pico.craneLib.cargoAudit {
             inherit advisory-db;
@@ -400,12 +411,15 @@
           # Audit licenses
           attiny85-deny = boards.attiny85.craneLib.cargoDeny {
             inherit (boards.attiny85.commonArgs) src;
+            cargoDenyChecks = "--config ${./deny.toml} bans licenses sources";
           };
           pico-deny = boards.pico.craneLib.cargoDeny {
             inherit (boards.pico.commonArgs) src;
+            cargoDenyChecks = "--config ${./deny.toml} bans licenses sources";
           };
           qt-py-ch32v203-deny = boards.qt-py-ch32v203.craneLib.cargoDeny {
             inherit (boards.qt-py-ch32v203.commonArgs) src;
+            cargoDenyChecks = "--config ${./deny.toml} bans licenses sources";
           };
 
           # Run tests with cargo-nextest
@@ -425,9 +439,9 @@
                 commonNativeBuildInputs
                 ++ [
                   treefmtEval.config.build.wrapper
-                  # Make formatters available for IDE's.
-                  (builtins.attrValues treefmtEval.config.build.programs)
                 ]
+                # Make formatters available for IDE's.
+                ++ (builtins.attrValues treefmtEval.config.build.programs)
                 ++ pre-commit.enabledPackages;
               inherit (pre-commit) shellHook;
             };

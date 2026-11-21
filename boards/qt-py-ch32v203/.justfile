@@ -23,7 +23,7 @@ run profile="dev" method="": (build profile)
     if ("{{ method }}" | is-empty) {
         ^cargo run --profile="{{ profile }}"
     } else if "{{ method }}" == "wchisp" {
-        ^wchisp flash $"target/riscvimac-unknown-none-elf/($build_type)/pwm-fan-controller-qt-py-ch32v203"
+        ^wchisp flash $"target/riscv32imac-unknown-none-elf/($build_type)/pwm-fan-controller-qt-py-ch32v203"
     }
 
 alias p := package
@@ -33,7 +33,7 @@ package:
     nix build ".#qt-py-ch32v203"
 
 alias u := update
-alias up := package
+alias up := update
 
 update:
     nix flake update

@@ -20,12 +20,13 @@ features = [
   # "time-driver-tim2",
 ]
 git = "https://github.com/ch32-rs/ch32-hal.git"
+rev = "f2be1bca8d8e0dc3892668afa7b558c6f2c1a19d"
 
 [dependencies]
 embedded-hal = "1.0"
-qingke-rt = "0.2"
-qingke = "0.2"
-panic-halt = "0.2"
+qingke-rt = "0.8"
+qingke = "0.8"
+panic-halt = "1.0"
 
 # Dev builds need to be optimized for code size or they won't fit in flash.
 [profile.dev]

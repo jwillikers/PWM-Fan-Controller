@@ -180,7 +180,7 @@ cd pwm-fan-controller/boards/attiny85
 +
 [,sh]
 ----
-nix run ../..#attiny85.flash.avrdude
+nix run ../..#attiny85-flash
 ----
 
 == Todo

@@ -144,11 +144,11 @@ SUBSYSTEM=="usb", ATTRS{idVendor}=="4348", ATTRS{idProduct}=="55e0", TAG+="uacce
 
 . While holding the `BOOT` button, attach the QT Py CH32V203 to your computer via the USB-C port.
 
-. Flash the board using the `nix run` command with the `qt-py-ch32v203.flash.wchisp` target.
+. Flash the board using the `nix run` command with the `qt-py-ch32v203-flash` app.
 +
 [,sh]
 ----
-nix run ../..#qt-py-ch32v203.flash.wchisp
+nix run ../..#qt-py-ch32v203-flash
 ----
 
 == References

@@ -61,7 +61,7 @@ run board="attiny85" profile="dev" method="": (build board profile)
             }
         }
         ^wchisp flash \
-            $"boards/{{ board }}target/riscvimac-unknown-none-elf/($build_type)/pwm-fan-controller-qt-py-ch32v203"
+            $"boards/{{ board }}/target/riscv32imac-unknown-none-elf/($build_type)/pwm-fan-controller-qt-py-ch32v203"
     }
 
 alias p := package
