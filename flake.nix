@@ -395,6 +395,9 @@
           attiny85-audit = boards.attiny85.craneLib.cargoAudit {
             inherit advisory-db;
             inherit (boards.attiny85.commonArgs) src;
+            # quick-xml is only used at build time by svdtools to parse the SVD files.
+            # avr-device pins svdtools =0.5.0, which requires quick-xml ^0.37, so no fix is available yet.
+            cargoAuditExtraArgs = "--ignore yanked --ignore RUSTSEC-2026-0194 --ignore RUSTSEC-2026-0195";
           };
           pico-audit = boards.pico.craneLib.cargoAudit {
             inherit advisory-db;
